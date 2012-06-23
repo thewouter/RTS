@@ -1,0 +1,20 @@
+changelog:
+23*3*2012
+	toegevoegd aan dropbox 
+24*3*2012
+	map overgezet naar arraylist, map is naar rechts oneindig, maar de linkerkant wordt korter???.
+	michiel: WTF, het werkt ook nog
+25*3*2012
+	map is oneindig, links komt er nu sand1 bij, dit gaat erg traaaaag.
+5*4*2012
+	map weer teruggezet naar een array([][])
+16*5*2012
+	OVER NAAR GIT
+	weer begonnen met changelog bijhouden
+	begonnen met itemEntities;
+31*5*2012
+	popups gemaakt;
+	ook OptionsPopup en de Options.
+10*6*2012
+	MovingEntities can follow other Entitities now
+	The camera can follow an Entitie now
