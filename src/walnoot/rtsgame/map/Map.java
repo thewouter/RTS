@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+
 import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
@@ -17,7 +18,7 @@ import walnoot.rtsgame.map.tiles.Tile;
 
 public class Map {
 	private Tile[][] surface;
-	private List<Entity> entities = new ArrayList<Entity>();
+	public List<Entity> entities = new ArrayList<Entity>();
 	
 	private static final Comparator<Entity> spriteSorter = new Comparator<Entity>() {
 		public int compare(Entity e0, Entity e1){
@@ -128,6 +129,10 @@ public class Map {
 	
 	public int getWidth(){
 		return surface.length;
+	}
+	
+	public void removeEntity(int x, int y){
+		entities.remove(getEntity(x, y));
 	}
 	
 	public Entity getClosestEntity(int x, int y){

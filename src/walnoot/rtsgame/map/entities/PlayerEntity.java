@@ -50,7 +50,7 @@ public class PlayerEntity extends MovingEntity {
 	
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
 		if(entityClicked == this){
-			OptionsPopup popup = new OptionsPopup(input, this);
+			OptionsPopup popup = new OptionsPopup(this);
 			Option option2 = new Option("Add campfire"){
 				public void onClick(){
 					map.addEntity(new CampFireStructure(map, xPos, yPos - 1, tribe));

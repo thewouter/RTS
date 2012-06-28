@@ -10,6 +10,7 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tiles.Tile;
+import walnoot.rtsgame.menubar.MenuBarPopup;
 import walnoot.rtsgame.popups.Option;
 import walnoot.rtsgame.popups.OptionsPopup;
 import walnoot.rtsgame.screen.GameScreen;
@@ -43,17 +44,7 @@ public class SheepEntity extends MovingEntity {
 	}
 	
 	public void update(){
-		if(super.getNextDirection()!= null){
-			if(  true){
-				currentAnimation = backwardsSheepAnimation;
-				System.out.println("backwards");
-			} else {
-				currentAnimation = sheepAnimation;
-				System.out.println("forward");
-			}
-		}else{
-			System.out.println("no target");
-		}
+		
 		
 		
 		if(isMoving()) counter++;
@@ -68,7 +59,7 @@ public class SheepEntity extends MovingEntity {
 	
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
 		if(entityClicked == this){
-			OptionsPopup popup = new OptionsPopup(input, this);
+			OptionsPopup popup = new OptionsPopup(this);
 			Option option1 = new Option("getclosest"){
 				public void onClick() {
 					System.out.println(map.getClosestEntity(getxPos(), getyPos()).getName());

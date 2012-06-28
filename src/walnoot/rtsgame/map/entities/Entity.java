@@ -6,6 +6,7 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.map.tribes.Tribe;
+import walnoot.rtsgame.menubar.MenuBarPopup;
 import walnoot.rtsgame.screen.GameScreen;
 
 public abstract class Entity {
@@ -45,6 +46,7 @@ public abstract class Entity {
 	
 	public void damage(int damage){
 		health -= damage;
+		if(health <=0) map.removeEntity(getxPos(), getyPos());
 	}
 	
 	public int getxPos(){
@@ -67,6 +69,8 @@ public abstract class Entity {
 		return false;
 	}
 	
+	public MenuBarPopup getBuildMenu(){return null;}
+	
 	public Tribe getTribe(){
 		return tribe;
 	}
@@ -83,4 +87,6 @@ public abstract class Entity {
 	public void remove(){
 		removed = true;
 	}
+
+	public void buildMenu() {}
 }

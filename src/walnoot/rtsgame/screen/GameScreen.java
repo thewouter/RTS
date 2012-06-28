@@ -4,18 +4,30 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+
+import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.Util;
+import walnoot.rtsgame.menubar.Button;
+import walnoot.rtsgame.menubar.MenuBarPopup;
+import walnoot.rtsgame.menubar.MenuBarPopupButton;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.DeerEntity;
+import walnoot.rtsgame.menubar.MenuBar;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.PlayerEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
+import walnoot.rtsgame.map.structures.CampFireStructure;
+import walnoot.rtsgame.map.structures.TentStructure;
 import walnoot.rtsgame.map.tribes.Tribe;
 import walnoot.rtsgame.popups.Popup;
+import walnoot.rtsgame.popups.TextPopup;
 
 public class GameScreen extends Screen {
 	private Map map;
@@ -26,6 +38,7 @@ public class GameScreen extends Screen {
 	private Entity targetEntity; //the Entity the camera will go to
 	
 	private Tribe tribe;
+	private MenuBar bar;
 	
 	public GameScreen(RTSComponent component, InputHandler input){
 		super(component, input);
@@ -41,31 +54,32 @@ public class GameScreen extends Screen {
 				break;
 			}
 		}
-		
 		targetEntity = selectedEntity;
 		map.addEntity(selectedEntity);
+		
+		bar = new MenuBar(input, this);
 		
 		tribe = new Tribe("My Tribe", Color.BLUE);
 		selectedEntity.setTribe(tribe);
 		
 		map.addEntity(new DeerEntity(map, 4, goodYPos+1)); //voor de test, later weghalen
 		map.addEntity(new SheepEntity(map, 4, goodYPos+2)); //voor de test, later weghalen
-		//map.addEntity(new TentStructure(map, 4, goodYPos + 10, tribe)); //voor de test, later weghalen
-		//map.addEntity(new CampFireStructure(map, 5, goodYPos + 12, tribe)); //voor de test, later weghalen
+		map.addEntity(new TentStructure(map, 4, goodYPos + 10, tribe)); //voor de test, later weghalen
+		map.addEntity(new CampFireStructure(map, 5, goodYPos + 12, tribe)); //voor de test, later weghalen
 		
 		translationX = -selectedEntity.getScreenX();
 		translationY = -selectedEntity.getScreenY();
 	}
-	
+
 	public void render(Graphics g){
 		Point translation = new Point((int) translationX, (int) translationY);
 		
 		map.render(g, translation, new Dimension(getWidth(), getHeight()));
+		bar.render(g, getWidth(), getHeight());
 		
 		g.translate(translation.x, translation.y);
 		if(popup != null) popup.render(g);
 		g.translate(-translation.x, -translation.y);
-	
 		int x = getMapX();
 		int y = getMapY();
 		
@@ -78,8 +92,13 @@ public class GameScreen extends Screen {
 		}
 	}
 	
+	public Entity getSelectedEntity(){
+		return selectedEntity;
+	}
+	
 	public void update(){
 		map.update((int) Math.floor(translationX), (int) Math.floor(translationY));
+		bar.update(getWidth(), getHeight());
 		
 		if(input.up.isPressed()) translationY += 5;
 		if(input.down.isPressed()) translationY -= 5;
@@ -100,26 +119,28 @@ public class GameScreen extends Screen {
 		
 		if(input.LMBTapped()){
 			if(popup != null){
-				popup.onLeftClick();
+				popup.onLeftClick(input.getMouseX(), input.getMouseY());
 			}
-			if(popup != null && !popup.isInPopup(input.getMouseX(), input.getMouseY())){
+			if(bar.isInBar(input.getMouseX(), input.getMouseY())){
+				
+				
+			}else if(popup != null && !popup.isInPopup(input.getMouseX(), input.getMouseY()) ){
 				selectedEntity = map.getEntity(getMapX(), getMapY());
-			}else if( popup == null){
+			}else if( popup == null ){
 				selectedEntity = map.getEntity(getMapX(), getMapY());
 			}
 		}
 		
 		if(popup != null){
-			popup.update(translationX,translationY);
+			popup.update(translationX,translationY, input.getMouseX(), input.getMouseY());
 			if(popup.getOwner() != selectedEntity) popup = null;
 		}
 		if(input.RMBTapped()){
-			//if(selectedEntity == null) return;
 			
 			Entity rightClicked = map.getEntity(getMapX(), getMapY()); //the Entity that is right clicked, if any
 			
 			boolean canMove = true;
-			if(rightClicked != null) canMove = selectedEntity.onRightClick(rightClicked, this, input);
+			if(rightClicked != null && selectedEntity != null) canMove = selectedEntity.onRightClick(rightClicked, this, input);
 			
 			if(canMove){
 				if(selectedEntity instanceof MovingEntity){
@@ -128,6 +149,7 @@ public class GameScreen extends Screen {
 				}
 			}
 		}
+		if(!map.entities.contains(selectedEntity)) selectedEntity = null;
 	}
 	
 	public void setPopup(Popup popup){
@@ -144,5 +166,9 @@ public class GameScreen extends Screen {
 	
 	private int getMapY(){
 		return Util.getMapY(input.getMouseX() - translationX, input.getMouseY() - translationY);
+	}
+	
+	public void deselectEntity(){
+		selectedEntity = null;
 	}
 }

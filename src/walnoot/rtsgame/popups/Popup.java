@@ -8,22 +8,18 @@ import walnoot.rtsgame.map.entities.Entity;
 
 public abstract class Popup {
 	public static final int EMPTY_SPACE = 32;
-	
-	protected final InputHandler input;
 	protected final Entity owner;
 	
 	/**
-	 * @param input Inputhandler object
 	 * @param owner The owner of this PopUp
 	 */
-	public Popup(InputHandler input, Entity owner){
-		this.input = input;
+	public Popup(Entity owner){
 		this.owner = owner;
 	}
 	
 	public abstract void render(Graphics g);
-	public abstract void update(int translationX, int translationY);
-	public abstract void onLeftClick();
+	public abstract void update(int translationX, int translationY, int mouseX, int mouseY);
+	public abstract void onLeftClick(int mouseX, int mouseY);
 	public abstract boolean isInPopup(int x, int y);
 	
 	/**
@@ -34,20 +30,6 @@ public abstract class Popup {
 	 * @param screenY
 	 */
 	protected void drawBox(Graphics g, int width, int height, int screenX, int screenY){
-		/*for(int x = 0; x < width; x++){
-			int xp = x; //x coordinate on gui.png
-			if(x == width - 1) xp = 2; 
-			else if(x > 0) xp = 1;
-			
-			for(int y = 0; y < height; y++){
-				int yp = y; //y coordinate on gui.png
-				if(y == height - 1) yp = 2; 
-				else if(y > 0) yp = 1;
-				
-				g.drawImage(Images.gui[xp][yp], x * 16 + screenX, y * 16 + screenY, null);
-			}
-		}*/
-		
 		int imageWidth = Images.gui[0][0].getWidth();
 		int imageHeight = Images.gui[0][0].getHeight();
 		

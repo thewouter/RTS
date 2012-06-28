@@ -12,8 +12,8 @@ public class TextPopup extends Popup {
 	private final String[] text;
 	private int width, height;
 
-	public TextPopup(InputHandler input, Entity owner, String...text){
-		super(input, owner);
+	public TextPopup(Entity owner, String...text){
+		super(owner);
 		this.text = text;
 		
 		for(String line: text){
@@ -37,11 +37,9 @@ public class TextPopup extends Popup {
 		}
 	}
 	
-	public void update(int translationX, int translationY){
-		
-	}
+	public void update(int translationX, int translationY, int mouseX, int mouseY){}
 
-	public void onLeftClick() {}
+	public void onLeftClick(int mouseX, int mouseY) {}
 	public boolean isInPopup(int x , int y){
 		return false;}
 }

@@ -3,11 +3,13 @@ package walnoot.rtsgame.map.entities;
 import java.awt.Point;
 import java.util.LinkedList;
 
+import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tribes.Tribe;
+import walnoot.rtsgame.menubar.MenuBarPopup;
 
 public abstract class MovingEntity extends Entity {
 	protected double timeTraveled; //hoelang hij onderweg is
@@ -63,6 +65,10 @@ public abstract class MovingEntity extends Entity {
 	public void follow(Entity e){
 		goal = e;
 	}
+	
+	public void buildMenu(){}
+	
+	public MenuBarPopup getBuildMenu(){return null;}
 	
 	public Direction getNextDirection(){
 		if(!nextDirections.isEmpty()) return nextDirections.get(0);

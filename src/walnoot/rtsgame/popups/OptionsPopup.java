@@ -17,11 +17,12 @@ public class OptionsPopup extends Popup {
 	int indexSelected = -1;
 	int indexHighlighted = -1;
 	int screenX = 0, screenY = 0;
+	int longestLine = 0;
 	Popup subPopup;
 	private boolean dimensionsSet = false;
 
-	public OptionsPopup(InputHandler input, Entity owner, Option...options){
-		super(input, owner);
+	public OptionsPopup(Entity owner, Option...options){
+		super(owner);
 		
 		/*if(owner instanceof MovingEntity){
 			if (((MovingEntity) owner).getSelectedOption() != -1){
@@ -33,7 +34,6 @@ public class OptionsPopup extends Popup {
 			this.options.add(options[i]);
 		}
 		
-		height = RTSFont.HEIGHT *( options.length);
 	}
 
 
@@ -62,17 +62,16 @@ public class OptionsPopup extends Popup {
 			if(lineWidth > width) width = lineWidth;
 		}
 		
-		height = RTSFont.HEIGHT * (options.size());
+		height = RTSFont.HEIGHT * (options.size())+EMPTY_SPACE;
 	}
 
 
-	public void update(int translationX, int translationY){
-		int mouseY = input.getMouseY();
+	public void update(int translationX, int translationY, int mouseX, int mouseY){
 		
 		screenX = getScreenX() + translationX;
 		screenY = getScreenY() + translationY;
 		
-		if(isInPopup(input.getMouseX(),input.getMouseY())){
+		if(isInPopup(mouseX, mouseY)){
 			indexHighlighted = (mouseY  - 16- screenY)/RTSFont.HEIGHT;
 		}else{
 			indexHighlighted = -1;
@@ -84,8 +83,11 @@ public class OptionsPopup extends Popup {
 	public void addOption(Option option){
 		options.add(option);
 		int lineWidth = Screen.font.getLineWidth(option.getName());
-		if(lineWidth > width) width = lineWidth;
-		height++;
+		if(lineWidth > longestLine) {
+			longestLine = lineWidth;
+			width = longestLine + EMPTY_SPACE;
+		}
+		dimensionsSet = false;
 	}
 	
 	public boolean isInPopup(int mouseX, int mouseY){
@@ -101,9 +103,9 @@ public class OptionsPopup extends Popup {
 		
 	}
 	
-	public void onLeftClick() {
-		if(isInPopup(input.getMouseX(),input.getMouseY())){
-			indexSelected = (input.getMouseY() - 16 - screenY)/RTSFont.HEIGHT;
+	public void onLeftClick(int mouseX, int mouseY) {
+		if(isInPopup(mouseX, mouseY)){
+			indexSelected = (mouseY - 16 - screenY)/RTSFont.HEIGHT;
 			if(getOption(indexSelected) != null){	
 				getOption(indexSelected).onClick();
 			}
