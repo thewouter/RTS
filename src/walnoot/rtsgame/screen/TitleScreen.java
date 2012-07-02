@@ -56,7 +56,7 @@ public class TitleScreen extends Screen {
 			}
 			
 		}
-		super.makeTransparant(g, logoTransparancy);
+		//super.makeTransparant(g, logoTransparancy);
 		
 		g.drawImage(logo, (super.component.getWidth() / RTSComponent.SCALE - logo.getWidth()) / 2, 30, null);
 		

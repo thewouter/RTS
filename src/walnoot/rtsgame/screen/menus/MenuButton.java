@@ -35,7 +35,7 @@ public class MenuButton {
 	public MenuButton(String text, int xOffset, int yPos, int width, int height, MenuScreen s){
 		try{
 			if(buttonImage == null){
-				BufferedImage imgSource = ImageIO.read(this.getClass().getResource("/button.png"));
+				BufferedImage imgSource = ImageIO.read(this.getClass().getResource("/res/button.png"));
 				
 				buttonImage = imgSource.getSubimage(0, 0, imgSource.getWidth(), imgSource.getHeight() / 2);
 				buttonImageDown = imgSource.getSubimage(0, imgSource.getHeight() / 2, imgSource.getWidth(), imgSource.getHeight() / 2);
@@ -54,17 +54,12 @@ public class MenuButton {
 		screen = s;
 	}
 	
-	public void mouseReleased(MouseEvent e){
-		mouseDown = false;
-		if(isInRect() && !e.isMetaDown()) screen.buttonPressed(this);
-	}
 	
-	public void mousePressed(MouseEvent e){
-		if(!e.isMetaDown() && selected) mouseDown = true;
-	}
-	
-	public void setMouseLocation(Point m){
+	public void setMouseLocation(Point m, boolean mouseTapped){
 		this.mouse = m;
+		if(mouseTapped && isInRect()){
+			screen.buttonPressed(this);
+		}
 	}
 	
 	private boolean isInRect(){
@@ -92,12 +87,8 @@ public class MenuButton {
 		
 		g.setColor(Color.BLACK);
 		
-		BufferedImage image; //de knop
+		BufferedImage image; //the button
 		
-		/*
-		 * if(!mouseDown)g.drawImage(buttonImage, getxPos(), getyPos(), null);
-		 * else g.drawImage(buttonImageDown, getxPos(), getyPos(), null);
-		 */
 		if(mouseDown) image = buttonImageDown;
 		else image = buttonImage;
 		
@@ -115,6 +106,7 @@ public class MenuButton {
 		Screen.font.drawLine(g, text, getxPos() + 10, yPos + (height / 2));
 		
 		g.setColor(new Color(128, 128, 255, 32));
+		
 		if(selected) g.fillRect(getxPos(), getyPos(), width, height);
 	}
 	

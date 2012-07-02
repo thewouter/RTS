@@ -16,14 +16,13 @@ public abstract class MenuScreen extends Screen {
 	
 	public void render(Graphics g){
 		for(MenuButton b: getButtons()){
-			if(b == null) System.out.println("uch");
 			b.render(g);
 		}
 	}
 	
 	public void update(){
 		for(MenuButton b: getButtons()){
-			b.setMouseLocation(super.getMouseLocation());
+			b.setMouseLocation(super.getMouseLocation(), super.input.LMBTapped());
 		}
 	}
 	
@@ -31,15 +30,4 @@ public abstract class MenuScreen extends Screen {
 	
 	public abstract void buttonPressed(MenuButton menuButton);
 	
-	public void mouseReleased(MouseEvent e){
-		for(MenuButton b: getButtons()){
-			b.mouseReleased(e);
-		}
-	}
-	
-	public void mousePressed(MouseEvent e){
-		for(MenuButton b: getButtons()){
-			b.mousePressed(e);
-		}
-	}
 }

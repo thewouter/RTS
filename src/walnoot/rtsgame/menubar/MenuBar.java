@@ -19,7 +19,7 @@ public class MenuBar {
 	LinkedList <Button> buttons = new LinkedList<Button>();
 	int xPosOnScreen = 0, yPosOnScreen = 0;
 	private MenuBarPopup popup;
-	public boolean showPopup = true;
+	public boolean showPopup = false;
 	
 	public MenuBar(InputHandler input, GameScreen screen) {
 		this.input = input;
@@ -33,65 +33,14 @@ public class MenuBar {
 		
 		addButton(new Button(Images.buttons[0][0], this) {
 			public void onLeftClick() {
-				
 				MenuBarPopup popup = new MenuBarPopup(xPosOnScreen + UITLOOP + (buttons.indexOf(this) + 1)*WIDTH_BUTTON, yPosOnScreen + UITLOOP, buttons.indexOf(this));
 				
 				popup.addButton(new MenuBarPopupButton(Images.buttons[3][0]) {
 					public void onLeftClick() {
-						bar.screen.deselectEntity();
-						System.out.println("test!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n\n\n!!!!!!!!!!!");
+						System.out.println("test!");
 						
 					}
 				});
-				popup.addButton(new MenuBarPopupButton(Images.buttons[3][0]) {
-					public void onLeftClick() {
-						bar.screen.deselectEntity();
-						
-					}
-				});
-				popup.addButton(new MenuBarPopupButton(Images.buttons[3][0]) {
-					public void onLeftClick() {
-						bar.screen.deselectEntity();
-						
-					}
-				});
-				popup.addButton(new MenuBarPopupButton(Images.buttons[3][0]) {
-					public void onLeftClick() {
-						bar.screen.deselectEntity();
-						
-					}
-				});
-				popup.addButton(new MenuBarPopupButton(Images.buttons[3][0]) {
-					public void onLeftClick() {
-						bar.screen.deselectEntity();
-						
-					}
-				});
-				popup.addButton(new MenuBarPopupButton(Images.buttons[3][0]) {
-					public void onLeftClick() {
-						bar.screen.deselectEntity();
-						
-					}
-				});
-				popup.addButton(new MenuBarPopupButton(Images.buttons[3][0]) {
-					public void onLeftClick() {
-						bar.screen.deselectEntity();
-						
-					}
-				});
-				popup.addButton(new MenuBarPopupButton(Images.buttons[3][0]) {
-					public void onLeftClick() {
-						bar.screen.deselectEntity();
-						
-					}
-				});
-				popup.addButton(new MenuBarPopupButton(Images.buttons[3][0]) {
-					public void onLeftClick() {
-						bar.screen.deselectEntity();
-						
-					}
-				});
-				
 				setMenuBarPopup(popup);
 				showPopup = !showPopup;
 				
@@ -100,6 +49,7 @@ public class MenuBar {
 		
 		addButton(new Button(Images.buttons[3][0], this) {
 			public void onLeftClick() {
+				this.bar.screen.component.setTitleScreen();
 			}
 		});
 	}
@@ -137,6 +87,7 @@ public class MenuBar {
 	public void update(int screenWidth, int screenHeight){
 		yPosOnScreen = screenHeight - UITLOOP - HEIGHT_BUTTON - Y_POS_FROM_BOTTOM;
 		xPosOnScreen = screenWidth - UITLOOP - X_POS_FROM_RIGHT - buttons.size()*WIDTH_BUTTON;
+		
 		if(input.LMBTapped() ){
 			if(isOnlyInBar(input.getMouseX(), input.getMouseY())){
 				int indexSelected = (int) ((input.getMouseX()- (screen.getWidth() - X_POS_FROM_RIGHT - buttons.size()*WIDTH_BUTTON)) / WIDTH_BUTTON);
@@ -145,7 +96,10 @@ public class MenuBar {
 				popup.onLeftClick(input.getMouseX(),input.getMouseY());
 			}
 		}
+		
 		if(popup != null) popup.update(xPosOnScreen + UITLOOP + (popup.index + 1)*WIDTH_BUTTON, yPosOnScreen + UITLOOP);
+		
+		
 	}
 	
 	private boolean isOnlyInBar(int x, int y) {

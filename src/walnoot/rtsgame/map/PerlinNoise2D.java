@@ -3,9 +3,9 @@ package walnoot.rtsgame.map;
 import java.util.Random;
 
 public class PerlinNoise2D {
-	private static int seed = new Random().nextInt();
+	private int seed = new Random().nextInt();
 	
-	private static float noise(int x, int y){
+	private float noise(int x, int y){
 		int i = x + y * 57;
 		i += seed;
 		
@@ -13,23 +13,15 @@ public class PerlinNoise2D {
 		return (1.0f - ((i * (i * i * 15731 + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0f);
 	}
 	
-	/*
-	 * private static float smoothNoise(int x, int y){ float corners = (noise(x
-	 * - 1, y - 1) + noise(x + 1, y - 1) + noise(x - 1, y + 1) + noise(x + 1, y
-	 * + 1)) / 16f; float sides = (noise(x - 1, y) + noise(x + 1, y) + noise(x,
-	 * y + 1) + noise(x, y - 1)) / 8f; float center = noise(x, y) / 4f;
-	 * 
-	 * return center + sides + corners; }
-	 */
-
-	private static float interpolate(float a, float b, float x){
+	
+	private float interpolate(float a, float b, float x){
 		float ft = (float) (x * Math.PI);
 		float i = (float) ((1 - Math.cos(ft)) * .5);
 		
 		return a * (1 - i) + (b * i);
 	}
 	
-	private static float interpolatedNoise(float x, float y){
+	private float interpolatedNoise(float x, float y){
 		int intX = (int) x;
 		float fracX = x - intX;
 		
@@ -55,7 +47,7 @@ public class PerlinNoise2D {
 	 * @param numberOctaves - hoeveel detail er is
 	 * @return een float tussen -1 en 1
 	 */
-	public static float perlinNoise(int x, int y, float persistence, float zoomlevel, int numberOctaves){
+	public float perlinNoise(int x, int y, float persistence, float zoomlevel, int numberOctaves){
 		float result = 0;
 		
 		for(int i = 0; i < numberOctaves; i++){
@@ -70,6 +62,8 @@ public class PerlinNoise2D {
 		
 		return result;
 	}
+	
+	
 	
 	/*
 	 * public static void main(String[] args) throws IOException{ boolean

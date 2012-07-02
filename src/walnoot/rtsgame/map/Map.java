@@ -19,6 +19,7 @@ import walnoot.rtsgame.map.tiles.Tile;
 public class Map {
 	private Tile[][] surface;
 	public List<Entity> entities = new ArrayList<Entity>();
+	private PerlinNoise2D noiseObj;
 	
 	private static final Comparator<Entity> spriteSorter = new Comparator<Entity>() {
 		public int compare(Entity e0, Entity e1){
@@ -36,6 +37,7 @@ public class Map {
 	
 	public Map(int mapSize){
 		surface = new Tile[mapSize][mapSize];
+		noiseObj = new PerlinNoise2D();
 		generateMap();
 	}
 	
@@ -50,7 +52,7 @@ public class Map {
 		
 		for(int x = 0; x < getWidth(); x++){
 			for(int y = 0; y < getWidth(); y++){
-				float noise = PerlinNoise2D.perlinNoise(x, y, 0.3f, 32f, 4);
+				float noise = noiseObj.perlinNoise(x, y, 0.3f, 32f, 4);
 				//double noise = SimplexNoise.noise(x / 64f, y / 64f);
 				
 				if(noise > 0) surface[x][y] = Tile.grass1;

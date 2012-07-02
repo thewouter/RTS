@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 
 import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.Screen;
+import walnoot.rtsgame.screen.TitleScreen;
 
 public class RTSComponent extends Canvas implements Runnable {
 	private static final long serialVersionUID = -1401470770875975471L;
@@ -21,6 +22,8 @@ public class RTSComponent extends Canvas implements Runnable {
 	public static final double MS_PER_TICK = 1000.0 / 60.0;
 	
 	private Screen screen;
+	private GameScreen gameScreen;
+	private TitleScreen titleScreen;
 	private boolean running = true;
 	public static final int SCALE = 2;
 	private FullScreenManager fullScreenManager;
@@ -35,7 +38,7 @@ public class RTSComponent extends Canvas implements Runnable {
 		
 		input = InputHandler.getInputHandler(this);
 		
-		screen = new GameScreen(this, input);
+		setGameScreen(true);
 		
 		setIgnoreRepaint(true);
 		
@@ -119,6 +122,19 @@ public class RTSComponent extends Canvas implements Runnable {
 	
 	public void setScreen(Screen s){
 		screen = s;
+	}
+	
+	public void setGameScreen(boolean newScreen){
+		if(gameScreen == null || newScreen == true) {
+			gameScreen = null;
+			gameScreen = new GameScreen(this, input);
+		}
+		setScreen(gameScreen);
+	}
+	
+	public void setTitleScreen(){
+		if(titleScreen == null) titleScreen = new TitleScreen(this, input);
+		setScreen(titleScreen);
 	}
 	
 	public Screen getScreen(){
