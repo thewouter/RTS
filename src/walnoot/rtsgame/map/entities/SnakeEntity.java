@@ -21,11 +21,11 @@ public class SnakeEntity extends MovingEntity {
 	public static final int WALK_RANGE = 3, WALK_CHANGE_NORMAL = 3, MAX_TICKS_SCARED = 1000, WALK_CHANGE_SCARED = 20;
 
 	public SnakeEntity(Map map, int xPos, int yPos) {
-		super(map, xPos, yPos, null, ID);
+		super(map, xPos, yPos, ID);
 	}
 	
 	public SnakeEntity(Map map, int xPos, int yPos, int health){
-		super(map,xPos, yPos, null, ID);
+		super(map,xPos, yPos, ID);
 		this.health = health;
 	}
 

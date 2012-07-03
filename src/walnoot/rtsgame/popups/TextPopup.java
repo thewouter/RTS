@@ -3,7 +3,6 @@ package walnoot.rtsgame.popups;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.screen.RTSFont;
 import walnoot.rtsgame.screen.Screen;

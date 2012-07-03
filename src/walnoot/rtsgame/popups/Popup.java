@@ -3,7 +3,6 @@ package walnoot.rtsgame.popups;
 import java.awt.Graphics;
 
 import walnoot.rtsgame.Images;
-import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.entities.Entity;
 
 public abstract class Popup {

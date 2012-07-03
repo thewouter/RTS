@@ -3,7 +3,6 @@ package walnoot.rtsgame.screen.menus;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 

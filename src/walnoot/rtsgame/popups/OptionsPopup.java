@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import walnoot.rtsgame.Images;
-import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.screen.RTSFont;

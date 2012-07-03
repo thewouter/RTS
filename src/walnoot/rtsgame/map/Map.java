@@ -139,7 +139,7 @@ public class Map {
 	}
 	
 	public Entity getClosestEntity(int x, int y){
-		int closestX, closestY, closestDistance = 999;
+		int closestDistance = 999;
 		int xe, ye;
 		Entity closest = new SnakeEntity(null, 0, 0);
 		for(Entity e: entities){
@@ -154,7 +154,7 @@ public class Map {
 	}
 	
 	public MovingEntity getClosestMovingEntity(int x, int y){
-		int closestX, closestY, closestDistance = 999;
+		int closestDistance = 999;
 		int xe, ye;
 		Entity closest = null;
 		for(Entity e: entities){
@@ -174,7 +174,6 @@ public class Map {
 	}
 	
 	public void addEntity(Entity u){
-		System.out.println(u.getxPos() + " " + u.getyPos());
 		
 		if((getEntity(u.xPos, u.yPos)== null)&& !getTile(u.getxPos(), u.getyPos()).isSolid()){
 

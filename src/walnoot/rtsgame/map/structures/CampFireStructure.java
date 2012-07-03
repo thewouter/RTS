@@ -1,18 +1,17 @@
 package walnoot.rtsgame.map.structures;
 
 import walnoot.rtsgame.map.Map;
-import walnoot.rtsgame.map.tribes.Tribe;
 
 public class CampFireStructure extends BasicStructure{
 	
 	public static final int ID = 200;
 	
-	public CampFireStructure(Map map, int xPos, int yPos, Tribe tribe){
-		super(map, xPos, yPos, tribe, 2, 0, ID);
+	public CampFireStructure(Map map, int xPos, int yPos){
+		super(map, xPos, yPos, 2, 0, ID);
 	}
 	
-	public CampFireStructure(Map map, int xPos, int yPos, Tribe tribe, int health){
-		super(map,xPos,yPos,tribe,2,0,ID);
+	public CampFireStructure(Map map, int xPos, int yPos,  int health){
+		super(map,xPos,yPos,2,0,ID);
 		this.health = health;
 	}
 	

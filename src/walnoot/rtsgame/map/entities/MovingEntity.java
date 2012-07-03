@@ -3,13 +3,10 @@ package walnoot.rtsgame.map.entities;
 import java.awt.Point;
 import java.util.LinkedList;
 
-import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
-import walnoot.rtsgame.map.tribes.Tribe;
-import walnoot.rtsgame.menubar.MenuBarPopup;
 
 public abstract class MovingEntity extends Entity {
 	protected double timeTraveled; //hoelang hij onderweg is
@@ -17,8 +14,8 @@ public abstract class MovingEntity extends Entity {
 	
 	private LinkedList<Direction> nextDirections = new LinkedList<Direction>();
 	
-	public MovingEntity(Map map, int xPos, int yPos, Tribe tribe, int ID){
-		super(map, xPos, yPos, tribe, ID);
+	public MovingEntity(Map map, int xPos, int yPos,  int ID){
+		super(map, xPos, yPos, ID);
 	}
 	
 	public void update(){

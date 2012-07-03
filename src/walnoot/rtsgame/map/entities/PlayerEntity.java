@@ -10,7 +10,6 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.structures.CampFireStructure;
 import walnoot.rtsgame.map.structures.TentStructure;
 import walnoot.rtsgame.map.tiles.Tile;
-import walnoot.rtsgame.map.tribes.Tribe;
 import walnoot.rtsgame.popups.Option;
 import walnoot.rtsgame.popups.OptionsPopup;
 import walnoot.rtsgame.screen.GameScreen;
@@ -22,21 +21,21 @@ public class PlayerEntity extends MovingEntity {
 	private int lastSelectedOption = -1;
 	InputHandler input;
 	private final static int ID = 102;
-	public PlayerEntity(Map map,int xPos, int yPos, Tribe tribe){
-		super(map, xPos, yPos, tribe, ID);
+	public PlayerEntity(Map map,int xPos, int yPos){
+		super(map, xPos, yPos, ID);
 		name = Util.NAME_GEN.getRandomName();
 		
 		//moveRandomLocation();
 	}
 	
-	public PlayerEntity(Map map, int xPos, int yPos, Tribe tribe, int health){
-		super(map,xPos,yPos,tribe, ID);
+	public PlayerEntity(Map map, int xPos, int yPos, int health){
+		super(map,xPos,yPos, ID);
 		this.health = health;
+		name = Util.NAME_GEN.getRandomName();
 	}
 	
 	public void render(Graphics g){
-		if(getTribe() != null) g.setColor(getTribe().getColor());
-		else g.setColor(Color.BLACK);
+		g.setColor(Color.BLUE);
 		g.fillRect(getScreenX() + 14, getScreenY() + 6, 4, 4);
 		
 		g.setColor(Color.WHITE);
@@ -59,12 +58,12 @@ public class PlayerEntity extends MovingEntity {
 			OptionsPopup popup = new OptionsPopup(this);
 			Option option2 = new Option("Add campfire"){
 				public void onClick(){
-					map.addEntity(new CampFireStructure(map, xPos, yPos - 1, tribe));
+					map.addEntity(new CampFireStructure(map, xPos, yPos - 1));
 				}
 			};
 			Option option1 = new Option("Add tent") {
 				public void onClick() {
-					map.addEntity(new TentStructure(map, xPos, yPos-2, tribe));
+					map.addEntity(new TentStructure(map, xPos, yPos-2));
 				}
 			};
 			Option dig = new Option("dig"){

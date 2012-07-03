@@ -11,7 +11,7 @@ public class Images {
 	public static BufferedImage structures = load("/res/structures.png");
 	public static BufferedImage font = load("/res/font.png");
 	public static BufferedImage[][] sheep = split(load("/res/animations/sheep.png"),7,1);
-	public static BufferedImage[][] buttons = split(load("/res/menubar.png"),4,1);
+	public static BufferedImage[][] buttons = split(load("/res/menubar.png"),4,4);
 	
 	public static BufferedImage load(String fileName){
 		try{

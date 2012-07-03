@@ -6,13 +6,12 @@ import java.awt.image.BufferedImage;
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tiles.Tile;
-import walnoot.rtsgame.map.tribes.Tribe;
 
 public abstract class BasicStructure extends Structure {
 	private BufferedImage image;
 	
-	public BasicStructure(Map map, int xPos, int yPos, Tribe tribe, int textureX, int textureY, int ID){
-		super(map, xPos, yPos, tribe, ID);
+	public BasicStructure(Map map, int xPos, int yPos, int textureX, int textureY, int ID){
+		super(map, xPos, yPos, ID);
 		
 		loadImage(textureX, textureY);
 	}

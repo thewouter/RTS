@@ -4,7 +4,6 @@ import java.awt.Graphics;
 
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
-import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.Screen;
 import walnoot.rtsgame.screen.TitleScreen;
 

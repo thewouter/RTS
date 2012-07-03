@@ -4,18 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
-import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.Util;
-import walnoot.rtsgame.menubar.Button;
-import walnoot.rtsgame.menubar.MenuBarPopup;
-import walnoot.rtsgame.menubar.MenuBarPopupButton;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.Save;
 import walnoot.rtsgame.map.entities.DeerEntity;
@@ -26,9 +18,7 @@ import walnoot.rtsgame.map.entities.PlayerEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.structures.CampFireStructure;
 import walnoot.rtsgame.map.structures.TentStructure;
-import walnoot.rtsgame.map.tribes.Tribe;
 import walnoot.rtsgame.popups.Popup;
-import walnoot.rtsgame.popups.TextPopup;
 
 public class GameScreen extends Screen {
 	private Map map;
@@ -38,21 +28,20 @@ public class GameScreen extends Screen {
 	private Entity selectedEntity;
 	private Entity targetEntity; //the Entity the camera will go to
 	
-	private Tribe tribe;
 	private MenuBar bar;
 	
-	public Save save;
+	
 	
 	public GameScreen(RTSComponent component, InputHandler input){
 		super(component, input);
 		
-		map = new Map(20);
+		map = new Map(256);
 		
 		int goodYPos;
 		
 		for(int i = 4;; i++){
-			if(/*!map.getTile(4, i).isSolid()*/true){
-				selectedEntity = new PlayerEntity(map, 4, i, null);
+			if(!map.getTile(4, i).isSolid()){
+				selectedEntity = new PlayerEntity(map, 4, i);
 				goodYPos = i;
 				break;
 			}
@@ -62,20 +51,16 @@ public class GameScreen extends Screen {
 		
 		bar = new MenuBar(input, this);
 		
-		tribe = new Tribe("My Tribe", Color.BLUE);
-		selectedEntity.setTribe(tribe);
 		
 		map.addEntity(new DeerEntity(map, 4, goodYPos+1)); //voor de test, later weghalen
 		map.addEntity(new SheepEntity(map, 4, goodYPos+2)); //voor de test, later weghalen
-		map.addEntity(new TentStructure(map, 4, goodYPos + 3, null)); //voor de test, later weghalen
-		map.addEntity(new CampFireStructure(map, 4, goodYPos + 5, null)); //voor de test, later weghalen
+		map.addEntity(new TentStructure(map, 4, goodYPos + 3)); //voor de test, later weghalen
+		map.addEntity(new CampFireStructure(map, 4, goodYPos + 5)); //voor de test, later weghalen
 		
-
-		save = new Save(map, "save1.rts");
-		save.save();
 		
 		translationX = -selectedEntity.getScreenX();
 		translationY = -selectedEntity.getScreenY();
+		
 	}
 
 	public void render(Graphics g){
@@ -103,8 +88,16 @@ public class GameScreen extends Screen {
 		return selectedEntity;
 	}
 	
+	public void save(){
+		Save.save(map, "save1");
+	}
+	
+	public void save(String fileName){
+		Save.save(map, fileName);
+	}
+	
 	public void load(){
-		map = save.load();
+		map = Save.load("save1");
 	}
 	
 	public void update(){

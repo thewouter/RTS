@@ -2,7 +2,6 @@ package walnoot.rtsgame.map.entities;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 import walnoot.rtsgame.Animation;
 import walnoot.rtsgame.Images;
@@ -10,7 +9,6 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tiles.Tile;
-import walnoot.rtsgame.menubar.MenuBarPopup;
 import walnoot.rtsgame.popups.Option;
 import walnoot.rtsgame.popups.OptionsPopup;
 import walnoot.rtsgame.screen.GameScreen;
@@ -24,7 +22,7 @@ public class SheepEntity extends MovingEntity {
 	public static final int WALK_RANGE = 6, WALK_CHANGE = 5, TICKS_PER_SHEEP = 5, ID = 101;
 
 	public SheepEntity(Map map, int xPos, int yPos) {
-		super(map, xPos, yPos, null, ID);
+		super(map, xPos, yPos, ID);
 		sheepAnimation = new Animation(TICKS_PER_SHEEP);
 		backwardsSheepAnimation = new Animation(TICKS_PER_SHEEP);
 		currentAnimation = sheepAnimation;
@@ -35,7 +33,7 @@ public class SheepEntity extends MovingEntity {
 	}
 	
 	public SheepEntity(Map map, int xPos, int yPos, int health){
-		super(map,xPos, yPos, null,ID);
+		super(map,xPos, yPos, ID);
 		this.health = health;sheepAnimation = new Animation(TICKS_PER_SHEEP);
 		backwardsSheepAnimation = new Animation(TICKS_PER_SHEEP);
 		currentAnimation = sheepAnimation;

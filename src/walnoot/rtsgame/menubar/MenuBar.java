@@ -1,12 +1,8 @@
 package walnoot.rtsgame.menubar;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.util.LinkedList;
-
-import javax.imageio.ImageIO;
 
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
@@ -26,11 +22,7 @@ public class MenuBar {
 		this.screen = screen;
 		
 
-		addButton(new Button(Images.buttons[3][0], this) {
-			public void onLeftClick() {
-				bar.screen.load();
-			}
-		});
+		
 		
 		addButton(new Button(Images.buttons[0][0], this) {
 			public void onLeftClick() {
@@ -45,6 +37,24 @@ public class MenuBar {
 				setMenuBarPopup(popup);
 				showPopup = !showPopup;
 				
+			}
+		});
+		
+		addButton(new Button(Images.buttons[0][1], this){
+			public void onLeftClick() {
+				MenuBarPopup popup = new MenuBarPopup(xPosOnScreen + UITLOOP + (buttons.indexOf(this) + 1)*WIDTH_BUTTON, yPosOnScreen + UITLOOP, buttons.indexOf(this));
+				popup.addButton(new MenuBarPopupButton(Images.buttons[1][0]) {
+					public void onLeftClick() {
+						bar.screen.load();
+					}
+				});
+				popup.addButton(new MenuBarPopupButton(Images.buttons[2][0]) {
+					public void onLeftClick() {
+						bar.screen.save();
+					}
+				});
+				setMenuBarPopup(popup);
+				showPopup = !showPopup;
 			}
 		});
 		

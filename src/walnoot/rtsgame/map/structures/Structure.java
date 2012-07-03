@@ -2,12 +2,11 @@ package walnoot.rtsgame.map.structures;
 
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
-import walnoot.rtsgame.map.tribes.Tribe;
 
 public abstract class Structure extends Entity {
 	
-	public Structure(Map map, int xPos, int yPos, Tribe tribe, int ID){
-		super(map, xPos, yPos, tribe, ID);
+	public Structure(Map map, int xPos, int yPos, int ID){
+		super(map, xPos, yPos, ID);
 	}
 	
 	public abstract int getSize();

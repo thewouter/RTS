@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tiles.Tile;
-import walnoot.rtsgame.map.tribes.Tribe;
 import walnoot.rtsgame.menubar.MenuBarPopup;
 import walnoot.rtsgame.screen.GameScreen;
 
@@ -15,14 +14,12 @@ public abstract class Entity {
 	public int xPos;
 	public int yPos;
 	protected int health;
-	public Tribe tribe;
 	public final int ID;
 	
-	public Entity(Map map, int xPos, int yPos, Tribe tribe, int ID){
+	public Entity(Map map, int xPos, int yPos, int ID){
 		this.map = map;
 		this.xPos = xPos;
 		this.yPos = yPos;
-		this.tribe = tribe;
 		this.ID = ID;
 		
 		health = getMaxHealth();
@@ -73,13 +70,6 @@ public abstract class Entity {
 	
 	public MenuBarPopup getBuildMenu(){return null;}
 	
-	public Tribe getTribe(){
-		return tribe;
-	}
-	
-	public void setTribe(Tribe tribe){
-		this.tribe = tribe;
-	}
 	
 	public boolean isRemoved(){
 		if(health <= 0) return true;

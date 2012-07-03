@@ -1,7 +1,6 @@
 package walnoot.rtsgame.screen.menus;
 
 import java.awt.Graphics;
-import java.awt.event.MouseEvent;
 
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;

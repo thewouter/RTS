@@ -52,6 +52,7 @@ public class Options {
 				System.out.println("end of file");
 			}
 			
+			data_in.close();
 		}catch(Exception e){
 			System.out.println("Error! : " + e);
 		}

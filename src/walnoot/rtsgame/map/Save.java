@@ -18,16 +18,12 @@ import walnoot.rtsgame.map.structures.TentStructure;
 import walnoot.rtsgame.map.tiles.Tile;
 
 public class Save {
-	Map map;
 	
-	public static String FILENAME;
-	public Save(Map map, String name){
-		FILENAME = name;
-		this.map = map;
-	}
+	private static String EXTENSION = ".rts";
 	
-	public void save(){
-		File file = new File(FILENAME);
+	public static void save(Map map, String nameFile){
+		String fileName = nameFile + EXTENSION;
+		File file = new File(fileName);
 		
 		try{
 			FileOutputStream file_output = new FileOutputStream(file);
@@ -46,6 +42,7 @@ public class Save {
 			
 			data_out.writeInt(map.entities.size());		//the amount of entities
 			
+			
 			for(Entity e: map.entities){		  		// then the Entities
 				data_out.writeInt(e.ID);
 				data_out.writeInt(e.getxPos());
@@ -61,8 +58,9 @@ public class Save {
 	}
 	
 	
-	public Map load(){
-		File file = new File(FILENAME);
+	public static Map load(String nameFile){
+		String fileName  = nameFile + EXTENSION;
+		File file = new File(fileName);
 		Map map = null;
 		
 		try{
@@ -79,7 +77,8 @@ public class Save {
 				
 				for(int x = 0; x < height; x++){
 					for( int y = 0; y < width; y++){
-						map.changeTile(x, y, Tile.getTile(data_in.readInt()));
+						int ID = data_in.readInt();
+						map.changeTile(x, y, Tile.getTile(ID));
 					}
 				}
 				
@@ -92,14 +91,13 @@ public class Save {
 					int xPos = data_in.readInt();
 					int yPos = data_in.readInt();
 					int health = data_in.readInt();
-					System.out.println(ID);
 					if(ID >= 200){
 						switch(ID){
 						case 200:
-							map.addEntity(new CampFireStructure(map, xPos, yPos, null, health));
+							map.addEntity(new CampFireStructure(map, xPos, yPos, health));
 							break;
 						case 201:
-							map.addEntity(new TentStructure(map, xPos, yPos, null, health));
+							map.addEntity(new TentStructure(map, xPos, yPos, health));
 							break;
 						}
 					}else if(ID >= 100){
@@ -111,7 +109,7 @@ public class Save {
 							map.addEntity(new SheepEntity(map, xPos, yPos, health));
 							break;
 						case 102:
-							map.addEntity(new PlayerEntity(map, xPos, yPos, null, health));
+							map.addEntity(new PlayerEntity(map, xPos, yPos, health));
 							break;
 						case 103:
 							map.addEntity(new DeerEntity(map, xPos, yPos, health));
@@ -130,9 +128,8 @@ public class Save {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		if(map == null){
-			System.out.println("reading error:");
-		}
+		
+		
 		return map;
 		
 		
