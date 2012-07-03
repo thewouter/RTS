@@ -21,11 +21,17 @@ public class PlayerEntity extends MovingEntity {
 	private ArrayList<ItemEntity> inventory = new ArrayList<ItemEntity>();
 	private int lastSelectedOption = -1;
 	InputHandler input;
+	private final static int ID = 102;
 	public PlayerEntity(Map map,int xPos, int yPos, Tribe tribe){
-		super(map, xPos, yPos, tribe);
+		super(map, xPos, yPos, tribe, ID);
 		name = Util.NAME_GEN.getRandomName();
 		
 		//moveRandomLocation();
+	}
+	
+	public PlayerEntity(Map map, int xPos, int yPos, Tribe tribe, int health){
+		super(map,xPos,yPos,tribe, ID);
+		this.health = health;
 	}
 	
 	public void render(Graphics g){

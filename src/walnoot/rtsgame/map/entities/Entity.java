@@ -16,12 +16,14 @@ public abstract class Entity {
 	public int yPos;
 	protected int health;
 	public Tribe tribe;
+	public final int ID;
 	
-	public Entity(Map map, int xPos, int yPos, Tribe tribe){
+	public Entity(Map map, int xPos, int yPos, Tribe tribe, int ID){
 		this.map = map;
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.tribe = tribe;
+		this.ID = ID;
 		
 		health = getMaxHealth();
 	}

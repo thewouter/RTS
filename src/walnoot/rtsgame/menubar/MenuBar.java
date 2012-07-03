@@ -28,6 +28,7 @@ public class MenuBar {
 
 		addButton(new Button(Images.buttons[3][0], this) {
 			public void onLeftClick() {
+				bar.screen.load();
 			}
 		});
 		

@@ -17,8 +17,8 @@ public abstract class MovingEntity extends Entity {
 	
 	private LinkedList<Direction> nextDirections = new LinkedList<Direction>();
 	
-	public MovingEntity(Map map, int xPos, int yPos, Tribe tribe){
-		super(map, xPos, yPos, tribe);
+	public MovingEntity(Map map, int xPos, int yPos, Tribe tribe, int ID){
+		super(map, xPos, yPos, tribe, ID);
 	}
 	
 	public void update(){

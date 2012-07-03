@@ -11,8 +11,8 @@ import walnoot.rtsgame.map.tribes.Tribe;
 public abstract class BasicStructure extends Structure {
 	private BufferedImage image;
 	
-	public BasicStructure(Map map, int xPos, int yPos, Tribe tribe, int textureX, int textureY){
-		super(map, xPos, yPos, tribe);
+	public BasicStructure(Map map, int xPos, int yPos, Tribe tribe, int textureX, int textureY, int ID){
+		super(map, xPos, yPos, tribe, ID);
 		
 		loadImage(textureX, textureY);
 	}

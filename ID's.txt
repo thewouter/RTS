@@ -1,0 +1,16 @@
+0-99		Tiles
+	0 	Grass2
+	1 	Grass1
+	2 	Water
+	
+	16	Sand
+
+100-199		MovingEntities
+	100	SnakeEntity
+	101	SheepEntity
+	102	PlayerEntity
+	103	DeerEntity
+	
+200-299		Structures
+	200	CampFireStructure
+	201	TentStructure

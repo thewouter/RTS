@@ -5,8 +5,15 @@ import walnoot.rtsgame.map.tribes.Tribe;
 
 public class CampFireStructure extends BasicStructure{
 	
+	public static final int ID = 200;
+	
 	public CampFireStructure(Map map, int xPos, int yPos, Tribe tribe){
-		super(map, xPos, yPos, tribe, 2, 0);
+		super(map, xPos, yPos, tribe, 2, 0, ID);
+	}
+	
+	public CampFireStructure(Map map, int xPos, int yPos, Tribe tribe, int health){
+		super(map,xPos,yPos,tribe,2,0,ID);
+		this.health = health;
 	}
 	
 	public void update(){

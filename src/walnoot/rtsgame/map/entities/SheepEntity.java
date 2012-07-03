@@ -21,17 +21,28 @@ public class SheepEntity extends MovingEntity {
 	private Animation sheepAnimation;
 	private Animation backwardsSheepAnimation;
 	private Animation currentAnimation;
-	public static final int WALK_RANGE = 6, WALK_CHANGE = 5, TICKS_PER_SHEEP = 5;
+	public static final int WALK_RANGE = 6, WALK_CHANGE = 5, TICKS_PER_SHEEP = 5, ID = 101;
 
 	public SheepEntity(Map map, int xPos, int yPos) {
-		super(map, xPos, yPos, null);
+		super(map, xPos, yPos, null, ID);
 		sheepAnimation = new Animation(TICKS_PER_SHEEP);
 		backwardsSheepAnimation = new Animation(TICKS_PER_SHEEP);
 		currentAnimation = sheepAnimation;
 		for(int i = 0, in = Images.sheep.length-2; i < Images.sheep.length-1; i++ , in--){
 			sheepAnimation.addScene(Images.sheep[i][0]);
 			backwardsSheepAnimation.addScene(Images.sheep[in][0]);
-			}
+		}
+	}
+	
+	public SheepEntity(Map map, int xPos, int yPos, int health){
+		super(map,xPos, yPos, null,ID);
+		this.health = health;sheepAnimation = new Animation(TICKS_PER_SHEEP);
+		backwardsSheepAnimation = new Animation(TICKS_PER_SHEEP);
+		currentAnimation = sheepAnimation;
+		for(int i = 0, in = Images.sheep.length-2; i < Images.sheep.length-1; i++ , in--){
+			sheepAnimation.addScene(Images.sheep[i][0]);
+			backwardsSheepAnimation.addScene(Images.sheep[in][0]);
+		}
 	}
 
 	protected double getTravelTime() {

@@ -29,6 +29,21 @@ public class Tile {
 		tiles[id] = this;
 	}
 	
+	public static Tile getTile(int ID){
+		switch(ID){
+		case 0:
+			return grass2;
+		case 1:
+			return grass1;
+		case 2:
+			return water1;
+		case 17:
+			return sand1;
+		default:
+			return sand1;	
+		}
+	}
+	
 	public void render(Graphics g, Dimension screenSize, Point translation, Point position){
 		BufferedImage image = getImage();
 		

@@ -15,11 +15,18 @@ public class SnakeEntity extends MovingEntity {
 	
 	private boolean scared = false;
 	private int ticksScared = 11;
+	public static final int ID = 100;
+	
 	
 	public static final int WALK_RANGE = 3, WALK_CHANGE_NORMAL = 3, MAX_TICKS_SCARED = 1000, WALK_CHANGE_SCARED = 20;
 
 	public SnakeEntity(Map map, int xPos, int yPos) {
-		super(map, xPos, yPos, null);
+		super(map, xPos, yPos, null, ID);
+	}
+	
+	public SnakeEntity(Map map, int xPos, int yPos, int health){
+		super(map,xPos, yPos, null, ID);
+		this.health = health;
 	}
 
 	protected double getTravelTime() {

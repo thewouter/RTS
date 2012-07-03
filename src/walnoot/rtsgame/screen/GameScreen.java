@@ -17,6 +17,7 @@ import walnoot.rtsgame.menubar.Button;
 import walnoot.rtsgame.menubar.MenuBarPopup;
 import walnoot.rtsgame.menubar.MenuBarPopupButton;
 import walnoot.rtsgame.map.Map;
+import walnoot.rtsgame.map.Save;
 import walnoot.rtsgame.map.entities.DeerEntity;
 import walnoot.rtsgame.menubar.MenuBar;
 import walnoot.rtsgame.map.entities.Entity;
@@ -40,15 +41,17 @@ public class GameScreen extends Screen {
 	private Tribe tribe;
 	private MenuBar bar;
 	
+	public Save save;
+	
 	public GameScreen(RTSComponent component, InputHandler input){
 		super(component, input);
 		
-		map = new Map(256);
+		map = new Map(20);
 		
 		int goodYPos;
 		
 		for(int i = 4;; i++){
-			if(!map.getTile(4, i).isSolid()){
+			if(/*!map.getTile(4, i).isSolid()*/true){
 				selectedEntity = new PlayerEntity(map, 4, i, null);
 				goodYPos = i;
 				break;
@@ -64,8 +67,12 @@ public class GameScreen extends Screen {
 		
 		map.addEntity(new DeerEntity(map, 4, goodYPos+1)); //voor de test, later weghalen
 		map.addEntity(new SheepEntity(map, 4, goodYPos+2)); //voor de test, later weghalen
-		map.addEntity(new TentStructure(map, 4, goodYPos + 10, tribe)); //voor de test, later weghalen
-		map.addEntity(new CampFireStructure(map, 5, goodYPos + 12, tribe)); //voor de test, later weghalen
+		map.addEntity(new TentStructure(map, 4, goodYPos + 3, null)); //voor de test, later weghalen
+		map.addEntity(new CampFireStructure(map, 4, goodYPos + 5, null)); //voor de test, later weghalen
+		
+
+		save = new Save(map, "save1.rts");
+		save.save();
 		
 		translationX = -selectedEntity.getScreenX();
 		translationY = -selectedEntity.getScreenY();
@@ -94,6 +101,10 @@ public class GameScreen extends Screen {
 	
 	public Entity getSelectedEntity(){
 		return selectedEntity;
+	}
+	
+	public void load(){
+		map = save.load();
 	}
 	
 	public void update(){

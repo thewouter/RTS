@@ -35,14 +35,11 @@ public class Map {
 		
 	};
 	
+	
 	public Map(int mapSize){
-		mapSize -= 100;
 		surface = new Tile[mapSize][mapSize];
 		noiseObj = new PerlinNoise2D();
 		generateMap();
-		Save save = new Save(this, "test");
-		save.save();
-		save.load();
 	}
 	
 	public void update(int translationX, int translationY){
@@ -177,6 +174,8 @@ public class Map {
 	}
 	
 	public void addEntity(Entity u){
+		System.out.println(u.getxPos() + " " + u.getyPos());
+		
 		if((getEntity(u.xPos, u.yPos)== null)&& !getTile(u.getxPos(), u.getyPos()).isSolid()){
 
 			entities.add(u);

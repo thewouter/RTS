@@ -7,8 +7,8 @@ import walnoot.rtsgame.map.tribes.Tribe;
 
 public abstract class ItemEntity extends Entity {
 	
-	public ItemEntity(Map map, int xPos, int yPos, Tribe tribe){
-		super(map, xPos, yPos, tribe);
+	public ItemEntity(Map map, int xPos, int yPos, Tribe tribe, int ID){
+		super(map, xPos, yPos, tribe, ID);
 	}
 	
 	public void update(){
