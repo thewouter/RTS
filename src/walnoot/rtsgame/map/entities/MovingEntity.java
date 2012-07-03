@@ -68,7 +68,7 @@ public abstract class MovingEntity extends Entity {
 	
 	public void buildMenu(){}
 	
-	public MenuBarPopup getBuildMenu(){return null;}
+	//public MenuBarPopup getBuildMenu(){return null;}
 	
 	public Direction getNextDirection(){
 		if(!nextDirections.isEmpty()) return nextDirections.get(0);
