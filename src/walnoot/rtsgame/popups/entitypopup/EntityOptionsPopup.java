@@ -1,34 +1,27 @@
-package walnoot.rtsgame.popups;
+package walnoot.rtsgame.popups.entitypopup;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
 import walnoot.rtsgame.Images;
+import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
-import walnoot.rtsgame.screen.RTSFont;
 import walnoot.rtsgame.screen.Screen;
 
-public class OptionsPopup extends Popup {
+public class EntityOptionsPopup extends EntityPopup {
 	private final ArrayList<Option> options = new ArrayList<Option>();
 	private int width, height = 0;
 	int indexSelected = -1;
 	int indexHighlighted = -1;
 	int screenX = 0, screenY = 0;
 	int longestLine = 0;
-	Popup subPopup;
+	EntityPopup subPopup;
 	private boolean dimensionsSet = false;
 
-	public OptionsPopup(Entity owner, Option...options){
+	public EntityOptionsPopup(Entity owner, Option...options){
 		super(owner);
-		
-		/*if(owner instanceof MovingEntity){
-			if (((MovingEntity) owner).getSelectedOption() != -1){
-				indexSelected = ((MovingEntity) owner).getSelectedOption();
-			}
-		}*/
-		
 		for(int i = 0; i < options.length; i++){
 			this.options.add(options[i]);
 		}
@@ -42,15 +35,15 @@ public class OptionsPopup extends Popup {
 		
 		g.setColor(Color.BLACK);
 		
-		drawBox(g, width, height);
+		drawBox(g, width, height, getScreenX() ,getScreenY());
 		
 		for(int i = 0; i < options.size(); i++){
 			if(i == indexSelected){
-				options.get(i).renderInColor(g, this, i, Color.BLUE);
+				options.get(i).renderInColor(g, i, Color.BLUE);
 			}else if(i == indexHighlighted){
-				options.get(i).renderInColor(g, this, i, Color.RED);
+				options.get(i).renderInColor(g, i, Color.RED);
 			}else{
-				options.get(i).render(g,this, i);
+				options.get(i).render(g, i);
 			}
 		}
 	}
@@ -67,8 +60,8 @@ public class OptionsPopup extends Popup {
 
 	public void update(int translationX, int translationY, int mouseX, int mouseY){
 		
-		screenX = getScreenX() + translationX;
-		screenY = getScreenY() + translationY;
+		screenX = getScreenX() + translationX;;
+		screenY = getScreenY() + translationY;;
 		
 		if(isInPopup(mouseX, mouseY)){
 			indexHighlighted = (mouseY  - 16- screenY)/RTSFont.HEIGHT;

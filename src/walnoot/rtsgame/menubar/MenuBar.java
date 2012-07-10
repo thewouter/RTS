@@ -4,8 +4,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
+
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
+import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
+import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
+import walnoot.rtsgame.popups.screenpopup.TextInput;
 import walnoot.rtsgame.screen.GameScreen;
 
 public class MenuBar {
@@ -45,12 +50,39 @@ public class MenuBar {
 				MenuBarPopup popup = new MenuBarPopup(xPosOnScreen + UITLOOP + (buttons.indexOf(this) + 1)*WIDTH_BUTTON, yPosOnScreen + UITLOOP, buttons.indexOf(this));
 				popup.addButton(new MenuBarPopupButton(Images.buttons[1][0]) {
 					public void onLeftClick() {
-						bar.screen.load();
+						ScreenPopup popup = new ScreenPopup((bar.screen.getWidth() - 100)/2, (bar.screen.getHeight() - 100)/2, 100, 100, bar.screen);
+						popup.addPart(new TextInput(popup, bar.input));
+						popup.addPart(new ScreenPopupButton("load", popup, bar.input){
+							public void onLeftClick() {
+								bar.screen.load(owner.getTextInput().getOutput());
+								bar.screen.setPopup(null);
+							}
+						});
+						popup.addPart(new ScreenPopupButton("cancel", popup, bar.input) {
+							public void onLeftClick() {
+								bar.screen.setPopup(null);
+							}
+						});
+						bar.screen.setPopup(popup);
 					}
+					
 				});
 				popup.addButton(new MenuBarPopupButton(Images.buttons[2][0]) {
 					public void onLeftClick() {
-						bar.screen.save();
+						ScreenPopup popup = new ScreenPopup((bar.screen.getWidth() - 100)/2, (bar.screen.getHeight() - 100)/2, 100, 100, bar.screen);
+						popup.addPart(new TextInput(popup, bar.input));
+						popup.addPart(new ScreenPopupButton("Save", popup, bar.input){
+							public void onLeftClick() {
+								bar.screen.save(owner.getTextInput().getOutput());
+								bar.screen.setPopup(null);
+							}
+						});
+						popup.addPart(new ScreenPopupButton("cancel", popup, bar.input) {
+							public void onLeftClick() {
+								bar.screen.setPopup(null);
+							}
+						});
+						bar.screen.setPopup(popup);
 					}
 				});
 				setMenuBarPopup(popup);

@@ -95,11 +95,10 @@ public class RTSComponent extends Canvas implements Runnable {
 				
 				numTicks++;
 				
+				if(input.fullScreen.isTapped())fullScreenManager.switchFullScreen();
+				
 				screen.update();
 				input.update();
-				
-				if(input.escape.isPressed()) stop();
-				if(input.fullScreen.isTapped()) fullScreenManager.switchFullScreen();
 				
 			}
 			

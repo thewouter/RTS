@@ -3,31 +3,14 @@ package walnoot.rtsgame.popups;
 import java.awt.Graphics;
 
 import walnoot.rtsgame.Images;
-import walnoot.rtsgame.map.entities.Entity;
 
 public abstract class Popup {
-	public static final int EMPTY_SPACE = 32;
-	protected final Entity owner;
-	
-	/**
-	 * @param owner The owner of this PopUp
-	 */
-	public Popup(Entity owner){
-		this.owner = owner;
-	}
 	
 	public abstract void render(Graphics g);
 	public abstract void update(int translationX, int translationY, int mouseX, int mouseY);
 	public abstract void onLeftClick(int mouseX, int mouseY);
 	public abstract boolean isInPopup(int x, int y);
 	
-	/**
-	 * @param g
-	 * @param width width in pixels
-	 * @param height height in pixels
-	 * @param screenX
-	 * @param screenY
-	 */
 	protected void drawBox(Graphics g, int width, int height, int screenX, int screenY){
 		int imageWidth = Images.gui[0][0].getWidth();
 		int imageHeight = Images.gui[0][0].getHeight();
@@ -81,20 +64,5 @@ public abstract class Popup {
 		
 		g.drawImage(Images.gui[2][2], screenX + width - imageWidth, screenY + height - imageHeight, null);
 	}
-	
-	protected void drawBox(Graphics g, int width, int height){
-		drawBox(g, width, height, getScreenX(), getScreenY());
-	}
-	
-	public Entity getOwner(){
-		return owner;
-	}
-	
-	protected int getScreenX(){
-		return owner.getScreenX();
-	}
-	
-	protected int getScreenY(){
-		return owner.getScreenY();
-	}
+
 }

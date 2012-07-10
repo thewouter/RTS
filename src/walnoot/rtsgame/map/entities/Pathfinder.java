@@ -8,6 +8,7 @@ import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 
 /** tekst en uitleg op http://www.policyalmanac.org/games/aStarTutorial.htm */
+
 public class Pathfinder {
 	private static Direction[] directions = {Direction.NORTH, Direction.NORTH_EAST, Direction.EAST, Direction.SOUTH_EAST,
 			Direction.SOUTH, Direction.SOUTH_WEST, Direction.WEST, Direction.NORTH_WEST};
@@ -44,9 +45,10 @@ public class Pathfinder {
 		while(!openlist.isEmpty() && finalNode == null){
 			getNodeLowestF(openlist).checkNeighbours(map, openlist, closedlist);
 		}
-		
+		//Long startTime  = System.nanoTime();
 		Node node = finalNode;
 		while(true){
+			
 			Direction dir = node.getDirection();
 			if(dir != null)
 				result.addFirst(dir);
@@ -54,7 +56,9 @@ public class Pathfinder {
 			if(node.parent != null){
 				node = node.parent;
 			}else break;
+			//System.out.println(System.nanoTime() - startTime);
 		}
+		
 		
 		return result;
 	}

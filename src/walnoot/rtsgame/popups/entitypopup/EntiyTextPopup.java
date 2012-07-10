@@ -1,17 +1,17 @@
-package walnoot.rtsgame.popups;
+package walnoot.rtsgame.popups.entitypopup;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
+import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.map.entities.Entity;
-import walnoot.rtsgame.screen.RTSFont;
 import walnoot.rtsgame.screen.Screen;
 
-public class TextPopup extends Popup {
+public class EntiyTextPopup extends EntityPopup {
 	private final String[] text;
 	private int width, height;
 
-	public TextPopup(Entity owner, String...text){
+	public EntiyTextPopup(Entity owner, String...text){
 		super(owner);
 		this.text = text;
 		

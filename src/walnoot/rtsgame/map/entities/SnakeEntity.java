@@ -6,8 +6,8 @@ import java.awt.Graphics;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Map;
-import walnoot.rtsgame.popups.Option;
-import walnoot.rtsgame.popups.OptionsPopup;
+import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
+import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.Screen;
 
@@ -51,14 +51,14 @@ public class SnakeEntity extends MovingEntity {
 	}
 	
 	public void onRightClick(GameScreen screen, InputHandler input){
-		OptionsPopup popup = new OptionsPopup(this);
-		Option option1 = new Option("boe!"){
+		EntityOptionsPopup popup = new EntityOptionsPopup(this);
+		Option option1 = new Option("boe!",popup){
 			public void onClick() {
 				scare();
 			}
 		};
 		popup.addOption(option1);
-		screen.setPopup(popup);
+		screen.setEntityPopup(popup);
 	}
 	
 	public void scare(){

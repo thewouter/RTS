@@ -22,7 +22,7 @@ public class Save {
 	private static String EXTENSION = ".rts";
 	
 	public static void save(Map map, String nameFile){
-		String fileName = nameFile + EXTENSION;
+		String fileName = "saves/" + nameFile + EXTENSION;
 		File file = new File(fileName);
 		
 		try{
@@ -59,7 +59,7 @@ public class Save {
 	
 	
 	public static Map load(String nameFile){
-		String fileName  = nameFile + EXTENSION;
+		String fileName  = "saves/" + nameFile + EXTENSION;
 		File file = new File(fileName);
 		Map map = null;
 		
@@ -126,7 +126,8 @@ public class Save {
 			data_in.close();
 			
 		}catch(Exception e){
-			e.printStackTrace();
+			System.out.println("file not present");
+			//e.printStackTrace();
 		}
 		
 		

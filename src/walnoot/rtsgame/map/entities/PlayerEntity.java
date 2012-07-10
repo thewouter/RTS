@@ -10,8 +10,8 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.structures.CampFireStructure;
 import walnoot.rtsgame.map.structures.TentStructure;
 import walnoot.rtsgame.map.tiles.Tile;
-import walnoot.rtsgame.popups.Option;
-import walnoot.rtsgame.popups.OptionsPopup;
+import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
+import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.Screen;
 
@@ -55,42 +55,36 @@ public class PlayerEntity extends MovingEntity {
 	
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
 		if(entityClicked == this){
-			OptionsPopup popup = new OptionsPopup(this);
-			Option option2 = new Option("Add campfire"){
+			EntityOptionsPopup popup = new EntityOptionsPopup(this);
+			Option option2 = new Option("Add campfire", popup){
 				public void onClick(){
 					map.addEntity(new CampFireStructure(map, xPos, yPos - 1));
 				}
 			};
-			Option option1 = new Option("Add tent") {
+			Option option1 = new Option("Add tent",popup) {
 				public void onClick() {
 					map.addEntity(new TentStructure(map, xPos, yPos-2));
 				}
 			};
-			Option dig = new Option("dig"){
+			Option dig = new Option("dig", popup){
 				public void onClick() {
 					int ID = map.getTile(xPos, yPos - 1).getID();
 					if(ID == 0 || ID == 1) map.changeTile(xPos, yPos - 1, Tile.sand1);
 					else if(ID == 17) map.changeTile(xPos, yPos - 1, Tile.water1);
 				}
 			};
-			Option raise = new Option("raise"){
+			Option raise = new Option("raise",popup){
 				public void onClick() {
 					int ID = map.getTile(xPos, yPos - 1).getID();
 					if(ID == 2) map.changeTile(xPos, yPos - 1, Tile.sand1);
 					else if(ID == 17) map.changeTile(xPos, yPos - 1, Tile.grass1);
 				}
 			};
-			Option subPopupTest = new Option ("test"){
-				public void onClick(){
-					
-				}
-			};
 			popup.addOption(option1);
 			popup.addOption(option2);
 			popup.addOption(dig);
 			popup.addOption(raise);
-			popup.addOption(subPopupTest);
-			screen.setPopup(popup);
+			screen.setEntityPopup(popup);
 		}else follow(entityClicked);
 		
 		return false;

@@ -1,4 +1,4 @@
-package walnoot.rtsgame.screen;
+package walnoot.rtsgame;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -29,6 +29,11 @@ public class RTSFont {
 			currentChar.render(g, xPos + x, yPos);
 			x += currentChar.getWidth();
 		}
+	}
+	
+	public void drawLine(Graphics g, String text, int xPos, int yPos, Color color){
+		g.setColor(color);
+		drawLine(g, text, xPos, yPos);
 	}
 	
 	public void drawLineAndShadow(Graphics g, String text, int xPos, int yPos, Color shadowColor){

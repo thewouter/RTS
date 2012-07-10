@@ -9,8 +9,8 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tiles.Tile;
-import walnoot.rtsgame.popups.Option;
-import walnoot.rtsgame.popups.OptionsPopup;
+import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
+import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.screen.GameScreen;
 
 public class SheepEntity extends MovingEntity {
@@ -68,20 +68,20 @@ public class SheepEntity extends MovingEntity {
 	
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
 		if(entityClicked == this){
-			OptionsPopup popup = new OptionsPopup(this);
-			Option option1 = new Option("getclosest"){
+			EntityOptionsPopup popup = new EntityOptionsPopup(this);
+			Option option1 = new Option("getclosest",popup){
 				public void onClick() {
 					System.out.println(map.getClosestEntity(getxPos(), getyPos()).getName());
 				}
 			};
 			popup.addOption(option1);
-			popup.addOption(new Option("get closest moving entity"){
+			popup.addOption(new Option("get closest moving entity",popup){
 				public void onClick() {
 					System.out.println(map.getClosestMovingEntity(getxPos(), getyPos()).getName());
 				}
 			});
 			
-			screen.setPopup(popup);
+			screen.setEntityPopup(popup);
 			
 		}else{
 			follow(entityClicked);
