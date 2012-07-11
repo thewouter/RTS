@@ -18,8 +18,10 @@ import walnoot.rtsgame.map.entities.PlayerEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.structures.CampFireStructure;
 import walnoot.rtsgame.map.structures.TentStructure;
+import walnoot.rtsgame.map.structures.TreeStructure;
 import walnoot.rtsgame.popups.entitypopup.EntityPopup;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
+import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
 
 public class GameScreen extends Screen {
 	private Map map;
@@ -40,7 +42,7 @@ public class GameScreen extends Screen {
 	public GameScreen(RTSComponent component, InputHandler input){
 		super(component, input);
 		
-		map = new Map(256);
+		map = new Map(256,false);
 		
 		int goodYPos;
 		
@@ -62,6 +64,7 @@ public class GameScreen extends Screen {
 		map.addEntity(new SheepEntity(map, 4, goodYPos+2)); //voor de test, later weghalen
 		map.addEntity(new TentStructure(map, 4, goodYPos + 3)); //voor de test, later weghalen
 		map.addEntity(new CampFireStructure(map, 4, goodYPos + 5)); //voor de test, later weghalen
+		map.addEntity(new TreeStructure(map, 4, goodYPos + 7)); //voor de test, later weghalen
 		
 		
 		translationX = -selectedEntity.getScreenX();
@@ -72,7 +75,7 @@ public class GameScreen extends Screen {
 	public void render(Graphics g){
 		Point translation = new Point((int) translationX, (int) translationY);
 		
-		map.render(g, translation, new Dimension(getWidth(), getHeight()));
+		map.render(g, translation, new Dimension(getWidth(), getHeight()), getWidth(), getHeight());
 		bar.render(g, getWidth(), getHeight());
 		
 		g.translate(translation.x, translation.y);
@@ -115,12 +118,12 @@ public class GameScreen extends Screen {
 	}
 	
 	public void load(){
-		Map map = Save.load("save1");
-		if(map != null)this.map = map;
+		load("save1");
 	}
 	
 	public void load(String nameFile){
-		map = Save.load(nameFile);
+		Map map = Save.load(nameFile);
+		if(map != null)this.map = map;
 	}
 	
 	public void update(){
@@ -152,7 +155,6 @@ public class GameScreen extends Screen {
 				}
 				if(bar.isInBar(input.getMouseX(), input.getMouseY())){
 				
-				
 				}else if(entityPopup != null && !entityPopup.isInPopup(input.getMouseX(), input.getMouseY()) ){
 					selectedEntity = map.getEntity(getMapX(), getMapY());
 				}else if( entityPopup == null ){
@@ -161,7 +163,6 @@ public class GameScreen extends Screen {
 			}
 			
 			if(entityPopup != null){
-				System.out.println(3);
 				entityPopup.update(translationX,translationY, input.getMouseX(), input.getMouseY());
 				if(entityPopup.getOwner() != selectedEntity) entityPopup = null;
 			}
@@ -212,6 +213,12 @@ public class GameScreen extends Screen {
 	
 	public void pause(){
 		pause = true;
+		popup = new ScreenPopup((getWidth()-84)/2, (getHeight() - 20)/2, 84, 20, this);
+		popup.addPart(new ScreenPopupButton("play", popup, input) {
+			public void onLeftClick() {
+				dePause();			
+			}
+		});
 	}
 	
 	public void dePause(){
@@ -222,7 +229,7 @@ public class GameScreen extends Screen {
 	public void setPopup(ScreenPopup popup){
 		this.popup = popup;
 		if(popup == null){
-			dePause();
-		}else pause();
+			pause = false;
+		}else pause = true;
 	}
 }

@@ -3,7 +3,6 @@ package walnoot.rtsgame.menubar;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
-import walnoot.rtsgame.Images;
 import walnoot.rtsgame.popups.Popup;
 
 public class MenuBarPopup extends Popup {

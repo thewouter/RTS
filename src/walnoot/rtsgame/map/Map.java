@@ -8,12 +8,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-
 import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SnakeEntity;
 import walnoot.rtsgame.map.structures.Structure;
+import walnoot.rtsgame.map.structures.TreeStructure;
 import walnoot.rtsgame.map.tiles.Tile;
 
 public class Map {
@@ -21,25 +21,32 @@ public class Map {
 	public List<Entity> entities = new ArrayList<Entity>();
 	private PerlinNoise2D noiseObj;
 	
+	public static final int TREE_GROW_CHANGE = 10;  // change to spawn a tree is TREE_GROW_CHANGE^-1
+	
 	private static final Comparator<Entity> spriteSorter = new Comparator<Entity>() {
 		public int compare(Entity e0, Entity e1){
-			int y0 = e0.getxPos() + e0.getyPos(); //aprox. screen y coordinate of e0
-			int y1 = e1.getxPos() + e1.getyPos(); //aprox. screen y coordinate of e1
-			
-			if(y1 < y0)
-				return +1;
-			if(y1 > y0)
+			int x0 = e0.getxPos();
+			int y0 = e0.getyPos();
+			int x1 = e1.getxPos();
+			int y1 = e1.getyPos();
+			if(x0 > x1){
+				return 1;
+			}else if(x0 < x1){
 				return -1;
+			}else if(y0 > y1){
+				return 1;
+			}
 			return 0;
 		}
-		
 	};
 	
 	
-	public Map(int mapSize){
+	public Map(int mapSize, boolean isSave){
+		
 		surface = new Tile[mapSize][mapSize];
 		noiseObj = new PerlinNoise2D();
-		generateMap();
+		if(!isSave)generateMap();
+		else generateEmptyMap();
 	}
 	
 	public void update(int translationX, int translationY){
@@ -48,36 +55,59 @@ public class Map {
 		}
 	}
 	
-	public void generateMap(){
-		//long then = System.currentTimeMillis();
-		
+	public void generateEmptyMap(){
 		for(int x = 0; x < getWidth(); x++){
 			for(int y = 0; y < getWidth(); y++){
 				float noise = noiseObj.perlinNoise(x, y, 0.3f, 32f, 4);
-				//double noise = SimplexNoise.noise(x / 64f, y / 64f);
-				
-				if(noise > 0) surface[x][y] = Tile.grass1;
+			
+				if(noise > 0) {
+					surface[x][y] = Tile.grass1;
+				}
 				else if(noise > -0.2f) surface[x][y] = Tile.sand1;
 				else surface[x][y] = Tile.water1;
 			}
 		}
-		
-		//System.out.println(System.currentTimeMillis() - then);
 	}
 	
-	public void render(Graphics g, Point translation, Dimension screenSize){
+	public void generateMap(){
+		
+		for(int x = 0; x < getWidth(); x++){
+			for(int y = 0; y < getWidth(); y++){
+				float noise = noiseObj.perlinNoise(x, y, 0.3f, 32f, 4);
+				
+				if(noise > 0) {
+					surface[x][y] = Tile.grass1;
+					if(noise > 0.5 && noise < 0.9) {
+						if(Util.RANDOM.nextInt(TREE_GROW_CHANGE) == 0){
+							addEntity(new TreeStructure(this, x, y));
+						}
+					}
+				}
+				else if(noise > -0.2f) surface[x][y] = Tile.sand1;
+				else surface[x][y] = Tile.water1;
+			}
+		}
+	}
+	
+	public void render(Graphics g, Point translation, Dimension screenSize, int screenWidth, int screenHeight){
 		g.translate(translation.x, translation.y);
 		
 		for(int x = 0; x < getWidth(); x++){
 			for(int y = 0; y < getLength(); y++){
-				getTile(x, y).render(g, screenSize, translation, new Point(x, y));
+				if(x + y + 2 > - ((translation.y) / 8) && x + y - 1 < - ((translation.y - screenHeight)/ 8) && x - y - 3 < ((translation.x) / 16) && x - y + 1 > ((translation.x - screenWidth) / 16)){
+					getTile(x, y).render(g, screenSize, translation, new Point(x, y));
+				}
 			}
 		}
 		
 		Collections.sort(entities, spriteSorter);
 		
 		for(Entity e: entities){
-			e.render(g);
+			int x = e.getxPos();
+			int y = e.getyPos();
+			if(x + y + 2 > - ((translation.y) / 8) && x + y - 1 < - ((translation.y - screenHeight - 128)/ 8) && x - y - 3 < ((translation.x) / 16) && x - y + 1 > ((translation.x - screenWidth) / 16)){
+				e.render(g);
+			}
 		}
 		
 		g.translate(-translation.x, -translation.y);
@@ -166,7 +196,6 @@ public class Map {
 			}
 		}
 		return (MovingEntity) closest;
-		
 	}
 	
 	public int getLength(){
@@ -174,9 +203,7 @@ public class Map {
 	}
 	
 	public void addEntity(Entity u){
-		
 		if((getEntity(u.xPos, u.yPos)== null)&& !getTile(u.getxPos(), u.getyPos()).isSolid()){
-
 			entities.add(u);
 		}
 	}

@@ -14,3 +14,4 @@
 200-299		Structures
 	200	CampFireStructure
 	201	TentStructure
+	202 TreeStructure

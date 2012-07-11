@@ -8,11 +8,9 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class InputHandler implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	private ArrayList<Key> keylist = new ArrayList<Key>();
-	public LinkedList<Key> letters = new LinkedList<Key>();
 
 	public Key left = new Key("", KeyEvent.VK_LEFT, KeyEvent.VK_A);
 	public Key fullScreen = new Key("", KeyEvent.VK_F11);

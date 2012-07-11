@@ -47,7 +47,7 @@ public abstract class ScreenPopupButton extends ScreenPopupPart {
 	public void update(int xPos, int yPos, int width) {
 		this.xPos = xPos;
 		this.yPos = yPos;
-		this.width = width;
+		this.width = button.getWidth();
 		if(input.LMBTapped() && isInRect(input.mouseX, input.mouseY)){
 			onLeftClick();
 		}

@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
-import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
-
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
@@ -61,9 +59,11 @@ public class MenuBar {
 						popup.addPart(new ScreenPopupButton("cancel", popup, bar.input) {
 							public void onLeftClick() {
 								bar.screen.setPopup(null);
+								System.out.println("test");
 							}
 						});
 						bar.screen.setPopup(popup);
+						
 					}
 					
 				});

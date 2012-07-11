@@ -50,6 +50,10 @@ public class ScreenPopup extends Popup{
 		return false;
 	}
 	
+	public ScreenPopupPart getPart(int index){
+		return parts.get(index);
+	}
+	
 	public void addPart(ScreenPopupPart p){
 		parts.add(p);
 	}

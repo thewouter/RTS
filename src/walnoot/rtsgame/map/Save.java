@@ -15,6 +15,7 @@ import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.SnakeEntity;
 import walnoot.rtsgame.map.structures.CampFireStructure;
 import walnoot.rtsgame.map.structures.TentStructure;
+import walnoot.rtsgame.map.structures.TreeStructure;
 import walnoot.rtsgame.map.tiles.Tile;
 
 public class Save {
@@ -73,7 +74,7 @@ public class Save {
 				int width = data_in.readInt();
 				int height = data_in.readInt();
 				
-				map = new Map(width);
+				map = new Map(width, true);
 				
 				for(int x = 0; x < height; x++){
 					for( int y = 0; y < width; y++){
@@ -98,6 +99,9 @@ public class Save {
 							break;
 						case 201:
 							map.addEntity(new TentStructure(map, xPos, yPos, health));
+							break;
+						case 202:
+							map.addEntity(new TreeStructure(map, xPos, yPos, health));
 							break;
 						}
 					}else if(ID >= 100){
