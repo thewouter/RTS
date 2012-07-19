@@ -34,6 +34,8 @@ public class Save {
 			
 			data_out.writeInt(mapWidth);				// first  2 ints are the map width and height
 			data_out.writeInt(mapHeight);
+
+			data_out.writeInt(map.amountSheepGroups);	// the amount of sheep groups
 			
 			for(int x = 0; x < mapHeight; x++){			// after that the ID's of all the tiles
 				for(int y = 0; y < mapWidth; y++){
@@ -73,8 +75,10 @@ public class Save {
 				
 				int width = data_in.readInt();
 				int height = data_in.readInt();
+
+				int amountSheepGroups = data_in.readInt();
 				
-				map = new Map(width, true);
+				map = new Map(width, amountSheepGroups);
 				
 				for(int x = 0; x < height; x++){
 					for( int y = 0; y < width; y++){
@@ -82,6 +86,7 @@ public class Save {
 						map.changeTile(x, y, Tile.getTile(ID));
 					}
 				}
+				
 				
 				int amountEntities = data_in.readInt();
 				

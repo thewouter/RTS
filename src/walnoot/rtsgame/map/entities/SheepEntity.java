@@ -15,31 +15,26 @@ import walnoot.rtsgame.screen.GameScreen;
 
 public class SheepEntity extends MovingEntity {
 	
-	private int counter = 0;
 	private Animation sheepAnimation;
-	private Animation backwardsSheepAnimation;
 	private Animation currentAnimation;
-	public static final int WALK_RANGE = 6, WALK_CHANGE = 5, TICKS_PER_SHEEP = 5, ID = 101;
+	private int lifeTime;
+	public static final int WALK_RANGE = 6, WALK_CHANGE = 5, TICKS_PER_SHEEP = 5, APROX_LIFETIME_IN_TICKS = 60000, ID = 101;
 
 	public SheepEntity(Map map, int xPos, int yPos) {
 		super(map, xPos, yPos, ID);
 		sheepAnimation = new Animation(TICKS_PER_SHEEP);
-		backwardsSheepAnimation = new Animation(TICKS_PER_SHEEP);
 		currentAnimation = sheepAnimation;
-		for(int i = 0, in = Images.sheep.length-2; i < Images.sheep.length-1; i++ , in--){
+		for(int i = 0; i < Images.sheep.length-1; i++){
 			sheepAnimation.addScene(Images.sheep[i][0]);
-			backwardsSheepAnimation.addScene(Images.sheep[in][0]);
 		}
 	}
 	
 	public SheepEntity(Map map, int xPos, int yPos, int health){
 		super(map,xPos, yPos, ID);
 		this.health = health;sheepAnimation = new Animation(TICKS_PER_SHEEP);
-		backwardsSheepAnimation = new Animation(TICKS_PER_SHEEP);
 		currentAnimation = sheepAnimation;
-		for(int i = 0, in = Images.sheep.length-2; i < Images.sheep.length-1; i++ , in--){
+		for(int i = 0; i < Images.sheep.length-1; i++){
 			sheepAnimation.addScene(Images.sheep[i][0]);
-			backwardsSheepAnimation.addScene(Images.sheep[in][0]);
 		}
 	}
 
@@ -53,15 +48,11 @@ public class SheepEntity extends MovingEntity {
 	}
 	
 	public void update(){
-		
-		
-		
-		if(isMoving()) counter++;
-		if(counter >= TICKS_PER_SHEEP*(Images.sheep.length-1)) counter = 0;
+		lifeTime++;
 		super.update();
 		sheepAnimation.update();
-		backwardsSheepAnimation.update();
 		if(!isMoving() && Util.RANDOM.nextInt(1000) < WALK_CHANGE) moveRandomLocation(WALK_RANGE);
+		if(Util.RANDOM.nextInt(APROX_LIFETIME_IN_TICKS) == 0)map.removeEntity(xPos, yPos);
 	}
 	
 	

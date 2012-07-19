@@ -68,9 +68,6 @@ public abstract class Entity {
 		return false;
 	}
 	
-	public MenuBarPopup getBuildMenu(){return null;}
-	
-	
 	public boolean isRemoved(){
 		if(health <= 0) return true;
 		return removed;

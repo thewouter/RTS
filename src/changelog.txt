@@ -17,4 +17,8 @@ changelog:
 	ook OptionsPopup en de Options.
 10*6*2012
 	MovingEntities can follow other Entitities now
-	The camera can follow an Entitie now
+	The camera can follow an Entity now
+15*7*2012
+	sheeps added, they spawn in groups with ajustible sizes,(only in-code)
+	trees spawn at grass with a noise of 0.8 of higher with ajustible changes(again, only in-code)
+	

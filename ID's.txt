@@ -15,3 +15,6 @@
 	200	CampFireStructure
 	201	TentStructure
 	202 TreeStructure
+	
+300-399
+	300 GoldMine

@@ -17,6 +17,7 @@ import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.PlayerEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.structures.CampFireStructure;
+import walnoot.rtsgame.map.structures.GoldMine;
 import walnoot.rtsgame.map.structures.TentStructure;
 import walnoot.rtsgame.map.structures.TreeStructure;
 import walnoot.rtsgame.popups.entitypopup.EntityPopup;
@@ -42,7 +43,7 @@ public class GameScreen extends Screen {
 	public GameScreen(RTSComponent component, InputHandler input){
 		super(component, input);
 		
-		map = new Map(256,false);
+		map = new Map(256);
 		
 		int goodYPos;
 		
@@ -65,10 +66,13 @@ public class GameScreen extends Screen {
 		map.addEntity(new TentStructure(map, 4, goodYPos + 3)); //voor de test, later weghalen
 		map.addEntity(new CampFireStructure(map, 4, goodYPos + 5)); //voor de test, later weghalen
 		map.addEntity(new TreeStructure(map, 4, goodYPos + 7)); //voor de test, later weghalen
+		map.addEntity(new GoldMine(map, 20, goodYPos + 20, 4,5)); // etc...
 		
 		
 		translationX = -selectedEntity.getScreenX();
 		translationY = -selectedEntity.getScreenY();
+		
+		
 		
 	}
 
@@ -134,7 +138,8 @@ public class GameScreen extends Screen {
 			if(input.left.isPressed()) translationX += 5;
 			if(input.right.isPressed()) translationX -= 5;
 	
-			map.update((int) Math.floor(translationX), (int) Math.floor(translationY));
+			map.update((int) Math.floor(translationX), (int) Math.floor(translationY), getWidth(), getHeight());
+			
 			bar.update(getWidth(), getHeight());
 		
 			if(input.space.isPressed()) targetEntity = selectedEntity;

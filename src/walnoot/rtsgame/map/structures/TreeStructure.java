@@ -14,18 +14,12 @@ public class TreeStructure extends BasicStructure{
 
 	public TreeStructure(Map map, int xPos, int yPos) {
 		super(map, xPos, yPos, 3, 0, ID);
-		try {
-			image = ImageIO.read(this.getClass().getResource("/res/tree.png"));
-		} catch (IOException e) {}
 	}
 	
 	
 	public TreeStructure(Map map, int xPos, int yPos, int health){
 		super(map, xPos, yPos, 3, 0, ID);
 		this.health = health;
-		try{
-			image = ImageIO.read(this.getClass().getResource("/res/tree.png"));
-		}catch(IOException e){}
 	}
 	
 	public void update() {

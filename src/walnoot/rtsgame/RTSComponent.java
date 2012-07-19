@@ -43,7 +43,7 @@ public class RTSComponent extends Canvas implements Runnable {
 		setIgnoreRepaint(true);
 		
 		if(!new File(Options.fileName).exists()) Options.writeOptions();
-		Options.loadOptions();
+		//Options.loadOptions();
 	}
 	
 	public void render(){
