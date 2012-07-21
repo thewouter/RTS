@@ -83,7 +83,7 @@ public class EntityOptionsPopup extends EntityPopup {
 	}
 	
 	public boolean isInPopup(int mouseX, int mouseY){
-		if(mouseY > screenY + Images.gui[0][0].getHeight() && mouseY < screenY + height*RTSFont.HEIGHT/ + 2 * Images.gui[0][0].getHeight() && mouseX >= screenX && mouseX < screenX + width + 2* Images.gui[0][0].getWidth()){
+		if(mouseX > screenX && mouseX < screenX + width && mouseY > screenY && mouseY < screenY + height){
 			return true;
 		}
 		return false;

@@ -66,8 +66,9 @@ public class GameScreen extends Screen {
 		map.addEntity(new TentStructure(map, 4, goodYPos + 3)); //voor de test, later weghalen
 		map.addEntity(new CampFireStructure(map, 4, goodYPos + 5)); //voor de test, later weghalen
 		map.addEntity(new TreeStructure(map, 4, goodYPos + 7)); //voor de test, later weghalen
-		map.addEntity(new GoldMine(map, 20, goodYPos + 20, 4,5)); // etc...
-		
+		map.addEntity(new GoldMine(map, 20, goodYPos + 20, 3)); // etc...
+		map.addEntity(new GoldMine(map, 15, goodYPos + 20, 2)); 
+		map.addEntity(new GoldMine(map, 10, goodYPos + 20, 1)); 
 		
 		translationX = -selectedEntity.getScreenX();
 		translationY = -selectedEntity.getScreenY();

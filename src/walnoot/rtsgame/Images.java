@@ -6,13 +6,13 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Images {
-	public static BufferedImage[][] terrain = split(load("/res/terrain3.png"), 16, 16);
+	public static BufferedImage[][] terrain = split(load("/res/terrain2.png"), 16, 16);
 	public static BufferedImage[][] gui = split(load("/res/gui.png"), 3, 3);
 	public static BufferedImage structures = load("/res/structures.png");
 	public static BufferedImage font = load("/res/font.png");
 	public static BufferedImage[][] sheep = split(load("/res/animations/sheep.png"),7,1);
 	public static BufferedImage[][] buttons = split(load("/res/menubar.png"),4,4);
-	public static BufferedImage[] mines = split(load("/res/mines.png"), 4);
+	public static BufferedImage mines = load("/res/mines.png");
 	
 	public static BufferedImage load(String fileName){
 		try{

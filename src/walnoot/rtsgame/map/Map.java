@@ -282,11 +282,22 @@ public class Map {
 	}
 	
 	public void addEntity(Entity u){
-		if(getEntity(u.xPos, u.yPos)== null){
-			if(getTile(u.getxPos(), u.getyPos()) == null) return;
-			if(!getTile(u.getxPos(), u.getyPos()).isSolid()){
-				entities.add(u);
+		if(! (u instanceof Structure)){
+			if(getEntity(u.xPos, u.yPos)== null){
+				if(getTile(u.getxPos(), u.getyPos()) == null) return;
+				if(!getTile(u.getxPos(), u.getyPos()).isSolid()){
+					entities.add(u);
+				}
 			}
+		}else{
+			Structure structure = (Structure) u;
+			for(int x = 0; x < structure.getSize(); x++){
+				for(int y = 0; y < structure.getSize(); y++){
+					if(getTile(u.xPos +x, u.yPos + y).isSolid()) return;
+				}
+			}
+			entities.add(u);
+			
 		}
 	}
 	

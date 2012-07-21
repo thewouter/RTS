@@ -40,5 +40,6 @@ public class EntiyTextPopup extends EntityPopup {
 
 	public void onLeftClick(int mouseX, int mouseY) {}
 	public boolean isInPopup(int x , int y){
-		return false;}
+		return false;
+	}
 }
