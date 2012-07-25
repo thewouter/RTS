@@ -282,7 +282,7 @@ public class Map {
 	}
 	
 	public void addEntity(Entity u){
-		if(! (u instanceof Structure)){
+		if(!(u instanceof Structure) || ((Structure) u ).getSize() == 1){
 			if(getEntity(u.xPos, u.yPos)== null){
 				if(getTile(u.getxPos(), u.getyPos()) == null) return;
 				if(!getTile(u.getxPos(), u.getyPos()).isSolid()){
@@ -293,7 +293,7 @@ public class Map {
 			Structure structure = (Structure) u;
 			for(int x = 0; x < structure.getSize(); x++){
 				for(int y = 0; y < structure.getSize(); y++){
-					if(getTile(u.xPos +x, u.yPos + y).isSolid()) return;
+					if(getTile(u.xPos + x, u.yPos + y).isSolid()) return; System.out.println("gets");
 				}
 			}
 			entities.add(u);
