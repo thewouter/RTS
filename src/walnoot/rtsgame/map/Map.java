@@ -14,6 +14,7 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.SnakeEntity;
+import walnoot.rtsgame.map.structures.GoldMine;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.TreeStructure;
 import walnoot.rtsgame.map.tiles.Tile;
@@ -157,7 +158,10 @@ public class Map {
 						}
 					}
 					
-					if(Util.RANDOM)
+					if(Util.RANDOM.nextInt(10000) < SPAWN_CHANGE_GOLD_MINE){
+						int size = Util.RANDOM.nextInt(3) + 1;
+						if(x > size && y > size) addEntity(new GoldMine(this, x - size, y - size ,size));
+					}
 				}
 				else if(noise > -0.2f) surface[x][y] = Tile.sand1;
 				else surface[x][y] = Tile.water1;
