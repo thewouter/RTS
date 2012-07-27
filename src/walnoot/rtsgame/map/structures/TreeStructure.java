@@ -1,9 +1,6 @@
 package walnoot.rtsgame.map.structures;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import walnoot.rtsgame.map.Map;
 

@@ -17,7 +17,6 @@ public class SheepEntity extends MovingEntity {
 	
 	private Animation sheepAnimation;
 	private Animation currentAnimation;
-	private int lifeTime;
 	public static final int WALK_RANGE = 6, WALK_CHANGE = 5, TICKS_PER_SHEEP = 5, APROX_LIFETIME_IN_TICKS = 60000, ID = 101;
 
 	public SheepEntity(Map map, int xPos, int yPos) {
@@ -48,7 +47,6 @@ public class SheepEntity extends MovingEntity {
 	}
 	
 	public void update(){
-		lifeTime++;
 		super.update();
 		sheepAnimation.update();
 		if(!isMoving() && Util.RANDOM.nextInt(1000) < WALK_CHANGE) moveRandomLocation(WALK_RANGE);

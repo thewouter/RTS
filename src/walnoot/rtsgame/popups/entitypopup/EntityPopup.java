@@ -2,7 +2,6 @@ package walnoot.rtsgame.popups.entitypopup;
 
 import java.awt.Graphics;
 
-import walnoot.rtsgame.Images;
 import walnoot.rtsgame.popups.Popup;
 import walnoot.rtsgame.map.entities.Entity;
 

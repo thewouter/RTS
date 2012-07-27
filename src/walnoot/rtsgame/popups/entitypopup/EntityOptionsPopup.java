@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import walnoot.rtsgame.Images;
 import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
@@ -17,7 +16,6 @@ public class EntityOptionsPopup extends EntityPopup {
 	int indexHighlighted = -1;
 	int screenX = 0, screenY = 0;
 	int longestLine = 0;
-	EntityPopup subPopup;
 	private boolean dimensionsSet = false;
 
 	public EntityOptionsPopup(Entity owner, Option...options){

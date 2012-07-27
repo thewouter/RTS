@@ -1,7 +1,5 @@
 package walnoot.rtsgame.map.structures;
 
-import java.awt.Graphics;
-
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;

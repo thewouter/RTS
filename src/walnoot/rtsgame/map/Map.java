@@ -26,7 +26,7 @@ public class Map {
 	public int amountSheepGroups = 0;
 	int c1 = 0, c2 = 0;
 	
-	public static final int TREE_GROW_CHANGE = 10, SHEEP_SPAWN_CHANGE_IN_FOREST =2, SHEEP_SPAWN_CHANGE_ON_PLAINS = 5, RADIUS_SHEEP_GROUPS = 5, SIZE_SHEEP_GROUPS = 10;  
+	public static final int TREE_GROW_CHANGE = 10, SHEEP_SPAWN_CHANGE_IN_FOREST =2, SHEEP_SPAWN_CHANGE_ON_PLAINS = 5, RADIUS_SHEEP_GROUPS = 5, SIZE_SHEEP_GROUPS = 10, SPAWN_CHANGE_GOLD_MINE = 3;  
 	/**
 	 *Sheep_spawn_change out of 10,000 change to spawn a sheep group existing of SIZE_SHEEP_GROUPS_IN_SHEEPS sheeps in a radius of RADIUS_SHEEP_GROUPS
 	 *size_sheep_groups_in_sheeps has a chance of 20% deviation
@@ -156,6 +156,8 @@ public class Map {
 							addSheepGroup(x,y);
 						}
 					}
+					
+					if(Util.RANDOM)
 				}
 				else if(noise > -0.2f) surface[x][y] = Tile.sand1;
 				else surface[x][y] = Tile.water1;
@@ -293,7 +295,7 @@ public class Map {
 			Structure structure = (Structure) u;
 			for(int x = 0; x < structure.getSize(); x++){
 				for(int y = 0; y < structure.getSize(); y++){
-					if(getTile(u.xPos + x, u.yPos + y).isSolid()) return; System.out.println("gets");
+					if(getTile(u.xPos + x, u.yPos + y).isSolid()) return;
 				}
 			}
 			entities.add(u);

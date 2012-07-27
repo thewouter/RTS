@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tiles.Tile;
-import walnoot.rtsgame.menubar.MenuBarPopup;
 import walnoot.rtsgame.screen.GameScreen;
 
 public abstract class Entity {
