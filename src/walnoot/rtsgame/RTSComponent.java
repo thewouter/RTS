@@ -31,10 +31,13 @@ public class RTSComponent extends Canvas implements Runnable {
 	private Container container;
 	private long fps;
 	private BufferedImage screenImage;
+	private Sound backgroundSound;
+	public boolean backgroundSoundOn = true;
 	
 	public RTSComponent(Container container){
 		this.container = container;
 		fullScreenManager = new FullScreenManager(this, container);
+		backgroundSound = new Sound("/res/Sounds/risingsun.wav");
 		
 		input = InputHandler.getInputHandler(this);
 		
@@ -43,7 +46,8 @@ public class RTSComponent extends Canvas implements Runnable {
 		setIgnoreRepaint(true);
 		
 		if(!new File(Options.fileName).exists()) Options.writeOptions();
-		//Options.loadOptions();
+		Options.loadOptions();
+		
 	}
 	
 	public void render(){
@@ -121,6 +125,11 @@ public class RTSComponent extends Canvas implements Runnable {
 	
 	public void setScreen(Screen s){
 		screen = s;
+		if(s instanceof GameScreen && backgroundSoundOn){
+			backgroundSound.play();
+		}else{
+			backgroundSound.stop();
+		}
 	}
 	
 	public void setGameScreen(boolean newScreen){
@@ -129,15 +138,30 @@ public class RTSComponent extends Canvas implements Runnable {
 			gameScreen = new GameScreen(this, input);
 		}
 		setScreen(gameScreen);
+		
+		if(backgroundSoundOn) backgroundSound.play();
 	}
 	
 	public void setTitleScreen(){
 		if(titleScreen == null) titleScreen = new TitleScreen(this, input);
 		setScreen(titleScreen);
+		backgroundSound.stop();
 	}
 	
 	public Screen getScreen(){
 		return screen;
+	}
+	
+	public void muteBackground(){
+		backgroundSound.stop();
+		backgroundSoundOn = false;
+	}
+	
+	public void amplifybackground(){
+		if(!backgroundSoundOn){
+			backgroundSoundOn = true;
+			backgroundSound.play();
+		}
 	}
 	
 	public void stop(){

@@ -7,7 +7,6 @@ import java.awt.Point;
 
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
-import walnoot.rtsgame.Sounds;
 import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.Save;
@@ -18,7 +17,6 @@ import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.PlayerEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.structures.CampFireStructure;
-import walnoot.rtsgame.map.structures.GoldMine;
 import walnoot.rtsgame.map.structures.TentStructure;
 import walnoot.rtsgame.map.structures.TreeStructure;
 import walnoot.rtsgame.popups.entitypopup.EntityPopup;
@@ -60,7 +58,6 @@ public class GameScreen extends Screen {
 		map.addEntity(selectedEntity);
 		
 		bar = new MenuBar(input, this);
-		component.sound.playSong(Sounds.RISING_SUN);
 		
 		map.addEntity(new DeerEntity(map, 4, goodYPos+1)); //voor de test, later weghalen
 		map.addEntity(new SheepEntity(map, 4, goodYPos+2)); //voor de test, later weghalen

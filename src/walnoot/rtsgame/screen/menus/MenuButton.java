@@ -34,7 +34,7 @@ public class MenuButton {
 	public MenuButton(String text, int xOffset, int yPos, int width, int height, MenuScreen s){
 		try{
 			if(buttonImage == null){
-				BufferedImage imgSource = ImageIO.read(this.getClass().getResource("/res/button.png"));
+				BufferedImage imgSource = ImageIO.read(this.getClass().getResource("/res/Pictures/button.png"));
 				
 				buttonImage = imgSource.getSubimage(0, 0, imgSource.getWidth(), imgSource.getHeight() / 2);
 				buttonImageDown = imgSource.getSubimage(0, imgSource.getHeight() / 2, imgSource.getWidth(), imgSource.getHeight() / 2);

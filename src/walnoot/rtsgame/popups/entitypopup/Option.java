@@ -8,7 +8,6 @@ import walnoot.rtsgame.screen.Screen;
 
 public abstract class Option {
 	public String name;
-	public EntityPopup popup;
 	private EntityOptionsPopup owner;
 	
 	
@@ -29,8 +28,8 @@ public abstract class Option {
 		Screen.font.drawLineAndShadow(g, name, owner.getScreenX() + 16, owner.getScreenY() + 16 + index * RTSFont.HEIGHT, c);
 	}
 	
-	public EntityPopup getPopup(){
-		return popup;
+	public EntityOptionsPopup getPopup(){
+		return owner;
 	}
 	
 	public abstract void onClick();

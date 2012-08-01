@@ -57,7 +57,7 @@ public class SheepEntity extends MovingEntity {
 	
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
 		if(entityClicked == this){
-			EntityOptionsPopup popup = new EntityOptionsPopup(this);
+			EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
 			Option option1 = new Option("getclosest",popup){
 				public void onClick() {
 					System.out.println(map.getClosestEntity(getxPos(), getyPos()).getName());

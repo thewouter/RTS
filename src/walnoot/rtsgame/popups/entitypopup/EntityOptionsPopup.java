@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
+import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.Screen;
 
 public class EntityOptionsPopup extends EntityPopup {
@@ -18,12 +19,11 @@ public class EntityOptionsPopup extends EntityPopup {
 	int longestLine = 0;
 	private boolean dimensionsSet = false;
 
-	public EntityOptionsPopup(Entity owner, Option...options){
-		super(owner);
+	public EntityOptionsPopup(Entity owner, GameScreen screen, Option...options){
+		super(owner, screen);
 		for(int i = 0; i < options.length; i++){
 			this.options.add(options[i]);
 		}
-		
 	}
 
 

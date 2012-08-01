@@ -5,14 +5,15 @@ import java.awt.Graphics;
 
 import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.map.entities.Entity;
+import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.Screen;
 
 public class EntiyTextPopup extends EntityPopup {
 	private final String[] text;
 	private int width, height;
 
-	public EntiyTextPopup(Entity owner, String...text){
-		super(owner);
+	public EntiyTextPopup(Entity owner, GameScreen screen, String...text){
+		super(owner,screen );
 		this.text = text;
 		
 		for(String line: text){

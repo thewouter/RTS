@@ -13,6 +13,8 @@ public class ScreenPopupTextField extends ScreenPopupPart {
 	public ScreenPopupTextField(String text){
 		this.text = text;
 		color = Color.BLACK;
+		width = Screen.font.getLineWidth(text) + EMPTY_SPACE;
+		height = Screen.font.HEIGHT;
 	}
 	
 	public ScreenPopupTextField(String text, Color color){

@@ -8,6 +8,7 @@ import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
+import walnoot.rtsgame.popups.screenpopup.ScreenPopupTextField;
 import walnoot.rtsgame.popups.screenpopup.TextInput;
 import walnoot.rtsgame.screen.GameScreen;
 
@@ -20,12 +21,21 @@ public class MenuBar {
 	private MenuBarPopup popup;
 	public boolean showPopup = false;
 	
+	
+	
 	public MenuBar(InputHandler input, GameScreen screen) {
 		this.input = input;
 		this.screen = screen;
 		
-
 		
+		
+
+
+		addButton(new Button(Images.buttons[3][0], this) {
+			public void onLeftClick() {
+				this.bar.screen.component.setTitleScreen();
+			}
+		});
 		
 		addButton(new Button(Images.buttons[0][0], this) {
 			public void onLeftClick() {
@@ -85,16 +95,35 @@ public class MenuBar {
 						bar.screen.setPopup(popup);
 					}
 				});
+				
 				setMenuBarPopup(popup);
 				showPopup = !showPopup;
 			}
 		});
-		
-		addButton(new Button(Images.buttons[3][0], this) {
+
+		addButton(new Button(Images.buttons[1][1], this){
 			public void onLeftClick() {
-				this.bar.screen.component.setTitleScreen();
+				ScreenPopup options = new ScreenPopup(this.bar.screen.getWidth() / 2 - 50, this.bar.screen.getHeight() / 2 - 50, 85, 1, this.bar.screen);
+				options.addPart(new ScreenPopupTextField("set music"));
+				options.addPart(new ScreenPopupButton("on", options, this.bar.input) {
+					public void onLeftClick() {
+						this.owner.screen.component.amplifybackground();
+					}
+				});
+				options.addPart(new ScreenPopupButton("off", options, this.bar.input) {
+					public void onLeftClick() {
+						this.owner.screen.component.muteBackground();
+					}
+				});
+				options.addPart(new ScreenPopupButton("ok", options, this.bar.input) {
+					public void onLeftClick() {
+						this.owner.screen.setPopup(null);
+					}
+				});
+				this.bar.screen.setPopup(options);
 			}
 		});
+		
 	}
 
 	public boolean isInBar(int x, int y){

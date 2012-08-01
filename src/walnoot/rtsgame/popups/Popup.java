@@ -53,7 +53,7 @@ public abstract class Popup {
 		
 		g.setClip(screenX, screenY, width, height - imageHeight);
 		
-		for(int y = 0; y < width / imageWidth; y++){
+		for(int y = 0; y < width/* / imageWidth*/; y++){
 			int imageX = 2, imageY = y;
 			if(y > 0) imageY = 1;
 			

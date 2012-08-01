@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import walnoot.rtsgame.InputHandler;
+import walnoot.rtsgame.Sound;
 import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.structures.CampFireStructure;
@@ -54,8 +55,12 @@ public class PlayerEntity extends MovingEntity {
 	}
 	
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
+		if(screen == null){
+			System.out.println("test");
+		}
 		if(entityClicked == this){
-			EntityOptionsPopup popup = new EntityOptionsPopup(this);
+			EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
+			
 			Option option2 = new Option("Add campfire", popup){
 				public void onClick(){
 					map.addEntity(new CampFireStructure(map, xPos, yPos - 1));
@@ -80,13 +85,17 @@ public class PlayerEntity extends MovingEntity {
 					else if(ID == 17) map.changeTile(xPos, yPos - 1, Tile.grass1);
 				}
 			};
+			popup.addOption(new Option("shoot", popup){
+				public void onClick() {
+					new Sound("/res/Sounds/shot.wav").play();
+				}
+			});
 			popup.addOption(option1);
 			popup.addOption(option2);
 			popup.addOption(dig);
 			popup.addOption(raise);
 			screen.setEntityPopup(popup);
 		}else follow(entityClicked);
-		
 		return false;
 	}
 	

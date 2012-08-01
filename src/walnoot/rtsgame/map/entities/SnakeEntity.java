@@ -51,7 +51,7 @@ public class SnakeEntity extends MovingEntity {
 	}
 	
 	public void onRightClick(GameScreen screen, InputHandler input){
-		EntityOptionsPopup popup = new EntityOptionsPopup(this);
+		EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
 		Option option1 = new Option("boe!",popup){
 			public void onClick() {
 				scare();

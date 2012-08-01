@@ -13,10 +13,11 @@ import walnoot.rtsgame.screen.Screen;
 public abstract class ScreenPopupButton extends ScreenPopupPart {
 	private BufferedImage button;
 	private String text;
+	Boolean isInRect = false;
 	
 	public ScreenPopupButton(String text, ScreenPopup owner, InputHandler input){
 		try {
-			button = ImageIO.read(this.getClass().getResource("/res/buttonsmall.png"));
+			button = ImageIO.read(this.getClass().getResource("/res/Pictures/buttonsmall.png"));
 		} catch (IOException e){
 			System.out.println("no pic?");
 		}
@@ -39,6 +40,10 @@ public abstract class ScreenPopupButton extends ScreenPopupPart {
 		
 		g.setColor(new Color(0x5B5B5B));
 		Screen.font.drawLine(g, text, xPos + 10, yPos + (height / 2));
+
+		g.setColor(new Color(128, 128, 255, 32));
+		
+		if(isInRect) g.fillRect(xPos, yPos, width, height);
 		
 	}
 	
@@ -51,6 +56,7 @@ public abstract class ScreenPopupButton extends ScreenPopupPart {
 		if(input.LMBTapped() && isInRect(input.mouseX, input.mouseY)){
 			onLeftClick();
 		}
+		isInRect = isInRect(input.mouseX, input.mouseY);
 		
 	}
 	

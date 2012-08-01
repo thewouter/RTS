@@ -4,15 +4,16 @@ import java.awt.Graphics;
 import java.util.LinkedList;
 
 import walnoot.rtsgame.popups.Popup;
+import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.Screen;
 
 public class ScreenPopup extends Popup{
 	int xPos,yPos, width, height;
 	private static int EMPTY_SPACE = 10;
 	LinkedList<ScreenPopupPart> parts = new LinkedList<ScreenPopupPart>();
-	Screen screen;
+	public GameScreen screen;
 	
-	public ScreenPopup(int xPos, int yPos, int width, int height, Screen screen){
+	public ScreenPopup(int xPos, int yPos, int width, int height, GameScreen screen){
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.width = width;
@@ -34,8 +35,8 @@ public class ScreenPopup extends Popup{
 			parts.get(i).update((xPos * 2 + width)/2- (width - 2 * EMPTY_SPACE)/2, yPos + EMPTY_SPACE + i * EMPTY_SPACE + totalHeight, width - 2 * EMPTY_SPACE);
 			totalHeight += parts.get(i).height;
 		}
-		if(height < (parts.size() + 1) * EMPTY_SPACE + totalHeight){
-			height = (parts.size() + 1) * EMPTY_SPACE + totalHeight;
+		if(this.height < (parts.size() + 1) * EMPTY_SPACE + totalHeight){
+			this.height = (parts.size() + 1) * EMPTY_SPACE + totalHeight;
 		}
 	}
 

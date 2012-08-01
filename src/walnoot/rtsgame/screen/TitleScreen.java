@@ -24,11 +24,9 @@ public class TitleScreen extends Screen {
 	public TitleScreen(RTSComponent game, InputHandler input){
 		super(game, input);
 		try{
-			//grass = ImageIO.read(this.getClass().getResource("/grass.png"));
-			//grass2 = ImageIO.read(this.getClass().getResource("/grass2.png"));
 			grass2 = Images.terrain[0][0];
 			grass = Images.terrain[1][0];
-			logo = ImageIO.read(this.getClass().getResource("/res/logo2.png"));
+			logo = ImageIO.read(this.getClass().getResource("/res/Pictures/logo2.png"));
 		}catch(IOException e){
 			e.printStackTrace();
 		}

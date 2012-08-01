@@ -3,17 +3,20 @@ package walnoot.rtsgame.popups.entitypopup;
 import java.awt.Graphics;
 
 import walnoot.rtsgame.popups.Popup;
+import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.map.entities.Entity;
 
 public abstract class EntityPopup extends Popup{
 	public static final int EMPTY_SPACE = 32;
-	protected final Entity owner;
+	public final Entity owner;
+	public GameScreen screen;
 	
 	/**
 	 * @param owner The owner of this PopUp
 	 */
-	public EntityPopup(Entity owner){
+	public EntityPopup(Entity owner, GameScreen screen){
 		this.owner = owner;
+		this.screen = screen;
 	}
 	
 	public abstract void render(Graphics g);
