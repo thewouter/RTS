@@ -3,6 +3,8 @@ package walnoot.rtsgame.map.structures;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
+import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
+import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.screen.GameScreen;
 
 public class GoldMine extends MineStructure {
@@ -10,11 +12,19 @@ public class GoldMine extends MineStructure {
 	
 	public GoldMine(Map map, int xPos, int yPos, int size) {
 		super(map, xPos, yPos, ID, size);
+		map.removeEntity(map.getEntity(getxPos() - getSize(), getyPos() - getSize()));
 	}
 	
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
-		System.out.println("test");
 		
+		EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
+		popup.addOption(new Option("test", popup){
+			public void onClick() {
+				damage(47);
+			}
+			
+		});
+		screen.setEntityPopup(popup);
 		return false;
 	}
 	
@@ -50,9 +60,19 @@ public class GoldMine extends MineStructure {
 		case 3:
 			return "Goldmine large";
 		default:
-			return "unknown??";
+			return "unknown name??";
 		}
 		
+	}
+	
+	public void damage(int damage){
+		super.damage(damage);
+		if (health <= HEALTH_MEDIUM){
+			setSize(2);
+		}
+		if(health <= HEALTH_SMALL){
+			setSize(1);
+		}
 	}
 
 }

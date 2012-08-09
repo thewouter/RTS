@@ -18,7 +18,6 @@ public abstract class Structure extends Entity {
 		if(dx >= 0 && dy >= 0){
 			if(dx < getSize() && dy < getSize()) return true;
 		}
-		
 		return false;
 	}
 }

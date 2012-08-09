@@ -33,4 +33,8 @@ public class TentStructure extends BasicStructure {
 	public String getName(){
 		return "Tent";
 	}
+
+	public int getExtraOne() {
+		return 0;
+	}
 }

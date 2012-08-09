@@ -33,4 +33,8 @@ public class CampFireStructure extends BasicStructure{
 	protected int getHeadSpace(){
 		return 1;
 	}
+
+	public int getExtraOne() {
+		return 0;
+	}
 }

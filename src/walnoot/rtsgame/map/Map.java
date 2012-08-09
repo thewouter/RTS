@@ -15,6 +15,7 @@ import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.SnakeEntity;
 import walnoot.rtsgame.map.structures.GoldMine;
+import walnoot.rtsgame.map.structures.MineStructure;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.TreeStructure;
 import walnoot.rtsgame.map.tiles.Tile;
@@ -69,6 +70,7 @@ public class Map {
 		generateEmptyMap();
 	
 	}
+	
 	public void update(int translationX, int translationY, int screenWidth, int screenHeight){
 		for(Entity e: entities){
 			if(e.xPos + e.yPos + 2 > - ((translationY) / 8) && e.xPos + e.yPos - 1 < - ((translationY - screenHeight - 128)/ 8) && e.xPos - e.yPos - 3 < ((translationX) / 16) && e.xPos - e.yPos + 1 > ((translationX - screenWidth) / 16)) {
@@ -108,7 +110,7 @@ public class Map {
 	}
 	
 	public void addSheepGroup(int x, int y){
-		if(getEntity(x, y) != null){
+		if(getEntity(x, y) == null){
 			for(int i = 0,control = 0; i < SIZE_SHEEP_GROUPS && control < RADIUS_SHEEP_GROUPS * RADIUS_SHEEP_GROUPS; control++){
 				int xPos = x - 2 * RADIUS_SHEEP_GROUPS + (Util.RANDOM.nextInt(RADIUS_SHEEP_GROUPS * 2)) - 2;
 				int yPos = y - 2 * RADIUS_SHEEP_GROUPS + (Util.RANDOM.nextInt(RADIUS_SHEEP_GROUPS * 2)) - 2;
@@ -138,7 +140,6 @@ public class Map {
 	}
 	
 	public void generateMap(){
-		
 		for(int x = 0; x < getWidth(); x++){
 			for(int y = 0; y < getWidth(); y++){
 				float noise = noiseObj.perlinNoise(x, y, 0.3f, 32f, 4);
@@ -253,6 +254,21 @@ public class Map {
 		toBeRemoved.add(getEntity(x, y));
 	}
 	
+	public Entity getClosestMine(int x, int y){
+		int closestDistance = 999;
+		int xe, ye;
+		Entity closest = new SnakeEntity(null, 0, 0);
+		for(Entity e: entities){
+			xe = e.getxPos();
+			ye = e.getyPos();
+			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y && e instanceof MineStructure){
+				closest = e;
+				closestDistance = Util.getDistance(x, y, xe, ye);
+			}
+		}
+		return closest;
+	}
+	
 	public Entity getClosestEntity(int x, int y){
 		int closestDistance = 999;
 		int xe, ye;
@@ -276,6 +292,21 @@ public class Map {
 			xe = e.getxPos();
 			ye = e.getyPos();
 			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y && e instanceof MovingEntity){
+				closest = e;
+				closestDistance = Util.getDistance(x, y, xe, ye);
+			}
+		}
+		return (MovingEntity) closest;
+	}
+	
+	public MovingEntity getClosestMovingEntity(int x, int y, LinkedList<MovingEntity> notIncluded){
+		int closestDistance = 999;
+		int xe, ye;
+		Entity closest = null;
+		for(Entity e: entities){
+			xe = e.getxPos();
+			ye = e.getyPos();
+			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y && e instanceof MovingEntity && !(notIncluded.contains(e))){
 				closest = e;
 				closestDistance = Util.getDistance(x, y, xe, ye);
 			}
@@ -314,6 +345,6 @@ public class Map {
 	}
 	
 	public void removeEntity(Entity u){
-		entities.remove(u);
+		toBeRemoved.add(u);
 	}
 }

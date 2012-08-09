@@ -12,7 +12,7 @@ public abstract class MovingEntity extends Entity {
 	protected double timeTraveled; //hoelang hij onderweg is
 	private Entity goal = null;
 	
-	private LinkedList<Direction> nextDirections = new LinkedList<Direction>();
+	public LinkedList<Direction> nextDirections = new LinkedList<Direction>();
 	
 	public MovingEntity(Map map, int xPos, int yPos,  int ID){
 		super(map, xPos, yPos, ID);
@@ -36,7 +36,6 @@ public abstract class MovingEntity extends Entity {
 				nextDirections.add(Direction.getDirection(dx, dy));
 			}else return;
 		}
-		
 		nextDirection = nextDirections.get(0);
 		
 		timeTraveled += RTSComponent.MS_PER_TICK / (getTravelTime() * (nextDirection.isDiagonal() ? Math.sqrt(2) : 1.0));
@@ -65,8 +64,6 @@ public abstract class MovingEntity extends Entity {
 	
 	public void buildMenu(){}
 	
-	//public MenuBarPopup getBuildMenu(){return null;}
-	
 	public Direction getNextDirection(){
 		if(!nextDirections.isEmpty()) return nextDirections.get(0);
 		else return null;
@@ -74,7 +71,6 @@ public abstract class MovingEntity extends Entity {
 
 	public void moveTo(Point goal){
 		this.goal = null;
-		
 		LinkedList<Direction> path = Pathfinder.moveTo(new Point(xPos, yPos), goal, map);
 		if(path != null) nextDirections = path;
 	}
@@ -125,4 +121,6 @@ public abstract class MovingEntity extends Entity {
 	public abstract int getSelectedOption() ;
 
 	public abstract void setSelectedOption(int indexSelected) ;
+	
+	public abstract boolean isMovable();
 }

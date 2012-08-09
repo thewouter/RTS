@@ -41,14 +41,16 @@ public class Pathfinder {
 		
 		Node firstNode = new Node(null, start.x, start.y);
 		openlist.add(firstNode);
-		
+		long startTimeNano = System.nanoTime();
 		while(!openlist.isEmpty() && finalNode == null){
 			getNodeLowestF(openlist).checkNeighbours(map, openlist, closedlist);
+			if(System.nanoTime() - startTimeNano > 1000000000){
+				System.out.println("took too long to calculate");
+				return result;
+			}
 		}
-		//Long startTime  = System.nanoTime();
 		Node node = finalNode;
 		while(true){
-			
 			Direction dir = node.getDirection();
 			if(dir != null)
 				result.addFirst(dir);
@@ -56,7 +58,6 @@ public class Pathfinder {
 			if(node.parent != null){
 				node = node.parent;
 			}else break;
-			//System.out.println(System.nanoTime() - startTime);
 		}
 		
 		

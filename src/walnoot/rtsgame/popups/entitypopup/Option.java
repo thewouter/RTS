@@ -8,7 +8,7 @@ import walnoot.rtsgame.screen.Screen;
 
 public abstract class Option {
 	public String name;
-	private EntityOptionsPopup owner;
+	public EntityOptionsPopup owner;
 	
 	
 	public Option(String name, EntityOptionsPopup owner){

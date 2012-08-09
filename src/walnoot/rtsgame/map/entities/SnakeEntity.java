@@ -82,4 +82,12 @@ public class SnakeEntity extends MovingEntity {
 		return "Snake";
 	}
 
+	public int getExtraOne() {
+		return 0;
+	}
+
+	public boolean isMovable() {
+		return false;
+	}
+
 }

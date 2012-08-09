@@ -1,4 +1,4 @@
-package walnoot.rtsgame.map.entities;
+package walnoot.rtsgame.map.entities.players;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -8,6 +8,9 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.Sound;
 import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Map;
+import walnoot.rtsgame.map.entities.Entity;
+import walnoot.rtsgame.map.entities.ItemEntity;
+import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.structures.CampFireStructure;
 import walnoot.rtsgame.map.structures.TentStructure;
 import walnoot.rtsgame.map.tiles.Tile;
@@ -17,7 +20,7 @@ import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.Screen;
 
 public class PlayerEntity extends MovingEntity {
-	private String name;
+	public String name;
 	private ArrayList<ItemEntity> inventory = new ArrayList<ItemEntity>();
 	private int lastSelectedOption = -1;
 	InputHandler input;
@@ -34,6 +37,8 @@ public class PlayerEntity extends MovingEntity {
 		this.health = health;
 		name = Util.NAME_GEN.getRandomName();
 	}
+	
+	
 	
 	public void render(Graphics g){
 		g.setColor(Color.BLUE);
@@ -55,9 +60,6 @@ public class PlayerEntity extends MovingEntity {
 	}
 	
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
-		if(screen == null){
-			System.out.println("test");
-		}
 		if(entityClicked == this){
 			EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
 			
@@ -117,6 +119,14 @@ public class PlayerEntity extends MovingEntity {
 	
 	public int getSelectedOption(){
 		return lastSelectedOption;
+	}
+
+	public int getExtraOne() {
+		return 0;
+	}
+
+	public boolean isMovable() {
+		return true;
 	}
 
 }

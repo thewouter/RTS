@@ -76,7 +76,7 @@ public class SheepEntity extends MovingEntity {
 			follow(entityClicked);
 		}
 		
-		return false;
+		return true;
 	}
 	
 	public void setSelectedOption(int indexSelected){}
@@ -93,5 +93,13 @@ public class SheepEntity extends MovingEntity {
 
 	public String getName(){
 		return "Sheep";
+	}
+	
+	public int getExtraOne() {
+		return 0;
+	}
+	
+	public boolean isMovable(){
+		return false;
 	}
 }

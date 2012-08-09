@@ -27,29 +27,34 @@ public class MenuBar {
 		this.input = input;
 		this.screen = screen;
 		
-		
-		
-
-
-		addButton(new Button(Images.buttons[3][0], this) {
-			public void onLeftClick() {
-				this.bar.screen.component.setTitleScreen();
-			}
-		});
-		
-		addButton(new Button(Images.buttons[0][0], this) {
+		addButton(new Button(Images.buttons[1][1], this){
 			public void onLeftClick() {
 				MenuBarPopup popup = new MenuBarPopup(xPosOnScreen + UITLOOP + (buttons.indexOf(this) + 1)*WIDTH_BUTTON, yPosOnScreen + UITLOOP, buttons.indexOf(this));
-				
-				popup.addButton(new MenuBarPopupButton(Images.buttons[3][0]) {
+				popup.addButton(new MenuBarPopupButton(Images.buttons[2][0]) {
+
 					public void onLeftClick() {
-						System.out.println("test!");
-						
+						ScreenPopup options = new ScreenPopup(bar.screen.getWidth() / 2 - 50, bar.screen.getHeight() / 2 - 50, 85, 1, bar.screen);
+						options.addPart(new ScreenPopupTextField("set music"));
+						options.addPart(new ScreenPopupButton("on", options, bar.input) {
+							public void onLeftClick() {
+								this.owner.screen.component.amplifybackground();
+							}
+						});
+						options.addPart(new ScreenPopupButton("off", options, bar.input) {
+							public void onLeftClick() {
+								this.owner.screen.component.muteBackground();
+							}
+						});
+						options.addPart(new ScreenPopupButton("ok", options, bar.input) {
+							public void onLeftClick() {
+								this.owner.screen.setPopup(null);
+							}
+						});
+						bar.screen.setPopup(options);
 					}
 				});
 				setMenuBarPopup(popup);
 				showPopup = !showPopup;
-				
 			}
 		});
 		
@@ -69,7 +74,6 @@ public class MenuBar {
 						popup.addPart(new ScreenPopupButton("cancel", popup, bar.input) {
 							public void onLeftClick() {
 								bar.screen.setPopup(null);
-								System.out.println("test");
 							}
 						});
 						bar.screen.setPopup(popup);
@@ -101,26 +105,10 @@ public class MenuBar {
 			}
 		});
 
-		addButton(new Button(Images.buttons[1][1], this){
+		
+		addButton(new Button(Images.buttons[3][0], this) {
 			public void onLeftClick() {
-				ScreenPopup options = new ScreenPopup(this.bar.screen.getWidth() / 2 - 50, this.bar.screen.getHeight() / 2 - 50, 85, 1, this.bar.screen);
-				options.addPart(new ScreenPopupTextField("set music"));
-				options.addPart(new ScreenPopupButton("on", options, this.bar.input) {
-					public void onLeftClick() {
-						this.owner.screen.component.amplifybackground();
-					}
-				});
-				options.addPart(new ScreenPopupButton("off", options, this.bar.input) {
-					public void onLeftClick() {
-						this.owner.screen.component.muteBackground();
-					}
-				});
-				options.addPart(new ScreenPopupButton("ok", options, this.bar.input) {
-					public void onLeftClick() {
-						this.owner.screen.setPopup(null);
-					}
-				});
-				this.bar.screen.setPopup(options);
+				this.bar.screen.component.setTitleScreen();
 			}
 		});
 		

@@ -10,11 +10,12 @@
 	101	SheepEntity
 	102	PlayerEntity
 	103	DeerEntity
+	104 HunterEntity
 	
 200-299		Structures
 	200	CampFireStructure
 	201	TentStructure
 	202 TreeStructure
 	
-300-399
+300-399 mines
 	300 GoldMine

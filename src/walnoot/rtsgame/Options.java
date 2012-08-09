@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class Options {
 	public static int window_width = 800, window_height = 600;
-	public static boolean startFullScreen = false;
+	public static boolean startFullScreen = false, SOUND_ON;
 	public static String name = "Name";
 	
 	public static String fileName = "options.dat";
@@ -26,6 +26,7 @@ public class Options {
 			data_out.writeInt(window_width);
 			data_out.writeInt(window_height);
 			data_out.writeBoolean(startFullScreen);
+			data_out.writeBoolean(SOUND_ON);
 			
 			file_output.close();
 		}catch(IOException e){
@@ -34,6 +35,7 @@ public class Options {
 	}
 	
 	/** herlaad options.dat en vervangt variabelen */
+	
 	public static void loadOptions(){
 		File file = new File(fileName);
 		
@@ -47,6 +49,7 @@ public class Options {
 				window_width = data_in.readInt();
 				window_height = data_in.readInt();
 				startFullScreen = data_in.readBoolean();
+				SOUND_ON = data_in.readBoolean();
 				
 			}catch(EOFException e){ //als hij bij het einde van de file is
 				System.out.println("end of file");

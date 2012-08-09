@@ -10,6 +10,7 @@ import walnoot.rtsgame.map.tiles.Tile;
 public abstract class MineStructure extends Structure {
 	int size;
 	BufferedImage image;
+	public int textureX, textureY;
 	
 	
 	public MineStructure(Map map, int xPos, int yPos, int ID, int size) {
@@ -17,8 +18,7 @@ public abstract class MineStructure extends Structure {
 		if(size < 1) size = 1;
 		if(size > 3) size = 3;
 		this.size = size;
-		int textureX = (ID - 300) * 4;
-		int textureY;
+		textureX = (ID - 300) * 4;
 		if(size == 1){
 			textureY = 0;
 		}else if(size == 2){
@@ -52,4 +52,22 @@ public abstract class MineStructure extends Structure {
 	public int getSize() {
 		return size;
 	}
+	
+	public void setSize(int size){
+		this.size = size;
+		if(size == 1){
+			textureY = 0;
+		}else if(size == 2){
+			textureY = 1;
+		}else{
+			textureY = 4;
+		}
+		loadImage(textureX, textureY);
+	}
+	
+	public int getExtraOne(){
+		return size;
+	}
+	
+	
 }

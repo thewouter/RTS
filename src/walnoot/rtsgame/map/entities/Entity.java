@@ -13,7 +13,7 @@ public abstract class Entity {
 	public int xPos;
 	public int yPos;
 	protected int health;
-	public final int ID;
+	public int ID;
 	
 	public Entity(Map map, int xPos, int yPos, int ID){
 		this.map = map;
@@ -24,10 +24,19 @@ public abstract class Entity {
 		health = getMaxHealth();
 	}
 	
+	public void setID(int ID){
+		this.ID = ID;
+	}
+	
 	public abstract void update();
 	public abstract void render(Graphics g);
 	public abstract int getMaxHealth();
 	public abstract String getName();
+	
+	/**
+	 * @return extra additional information for save
+	 */
+	public abstract int getExtraOne();
 	
 	/**
 	 * @param entityClicked Entity that is right-clicked
@@ -44,7 +53,7 @@ public abstract class Entity {
 	
 	public void damage(int damage){
 		health -= damage;
-		if(health <=0) map.removeEntity(getxPos(), getyPos());
+		if(health <=0) map.removeEntity(this);
 	}
 	
 	public int getxPos(){
@@ -75,6 +84,4 @@ public abstract class Entity {
 	public void remove(){
 		removed = true;
 	}
-
-	public void buildMenu() {}
 }

@@ -39,4 +39,8 @@ public class TreeStructure extends BasicStructure{
 		return 1;
 	}
 
+	public int getExtraOne() {
+		return 0;
+	}
+
 }

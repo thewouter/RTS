@@ -14,9 +14,12 @@ import walnoot.rtsgame.map.entities.DeerEntity;
 import walnoot.rtsgame.menubar.MenuBar;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
-import walnoot.rtsgame.map.entities.PlayerEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
+import walnoot.rtsgame.map.entities.players.HunterEntity;
+import walnoot.rtsgame.map.entities.players.MinerEntity;
+import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.structures.CampFireStructure;
+import walnoot.rtsgame.map.structures.GoldMine;
 import walnoot.rtsgame.map.structures.TentStructure;
 import walnoot.rtsgame.map.structures.TreeStructure;
 import walnoot.rtsgame.popups.entitypopup.EntityPopup;
@@ -64,6 +67,8 @@ public class GameScreen extends Screen {
 		map.addEntity(new TentStructure(map, 4, goodYPos + 3)); //voor de test, later weghalen
 		map.addEntity(new CampFireStructure(map, 4, goodYPos + 5)); //voor de test, later weghalen
 		map.addEntity(new TreeStructure(map, 4, goodYPos + 7)); //voor de test, later weghalen
+		map.addEntity(new HunterEntity(map, 4, goodYPos + 9)); // etc...
+		map.addEntity(new GoldMine(map, 10, 10, 3));
 		
 		translationX = -selectedEntity.getScreenX();
 		translationY = -selectedEntity.getScreenY();
@@ -176,8 +181,11 @@ public class GameScreen extends Screen {
 				
 				if(canMove){
 					if(selectedEntity instanceof MovingEntity){
-						((MovingEntity) selectedEntity).moveTo(new Point(getMapX(), getMapY()));
-						entityPopup = null;
+						if(((MovingEntity)selectedEntity).isMovable()){
+							((MovingEntity) selectedEntity).moveTo(new Point(getMapX(), getMapY()));
+							entityPopup = null;
+						}
+						
 					}
 				}
 			}

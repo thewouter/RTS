@@ -53,4 +53,12 @@ public class DeerEntity extends MovingEntity {
 	public int getSelectedOption() {return -1;}
 
 	public void setSelectedOption(int indexSelected) {}
+	
+	public int getExtraOne() {
+		return 0;
+	}
+
+	public boolean isMovable() {
+		return false;
+	}
 }
