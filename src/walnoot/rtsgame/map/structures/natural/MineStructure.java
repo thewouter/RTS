@@ -1,10 +1,11 @@
-package walnoot.rtsgame.map.structures;
+package walnoot.rtsgame.map.structures.natural;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.map.Map;
+import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.tiles.Tile;
 
 public abstract class MineStructure extends Structure {
@@ -51,6 +52,10 @@ public abstract class MineStructure extends Structure {
 
 	public int getSize() {
 		return size;
+	}
+	
+	public int getCosts(){
+		return 0;
 	}
 	
 	public void setSize(int size){

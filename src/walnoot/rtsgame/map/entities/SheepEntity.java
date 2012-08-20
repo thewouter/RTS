@@ -30,7 +30,8 @@ public class SheepEntity extends MovingEntity {
 	
 	public SheepEntity(Map map, int xPos, int yPos, int health){
 		super(map,xPos, yPos, ID);
-		this.health = health;sheepAnimation = new Animation(TICKS_PER_SHEEP);
+		this.health = health;
+		sheepAnimation = new Animation(TICKS_PER_SHEEP);
 		currentAnimation = sheepAnimation;
 		for(int i = 0; i < Images.sheep.length-1; i++){
 			sheepAnimation.addScene(Images.sheep[i][0]);

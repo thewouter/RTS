@@ -1,8 +1,9 @@
-package walnoot.rtsgame.map.structures;
+package walnoot.rtsgame.map.structures.natural;
 
 import java.awt.image.BufferedImage;
 
 import walnoot.rtsgame.map.Map;
+import walnoot.rtsgame.map.structures.BasicStructure;
 
 public class TreeStructure extends BasicStructure{
 	
@@ -40,6 +41,10 @@ public class TreeStructure extends BasicStructure{
 	}
 
 	public int getExtraOne() {
+		return 0;
+	}
+	
+	public int getCosts(){
 		return 0;
 	}
 

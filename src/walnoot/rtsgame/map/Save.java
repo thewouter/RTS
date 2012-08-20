@@ -14,10 +14,11 @@ import walnoot.rtsgame.map.entities.SnakeEntity;
 import walnoot.rtsgame.map.entities.players.HunterEntity;
 import walnoot.rtsgame.map.entities.players.MinerEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
-import walnoot.rtsgame.map.structures.CampFireStructure;
-import walnoot.rtsgame.map.structures.GoldMine;
-import walnoot.rtsgame.map.structures.TentStructure;
-import walnoot.rtsgame.map.structures.TreeStructure;
+import walnoot.rtsgame.map.structures.nonnatural.BaseOfOperations;
+import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
+import walnoot.rtsgame.map.structures.natural.GoldMine;
+import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
+import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.tiles.Tile;
 
 public class Save {
@@ -146,10 +147,13 @@ public class Save {
 						map.addEntity(new CampFireStructure(map, xPos, yPos, health));
 						break;
 					case 201:
-						map.addEntity(new TentStructure(map, xPos, yPos, health));
+						map.addEntity(new TentIStructure(map, xPos, yPos, health));
 						break;
 					case 202:
 						map.addEntity(new TreeStructure(map, xPos, yPos, health));
+						break;
+					case 203:
+						map.addEntity(new BaseOfOperations(map, xPos, yPos, health));
 						break;
 					}
 				}else if(ID >= 100){		//movingEntities
@@ -217,7 +221,7 @@ public class Save {
 						map.addEntity(new CampFireStructure(map, xPos, yPos, health));
 						break;
 					case 201:
-						map.addEntity(new TentStructure(map, xPos, yPos, health));
+						map.addEntity(new TentIStructure(map, xPos, yPos, health));
 						break;
 					case 202:
 						map.addEntity(new TreeStructure(map, xPos, yPos, health));

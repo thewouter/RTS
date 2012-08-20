@@ -14,19 +14,20 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.SnakeEntity;
-import walnoot.rtsgame.map.structures.GoldMine;
-import walnoot.rtsgame.map.structures.MineStructure;
+import walnoot.rtsgame.map.structures.natural.GoldMine;
+import walnoot.rtsgame.map.structures.natural.MineStructure;
 import walnoot.rtsgame.map.structures.Structure;
-import walnoot.rtsgame.map.structures.TreeStructure;
+import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.tiles.Tile;
 
 public class Map {
 	private Tile[][] surface;
 	public List<Entity> entities = new ArrayList<Entity>();
-	private LinkedList<Entity> toBeRemoved = new LinkedList<Entity>();
+	private LinkedList<Entity> toBeRemoved = new LinkedList<Entity>(), toBeAdded = new LinkedList<Entity>();
 	private PerlinNoise2D noiseObj;
 	public int amountSheepGroups = 0;
 	int c1 = 0, c2 = 0;
+	public int amountGold = 99999999;
 	
 	public static final int TREE_GROW_CHANGE = 10, SHEEP_SPAWN_CHANGE_IN_FOREST =2, SHEEP_SPAWN_CHANGE_ON_PLAINS = 5, RADIUS_SHEEP_GROUPS = 5, SIZE_SHEEP_GROUPS = 10, SPAWN_CHANGE_GOLD_MINE = 3;  
 	/**
@@ -50,8 +51,10 @@ public class Map {
 				return -1;
 			}else if(y0 > y1){
 				return 1;
+			}else{
+				return -1;
 			}
-			return 0;
+			
 		}
 	};
 	
@@ -85,6 +88,9 @@ public class Map {
 			addSheepGroup();
 		}
 		entities.removeAll(toBeRemoved);
+		toBeRemoved.clear();
+		entities.addAll(toBeAdded);
+		toBeAdded.clear();
 	}
 	
 	public void addSheepGroup(){
@@ -181,14 +187,19 @@ public class Map {
 			}
 		}
 		
-		Collections.sort(entities, spriteSorter);
-		
+		LinkedList<Entity> toSort = new LinkedList<Entity>();
 		for(Entity e: entities){
-			int x = e.getxPos();
-			int y = e.getyPos();
-			if(x + y + 2 > - ((translation.y) / 8) && x + y - 1 < - ((translation.y - screenHeight - 128)/ 8) && x - y - 3 < ((translation.x) / 16) && x - y + 1 > ((translation.x - screenWidth) / 16)){
-				e.render(g);
+			int x = e.getScreenX() + translation.x;
+			int y = e.getScreenY() + translation.y;
+			if(x > - 30  && y > - 30 && x < screenWidth + 30 && y < screenHeight + 30 ){
+				toSort.add(e);
 			}
+		}
+		
+		Collections.sort(toSort, spriteSorter);
+		
+		for(Entity e: toSort){
+			e.render(g);
 		}
 		
 		g.translate(-translation.x, -translation.y);
@@ -199,13 +210,12 @@ public class Map {
 	}
 	
 	public boolean isSolid(int x, int y){
-		if(x < 0 || y < 0 || x >= surface.length || y >= surface.length) return true; //buiten de map
+		if(x < 0 || y < 0 || x >= surface.length || y >= surface.length) return true; //outside the map
 		if(surface[x][y].isSolid()) return true;
 		
 		for(Entity e: entities){
 			if(e.isSolid(x, y)) return true;
 		}
-		
 		return false;
 	}
 	
@@ -225,6 +235,25 @@ public class Map {
 			}
 		}
 		return null;
+	}
+	
+	public LinkedList<Entity> getEntities(int x, int y){
+		LinkedList<Entity> result = new LinkedList<Entity>();
+		for(Entity e: entities){
+			if(e instanceof Structure){
+				Structure structure = (Structure) e;
+				
+				int dx = x - structure.getxPos();
+				int dy = y - structure.getyPos();
+				
+				if(dx >= 0 && dy >= 0){
+					if(dx < structure.getSize() && dy < structure.getSize()) result.add(structure);
+				}
+			}else{
+				if(e.getxPos() == x && e.getyPos() == y) result.add(e);
+			}
+		}
+		return result;
 	}
 	
 	public boolean isOnMap(int x, int y){
@@ -319,11 +348,12 @@ public class Map {
 	}
 	
 	public void addEntity(Entity u){
+		if(u == null)return;
 		if(!(u instanceof Structure) || ((Structure) u ).getSize() == 1){
-			if(getEntity(u.xPos, u.yPos)== null){
+			if(getEntity(u.xPos, u.yPos) instanceof MovingEntity || getEntity(u.xPos, u.yPos) == null){
 				if(getTile(u.getxPos(), u.getyPos()) == null) return;
 				if(!getTile(u.getxPos(), u.getyPos()).isSolid()){
-					entities.add(u);
+					toBeAdded.add(u);
 				}
 			}
 		}else{
@@ -331,10 +361,17 @@ public class Map {
 			for(int x = 0; x < structure.getSize(); x++){
 				for(int y = 0; y < structure.getSize(); y++){
 					if(getTile(u.xPos + x, u.yPos + y).isSolid()) return;
+					if(getEntity(u.getxPos(), u.getyPos()) != null) return;
 				}
 			}
-			entities.add(u);
+			toBeAdded.add(u);
 			
+		}
+	}
+	
+	public void addEntity(LinkedList<Entity> entities){
+		for(Entity e:entities){
+			addEntity(e);
 		}
 	}
 	
@@ -346,5 +383,9 @@ public class Map {
 	
 	public void removeEntity(Entity u){
 		toBeRemoved.add(u);
+	}
+	
+	public Tile[][] getSurface(){
+		return surface;
 	}
 }

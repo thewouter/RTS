@@ -26,4 +26,8 @@ public class Animation {
 	public Image getImage(){
 		return frames.get(currentTime / ticksPerFrame);
 	}
+	
+	public Image getImage(int index){
+		return frames.get(index);
+	}
 }

@@ -13,13 +13,19 @@ public abstract class MovingEntity extends Entity {
 	private Entity goal = null;
 	
 	public LinkedList<Direction> nextDirections = new LinkedList<Direction>();
+	private LinkedList<Direction> nextNextDirections = null;
 	
 	public MovingEntity(Map map, int xPos, int yPos,  int ID){
 		super(map, xPos, yPos, ID);
 	}
 	
 	public void update(){
+		if(nextNextDirections != null){
+			nextDirections = nextNextDirections;
+		}
+		
 		Direction nextDirection = null;
+		if(nextDirections == null) nextDirections = new LinkedList<Direction>();
 		if(nextDirections.isEmpty()){
 			if(goal != null){
 				int dx = goal.xPos - this.xPos;
@@ -55,7 +61,12 @@ public abstract class MovingEntity extends Entity {
 		}
 	}
 	
+	public void setNextDirections(LinkedList<Direction> toSet){
+		nextNextDirections = toSet;
+	}
+	
 	protected void onStopMoving(){
+	
 	}
 	
 	public void follow(Entity e){
@@ -68,14 +79,18 @@ public abstract class MovingEntity extends Entity {
 		if(!nextDirections.isEmpty()) return nextDirections.get(0);
 		else return null;
 	}
+	
+	public int getCosts(){
+		return 0;
+	}
 
 	public void moveTo(Point goal){
 		this.goal = null;
-		LinkedList<Direction> path = Pathfinder.moveTo(new Point(xPos, yPos), goal, map);
-		if(path != null) nextDirections = path;
+		Pathfinder.moveTo(this,new Point(xPos, yPos), goal, map);
 	}
 	
 	public boolean isMoving(){
+		if(nextDirections == null)return false;
 		return !nextDirections.isEmpty();
 	}
 	
@@ -83,7 +98,7 @@ public abstract class MovingEntity extends Entity {
 		int x = super.getScreenX();
 		
 		Direction direction = null;
-		if(!nextDirections.isEmpty()) direction = nextDirections.get(0);
+		if(nextDirections != null && !nextDirections.isEmpty()) direction = nextDirections.get(0);
 		
 		if(direction != null) x += Math.round(direction.getPointOnScreen().x * timeTraveled);
 		
@@ -94,7 +109,7 @@ public abstract class MovingEntity extends Entity {
 		int y = super.getScreenY();
 		
 		Direction direction = null;
-		if(!nextDirections.isEmpty()) direction = nextDirections.get(0);
+		if(nextDirections != null && !nextDirections.isEmpty()) direction = nextDirections.get(0);
 		
 		if(direction != null) y += Math.round(direction.getPointOnScreen().y * timeTraveled);
 		
@@ -106,7 +121,7 @@ public abstract class MovingEntity extends Entity {
 		do{
 			x = xPos + Util.RANDOM.nextInt(WALK_RANGE * 2) - WALK_RANGE;
 			y = yPos + Util.RANDOM.nextInt(WALK_RANGE * 2) - WALK_RANGE;
-		}while(map.isSolid(x, y));
+		}while(map.isSolid(x, y) && x != xPos && y != yPos);
 	
 		moveTo(new Point(x, y));
 	}

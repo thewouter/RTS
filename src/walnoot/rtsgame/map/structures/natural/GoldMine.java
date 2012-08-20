@@ -1,4 +1,4 @@
-package walnoot.rtsgame.map.structures;
+package walnoot.rtsgame.map.structures.natural;
 
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
@@ -16,15 +16,6 @@ public class GoldMine extends MineStructure {
 	}
 	
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
-		
-		EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
-		popup.addOption(new Option("test", popup){
-			public void onClick() {
-				damage(47);
-			}
-			
-		});
-		screen.setEntityPopup(popup);
 		return false;
 	}
 	

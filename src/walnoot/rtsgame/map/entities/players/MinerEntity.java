@@ -6,7 +6,7 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
-import walnoot.rtsgame.map.structures.MineStructure;
+import walnoot.rtsgame.map.structures.natural.MineStructure;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.screen.GameScreen;
@@ -25,7 +25,7 @@ public class MinerEntity extends PlayerEntity {
 	
 	public MinerEntity(Map map, int xPos, int yPos, int health) {
 		super(map, xPos, yPos);
-		name = Util.NAME_GEN.getRandomName() + " the miner";
+		name = Util.NAME_GEN.getRandomName() + " the Miner";
 		this.health = health;
 		setID(ID);
 	}
@@ -42,6 +42,7 @@ public class MinerEntity extends PlayerEntity {
 			if(isMining){ 
 				if(map.getEntity(getxPos() - 1, getyPos() - 1) instanceof MineStructure){
 					map.getEntity(getxPos() -1,  getyPos() - 1).damage(1);
+					map.amountGold+=1;
 				}
 			}
 		}

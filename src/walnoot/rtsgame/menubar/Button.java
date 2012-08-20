@@ -7,14 +7,11 @@ public abstract class Button {
 	BufferedImage image;
 	public MenuBar bar;
 	
-	public Button(BufferedImage i,MenuBar bar){
+	public Button(BufferedImage i, MenuBar bar){
 		image = i;
 		this.bar = bar;
 	}
 	
-
-
-
 	public abstract void onLeftClick();
 	
 	public void render(Graphics g, int xPos, int yPos){

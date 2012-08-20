@@ -56,8 +56,6 @@ public class RTSComponent extends Canvas implements Runnable {
 		if(screenImage.getWidth() != getWidth() / SCALE) screenImage = new BufferedImage(getWidth() / SCALE, getHeight() / SCALE, BufferedImage.TYPE_INT_RGB);
 		if(screenImage.getHeight() != getHeight() / SCALE) screenImage = new BufferedImage(getWidth() / SCALE, getHeight() / SCALE, BufferedImage.TYPE_INT_RGB);
 		
-		
-		
 		Graphics2D g = (Graphics2D) screenImage.getGraphics();
 		
 		g.setColor(Color.BLACK);

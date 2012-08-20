@@ -32,6 +32,7 @@ public abstract class Entity {
 	public abstract void render(Graphics g);
 	public abstract int getMaxHealth();
 	public abstract String getName();
+	public abstract int getCosts();
 	
 	/**
 	 * @return extra additional information for save

@@ -18,7 +18,7 @@ import walnoot.rtsgame.RTSFont;
 public abstract class Screen {
 	public RTSComponent component;
 	public static RTSFont font = new RTSFont(Images.font);
-	protected InputHandler input;
+	public InputHandler input;
 	
 	public Screen(RTSComponent component, InputHandler input){
 		this.component = component;

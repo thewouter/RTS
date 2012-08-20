@@ -28,7 +28,6 @@ public class DeerEntity extends MovingEntity {
 	
 	public void onRightClick(GameScreen screen, InputHandler input){
 		
-		//screen.setPopup(new TextPopup(input, this, "allemaal", "zinnen", "hier...", "vier totaal"));
 	}
 	
 	public void render(Graphics g){

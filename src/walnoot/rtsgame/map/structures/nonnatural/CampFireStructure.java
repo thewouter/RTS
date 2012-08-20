@@ -1,6 +1,7 @@
-package walnoot.rtsgame.map.structures;
+package walnoot.rtsgame.map.structures.nonnatural;
 
 import walnoot.rtsgame.map.Map;
+import walnoot.rtsgame.map.structures.BasicStructure;
 
 public class CampFireStructure extends BasicStructure{
 	
@@ -36,5 +37,9 @@ public class CampFireStructure extends BasicStructure{
 
 	public int getExtraOne() {
 		return 0;
+	}
+	
+	public int getCosts(){
+		return 20;
 	}
 }

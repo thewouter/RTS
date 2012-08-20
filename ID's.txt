@@ -11,11 +11,14 @@
 	102	PlayerEntity
 	103	DeerEntity
 	104 HunterEntity
+	105 MinerEntity
 	
 200-299		Structures
 	200	CampFireStructure
 	201	TentStructure
 	202 TreeStructure
+	203	BaseOfOperations
 	
 300-399 mines
 	300 GoldMine
+	

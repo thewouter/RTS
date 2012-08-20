@@ -2,8 +2,13 @@ package walnoot.rtsgame.map.entities.players;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import sun.awt.geom.AreaOp.AddOp;
+
+import walnoot.rtsgame.Animation;
+import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.Sound;
 import walnoot.rtsgame.Util;
@@ -11,13 +16,12 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.ItemEntity;
 import walnoot.rtsgame.map.entities.MovingEntity;
-import walnoot.rtsgame.map.structures.CampFireStructure;
-import walnoot.rtsgame.map.structures.TentStructure;
+import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
+import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.Screen;
 
 public class PlayerEntity extends MovingEntity {
 	public String name;
@@ -25,27 +29,52 @@ public class PlayerEntity extends MovingEntity {
 	private int lastSelectedOption = -1;
 	InputHandler input;
 	private final static int ID = 102;
+	private Animation animation;
+	private Animation backwardAnimation;
+	
 	public PlayerEntity(Map map,int xPos, int yPos){
 		super(map, xPos, yPos, ID);
 		name = Util.NAME_GEN.getRandomName();
-		
-		//moveRandomLocation();
+		loadAnimation(Images.player);
+	}
+	
+	public void update(){
+		super.update();
+		animation.update();
+		backwardAnimation.update();
 	}
 	
 	public PlayerEntity(Map map, int xPos, int yPos, int health){
 		super(map,xPos,yPos, ID);
 		this.health = health;
 		name = Util.NAME_GEN.getRandomName();
+		loadAnimation(Images.player);
 	}
 	
+	private void loadAnimation(BufferedImage[][] image){
+		animation = new Animation(3); 
+		for(int i = 0; i < image.length; i++){
+			animation.addScene(image[i][0]);
+		}
 	
+		backwardAnimation = new Animation(3);
+		for(int i = image.length - 1; i >= 0; i--){
+			backwardAnimation.addScene(image[i][0]);
+		}
+		
+	}
 	
-	public void render(Graphics g){
+	public void render(Graphics g){/*
 		g.setColor(Color.BLUE);
 		g.fillRect(getScreenX() + 14, getScreenY() + 6, 4, 4);
 		
 		g.setColor(Color.WHITE);
 		Screen.font.drawBoldLine(g, xPos + ":" + yPos, getScreenX(), getScreenY() - 8, Color.BLACK);
+		*/
+
+		if(isMoving() && nextDirections.getFirst().getyOffset() - nextDirections.getFirst().getxOffset() <= 0)g.drawImage(animation.getImage(), getScreenX() + (Tile.WIDTH - animation.getImage().getWidth(null)) / 2, getScreenY() - (animation.getImage().getHeight(null) - Tile.HEIGHT / 2), null);
+		else if(isMoving())g.drawImage(backwardAnimation.getImage(), getScreenX() + (Tile.WIDTH - animation.getImage().getWidth(null)) / 2, getScreenY() - (animation.getImage().getHeight(null) - Tile.HEIGHT / 2), null);
+		else g.drawImage(animation.getImage(0), getScreenX() + (Tile.WIDTH - animation.getImage().getWidth(null)) / 2, getScreenY() - (animation.getImage().getHeight(null) - Tile.HEIGHT / 2), null);
 	}
 	
 	protected void onStopMoving(){
@@ -70,7 +99,7 @@ public class PlayerEntity extends MovingEntity {
 			};
 			Option option1 = new Option("Add tent",popup) {
 				public void onClick() {
-					map.addEntity(new TentStructure(map, xPos, yPos-2));
+					map.addEntity(new TentIStructure(map, xPos, yPos-2));
 				}
 			};
 			Option dig = new Option("dig", popup){
@@ -92,6 +121,12 @@ public class PlayerEntity extends MovingEntity {
 					new Sound("/res/Sounds/shot.wav").play();
 				}
 			});
+			
+			popup.addOption(new Option("kill", popup) {
+				public void onClick() {
+					this.owner.owner.damage(this.owner.owner.getMaxHealth());
+				}
+			});
 			popup.addOption(option1);
 			popup.addOption(option2);
 			popup.addOption(dig);
@@ -102,7 +137,7 @@ public class PlayerEntity extends MovingEntity {
 	}
 	
 	protected double getTravelTime(){
-		return 100;
+		return 500;
 	}
 	
 	public int getMaxHealth(){

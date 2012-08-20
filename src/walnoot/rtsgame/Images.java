@@ -11,8 +11,10 @@ public class Images {
 	public static BufferedImage structures = load("/res/Pictures/structures.png");
 	public static BufferedImage font = load("/res/Pictures/font.png");
 	public static BufferedImage[][] sheep = split(load("/res/Pictures/animations/sheep.png"),7,1);
-	public static BufferedImage[][] buttons = split(load("/res/Pictures/menubar.png"),4,4);
+	public static BufferedImage[][] player = split(load("/res/Pictures/animations/playersmall.png"),8,1);
+	public static BufferedImage[][] buttons = split(load("/res/Pictures/16x16buttons.png"),4,4);
 	public static BufferedImage mines = load("/res/Pictures/mines.png");
+	public static BufferedImage[][] dudes = split(load("/res/Pictures/dudes.png"),4,4);
 	
 	public static BufferedImage load(String fileName){
 		try{

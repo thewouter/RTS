@@ -14,108 +14,38 @@ import walnoot.rtsgame.screen.GameScreen;
 
 public class MenuBar {
 	public InputHandler input;
-	public static int X_POS_FROM_RIGHT = 5, Y_POS_FROM_BOTTOM = 5, WIDTH_BUTTON = 16, HEIGHT_BUTTON = 16, UITLOOP = 5, EXTRA_WIDTH = 30,EXTRA_HEIGHT = 30;
+	public static int  UITLOOP = 5, EXTRA_WIDTH = 30,EXTRA_HEIGHT = 30;
+	public int X_POS_FROM_RIGHT, Y_POS_FROM_BOTTOM, WIDTH_BUTTON, HEIGHT_BUTTON;
 	public GameScreen screen;
-	LinkedList <Button> buttons = new LinkedList<Button>();
+	public LinkedList <Button> buttons = new LinkedList<Button>();
 	int xPosOnScreen = 0, yPosOnScreen = 0;
 	private MenuBarPopup popup;
 	public boolean showPopup = false;
+	public int corner, width, height;
+	/**
+	 * @param input
+	 * @param screen
+	 * @param X_POS_FROM_RIGHT
+	 * @param Y_POS_FROM_BOTTOM
+	 * @param WIDTH_BUTTON
+	 * @param HEIGHT_BUTTON
+	 * @param corner	top left withe te clock 1 , 2 , 3 , 4
+	 */
 	
-	
-	
-	public MenuBar(InputHandler input, GameScreen screen) {
+	public MenuBar(InputHandler input, GameScreen screen, int X_POS_FROM_RIGHT, int Y_POS_FROM_BOTTOM, int WIDTH_BUTTON, int HEIGHT_BUTTON, int corner) {
 		this.input = input;
 		this.screen = screen;
-		
-		addButton(new Button(Images.buttons[1][1], this){
-			public void onLeftClick() {
-				MenuBarPopup popup = new MenuBarPopup(xPosOnScreen + UITLOOP + (buttons.indexOf(this) + 1)*WIDTH_BUTTON, yPosOnScreen + UITLOOP, buttons.indexOf(this));
-				popup.addButton(new MenuBarPopupButton(Images.buttons[2][0]) {
-
-					public void onLeftClick() {
-						ScreenPopup options = new ScreenPopup(bar.screen.getWidth() / 2 - 50, bar.screen.getHeight() / 2 - 50, 85, 1, bar.screen);
-						options.addPart(new ScreenPopupTextField("set music"));
-						options.addPart(new ScreenPopupButton("on", options, bar.input) {
-							public void onLeftClick() {
-								this.owner.screen.component.amplifybackground();
-							}
-						});
-						options.addPart(new ScreenPopupButton("off", options, bar.input) {
-							public void onLeftClick() {
-								this.owner.screen.component.muteBackground();
-							}
-						});
-						options.addPart(new ScreenPopupButton("ok", options, bar.input) {
-							public void onLeftClick() {
-								this.owner.screen.setPopup(null);
-							}
-						});
-						bar.screen.setPopup(options);
-					}
-				});
-				setMenuBarPopup(popup);
-				showPopup = !showPopup;
-			}
-		});
-		
-		addButton(new Button(Images.buttons[0][1], this){
-			public void onLeftClick() {
-				MenuBarPopup popup = new MenuBarPopup(xPosOnScreen + UITLOOP + (buttons.indexOf(this) + 1)*WIDTH_BUTTON, yPosOnScreen + UITLOOP, buttons.indexOf(this));
-				popup.addButton(new MenuBarPopupButton(Images.buttons[1][0]) {
-					public void onLeftClick() {
-						ScreenPopup popup = new ScreenPopup((bar.screen.getWidth() - 100)/2, (bar.screen.getHeight() - 100)/2, 100, 100, bar.screen);
-						popup.addPart(new TextInput(popup, bar.input));
-						popup.addPart(new ScreenPopupButton("load", popup, bar.input){
-							public void onLeftClick() {
-								bar.screen.load(owner.getTextInput().getOutput());
-								bar.screen.setPopup(null);
-							}
-						});
-						popup.addPart(new ScreenPopupButton("cancel", popup, bar.input) {
-							public void onLeftClick() {
-								bar.screen.setPopup(null);
-							}
-						});
-						bar.screen.setPopup(popup);
-						
-					}
-					
-				});
-				popup.addButton(new MenuBarPopupButton(Images.buttons[2][0]) {
-					public void onLeftClick() {
-						ScreenPopup popup = new ScreenPopup((bar.screen.getWidth() - 100)/2, (bar.screen.getHeight() - 100)/2, 100, 100, bar.screen);
-						popup.addPart(new TextInput(popup, bar.input));
-						popup.addPart(new ScreenPopupButton("Save", popup, bar.input){
-							public void onLeftClick() {
-								bar.screen.save(owner.getTextInput().getOutput());
-								bar.screen.setPopup(null);
-							}
-						});
-						popup.addPart(new ScreenPopupButton("cancel", popup, bar.input) {
-							public void onLeftClick() {
-								bar.screen.setPopup(null);
-							}
-						});
-						bar.screen.setPopup(popup);
-					}
-				});
-				
-				setMenuBarPopup(popup);
-				showPopup = !showPopup;
-			}
-		});
-
-		
-		addButton(new Button(Images.buttons[3][0], this) {
-			public void onLeftClick() {
-				this.bar.screen.component.setTitleScreen();
-			}
-		});
-		
+		this.corner = corner;
+		width = UITLOOP + X_POS_FROM_RIGHT;
+		height = UITLOOP + HEIGHT_BUTTON + Y_POS_FROM_BOTTOM;
+		this.X_POS_FROM_RIGHT = X_POS_FROM_RIGHT;
+		this.WIDTH_BUTTON = WIDTH_BUTTON;
+		this.HEIGHT_BUTTON = HEIGHT_BUTTON;
+		this.Y_POS_FROM_BOTTOM = Y_POS_FROM_BOTTOM;
 	}
 
 	public boolean isInBar(int x, int y){
-		if(x > xPosOnScreen && y > yPosOnScreen) return true;
+		if(x > xPosOnScreen && x < xPosOnScreen + width && y > yPosOnScreen && y < yPosOnScreen + height) return true;
 		else if(showPopup){
 			if(popup.isInPopup(x, y)) return true;
 		}
@@ -124,6 +54,7 @@ public class MenuBar {
 	
 	public void addButton(Button b){
 		buttons.add(b);
+		width += WIDTH_BUTTON;
 	}
 	
 	public void showPopup(){
@@ -137,33 +68,58 @@ public class MenuBar {
 	
 	public void render (Graphics g , int screenWidth, int screenHeight){
 		g.setColor(Color.BLACK);
-		g.fillRoundRect(xPosOnScreen, yPosOnScreen, buttons.size()*WIDTH_BUTTON + EXTRA_WIDTH, HEIGHT_BUTTON+EXTRA_HEIGHT, 7, 7);
-		for(int i = 0; i < buttons.size(); i++){
-			buttons.get(i).render(g, xPosOnScreen + UITLOOP + i*WIDTH_BUTTON , yPosOnScreen + UITLOOP);
+		if(corner == 3){
+			g.fillRoundRect(xPosOnScreen, yPosOnScreen, buttons.size()*WIDTH_BUTTON + EXTRA_WIDTH, HEIGHT_BUTTON+EXTRA_HEIGHT, 7, 7);
+			for(int i = 0; i < buttons.size(); i++){
+				buttons.get(i).render(g, xPosOnScreen + UITLOOP + i*WIDTH_BUTTON , yPosOnScreen + UITLOOP);
+			}
+		}else if(corner == 1){
+			g.fillRoundRect(xPosOnScreen - EXTRA_WIDTH, yPosOnScreen - EXTRA_HEIGHT, width + EXTRA_WIDTH, EXTRA_HEIGHT + height,7,7);
+			for(int i = 0; i < buttons.size(); i++){
+				buttons.get(i).render(g, xPosOnScreen + X_POS_FROM_RIGHT + i*WIDTH_BUTTON , yPosOnScreen + Y_POS_FROM_BOTTOM);
+			}
 		}
-		if(popup!= null && showPopup)popup.render(g);
+		if(popup!= null && showPopup){
+			popup.render(g);
+		}
 	}
 	
 	public void update(int screenWidth, int screenHeight){
-		yPosOnScreen = screenHeight - UITLOOP - HEIGHT_BUTTON - Y_POS_FROM_BOTTOM;
-		xPosOnScreen = screenWidth - UITLOOP - X_POS_FROM_RIGHT - buttons.size()*WIDTH_BUTTON;
+		if(corner == 3){
+			yPosOnScreen = screenHeight - UITLOOP - HEIGHT_BUTTON - Y_POS_FROM_BOTTOM;
+			xPosOnScreen = screenWidth - UITLOOP - X_POS_FROM_RIGHT - buttons.size()*WIDTH_BUTTON;
+			
+			if(popup != null) popup.update(xPosOnScreen + width - X_POS_FROM_RIGHT, yPosOnScreen + UITLOOP);
+			
+		}else if(corner == 1){
+			xPosOnScreen = 0;
+			yPosOnScreen = 0;
+			
+			if(popup!= null) {
+				popup.update(X_POS_FROM_RIGHT, height);
+			}
+			
+		}
+		
+		for(Button b: buttons){
+			if(b instanceof MenubarTextField)((MenubarTextField) b).update();
+		}
 		
 		if(input.LMBTapped() ){
 			if(isOnlyInBar(input.getMouseX(), input.getMouseY())){
-				int indexSelected = (int) ((input.getMouseX()- (screen.getWidth() - X_POS_FROM_RIGHT - buttons.size()*WIDTH_BUTTON)) / WIDTH_BUTTON);
+				int indexSelected = (input.getMouseX() - UITLOOP - xPosOnScreen) / WIDTH_BUTTON;
 				if(indexSelected < buttons.size())buttons.get(indexSelected).onLeftClick();		
 			}else if(isInBar(input.getMouseX(), input.getMouseY())){
 				popup.onLeftClick(input.getMouseX(),input.getMouseY());
 			}
 		}
 		
-		if(popup != null) popup.update(xPosOnScreen + UITLOOP + (popup.index + 1)*WIDTH_BUTTON, yPosOnScreen + UITLOOP);
 		
 		
 	}
 	
 	private boolean isOnlyInBar(int x, int y) {
-		if(x > xPosOnScreen )if(y > yPosOnScreen)return true;
+		if(x > xPosOnScreen && x < xPosOnScreen + width && y > yPosOnScreen && y < yPosOnScreen + height)return true;
 		return false;
 	}
 

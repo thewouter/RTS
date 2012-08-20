@@ -27,13 +27,13 @@ public class Sound {
         }
        
         public void play(){
-                try{
-                        new Thread(){
-                                public void run(){
-                                        ac.play();
-                                }
-                        }.start();
-                }catch(Exception e){e.printStackTrace();}
+        	try{
+        		new Thread(){
+        			public void run(){
+        				ac.play();
+        			}
+        		}.start();
+        	}catch(Exception e){e.printStackTrace();}
         }
         
         public void isPlaying(){

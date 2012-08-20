@@ -64,7 +64,8 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 	
 	private boolean LMBDown = false, LMBWasDown = false;
 	private boolean RMBDown = false, RMBWasDown = false;
-	public int mouseX, mouseY, mouseWheelChange;
+	private boolean isDragging = false;
+	public int mouseX, mouseY, mouseWheelChange, mouseXOnClick, mouseYOnClick;
 	private char charTyped;
 	
 	private InputHandler(){
@@ -107,6 +108,10 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 		return RMBDown && !RMBWasDown;
 	}
 	
+	public boolean isDragging(){
+		return isDragging;
+	}
+	
 	public int getMouseX(){		//coordinats in mapcoordinats!
 		return mouseX;
 	}
@@ -136,16 +141,24 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 	public void mouseReleased(MouseEvent e){
 		if(e.getButton() == MouseEvent.BUTTON1) LMBDown = false;
 		else RMBDown = false;
+		isDragging = false;
 	}
 	
 	public void mouseDragged(MouseEvent e){
 		mouseX = e.getX() / RTSComponent.SCALE;
 		mouseY = e.getY() / RTSComponent.SCALE;
+		if(!isDragging){
+			mouseXOnClick = mouseX;
+			mouseYOnClick = mouseY;
+		}
+		isDragging = true;
+		
 	}
 	
 	public void mouseMoved(MouseEvent e){
 		mouseX = e.getX() / RTSComponent.SCALE;
 		mouseY = e.getY() / RTSComponent.SCALE;
+		
 	}
 	
 	public void mouseWheelMoved(MouseWheelEvent e){

@@ -6,31 +6,37 @@ import java.util.LinkedList;
 
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
+import walnoot.rtsgame.map.tiles.Tile;
 
 /** tekst en uitleg op http://www.policyalmanac.org/games/aStarTutorial.htm */
 
-public class Pathfinder {
-	private static Direction[] directions = {Direction.NORTH, Direction.NORTH_EAST, Direction.EAST, Direction.SOUTH_EAST,
-			Direction.SOUTH, Direction.SOUTH_WEST, Direction.WEST, Direction.NORTH_WEST};
-	private final Map map;
+public class Pathfinder extends Thread {
+	private static Direction[] directions = {Direction.NORTH, Direction.NORTH_EAST, Direction.EAST, Direction.SOUTH_EAST, Direction.SOUTH, Direction.SOUTH_WEST, Direction.WEST, Direction.NORTH_WEST};
 	private final Point goal;
 	private final Point start;
+	private final MovingEntity requester;
+	private final Tile[][] currentMap;
 	
 	private Node finalNode;
 	
-	public static LinkedList<Direction> moveTo(Point start, Point goal, Map map){
+	public static void moveTo(MovingEntity requester, Point start, Point goal, Map map){
 		if(map.isSolid(goal)){
 			System.out.println("Goal is unreachable!");
-			return null;
+			requester.nextDirections = null;
 		}
 		
-		return new Pathfinder(start, goal, map).getPath();
+		new Pathfinder(requester, start, goal, map.getSurface()).start();
 	}
 	
-	private Pathfinder(Point start, Point goal, Map map){
+	private Pathfinder(MovingEntity requester ,Point start, Point goal, Tile[][] currentMap){
 		this.start = start;
 		this.goal = goal;
-		this.map = map;
+		this.currentMap = currentMap;
+		this.requester = requester;
+	}
+	
+	public void run(){
+		requester.setNextDirections(getPath());
 	}
 	
 	private LinkedList<Direction> getPath(){
@@ -43,12 +49,14 @@ public class Pathfinder {
 		openlist.add(firstNode);
 		long startTimeNano = System.nanoTime();
 		while(!openlist.isEmpty() && finalNode == null){
-			getNodeLowestF(openlist).checkNeighbours(map, openlist, closedlist);
+			getNodeLowestF(openlist).checkNeighbours(currentMap, openlist, closedlist);
 			if(System.nanoTime() - startTimeNano > 1000000000){
 				System.out.println("took too long to calculate");
 				return result;
 			}
 		}
+		
+		try{
 		Node node = finalNode;
 		while(true){
 			Direction dir = node.getDirection();
@@ -59,7 +67,9 @@ public class Pathfinder {
 				node = node.parent;
 			}else break;
 		}
-		
+		}catch(Exception e){
+			return null;
+		}
 		
 		return result;
 	}
@@ -142,7 +152,7 @@ public class Pathfinder {
 			return posY;
 		}
 		
-		public void checkNeighbours(Map map, ArrayList<Node> openlist, ArrayList<Node> closedlist){
+		public void checkNeighbours(Tile[][] surface, ArrayList<Node> openlist, ArrayList<Node> closedlist){
 			openlist.remove(this);
 			closedlist.add(this);
 			
@@ -153,8 +163,8 @@ public class Pathfinder {
 			
 			for(Direction dir: directions){
 				Point newPosition = dir.nextPoint(posX, posY);
-				
-				if(!map.isSolid(newPosition)){
+				if(newPosition.x < 0 || newPosition.y < 0 || newPosition.x >= currentMap.length || newPosition.y >= currentMap[0].length) break;
+				if(!currentMap[newPosition.x][newPosition.y].isSolid()){
 					/*
 					 * if(newPosition.equals(goal)) { finalNode = new Node(this,
 					 * newPosition); break; }

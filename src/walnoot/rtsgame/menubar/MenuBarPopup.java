@@ -8,50 +8,71 @@ import walnoot.rtsgame.popups.Popup;
 public class MenuBarPopup extends Popup {
 	LinkedList<MenuBarPopupButton> buttons = new LinkedList<MenuBarPopupButton>();
 	private int xPos, yPos, width, height;
-	public int index;
+	private boolean allignFromTop;
 	/**
-	 * @param xPos x position of the button that created this popup
-	 * @param yPos y position of the button that created this popup
+	 * @param xPos x position of the button created in this popup
+	 * @param yPos y position of the button created in this popup
 	 */
 	
 	public static int WIDTH_BUTTON = 16, HEIGHT_BUTTON = 16, EMPTY_SPACE = 20, BUTTONS_PER_ROW = 5;
 	
-	public MenuBarPopup(int xPos, int yPos, int index){
+	public MenuBarPopup(int xPos, int yPos, int index, boolean allignFromTop){
 		this.xPos = xPos;
 		this.yPos = yPos;
-		this.index = index;
+		this.allignFromTop = allignFromTop;
 	}
 	
 	public void render(Graphics g){
-		int screenX = xPos - width;
-		int screenY = yPos - height;
+		int screenX = 0;
+		int screenY = 0;
+		if(!allignFromTop){
+			screenX = xPos - width;
+			screenY = yPos - height;
+		}else{
+			screenX = xPos;
+			screenY = yPos;
+		}
 		
 		drawBox(g,width	, height, screenX, screenY);
 		
 		for(int i = 0; i < buttons.size(); i++){
 			int x = i % 5;
 			int y  = i/5;
-			buttons.get(i).render(g,xPos - width + EMPTY_SPACE/2 + x * WIDTH_BUTTON, yPos - height + EMPTY_SPACE/2 + y *HEIGHT_BUTTON);
+			buttons.get(i).render(g, screenX + EMPTY_SPACE/2 + x * WIDTH_BUTTON, screenY + EMPTY_SPACE/2 + y * HEIGHT_BUTTON);
 		}
+		
 		
 	}
 	
 	public void addButton(MenuBarPopupButton b){
-		if(b != null) buttons.add(b);
+		if(b != null) {buttons.add(b);return;}
+		System.out.println("button == null !!");
+	}
+	
+	public void removeButton(MenuBarPopupButton b){
+		buttons.remove(b);
 	}
 	
 	public boolean isInPopup(int x, int y){
-		if(x > xPos - width && x < xPos && y > yPos - height && y < yPos)return true;
+		if(!allignFromTop)if(x > xPos - width && x < xPos && y > yPos - height && y < yPos)return true;if(!allignFromTop)if(x > xPos - width && x < xPos && y > yPos - height && y < yPos)return true;
+		if(allignFromTop)if(x > xPos && x < xPos + width && y > yPos && y < yPos + height)return true;
 		return false;
 	}
 	
 	public void onLeftClick(int mouseX, int mouseY){
-		int x = (mouseX - xPos + width - EMPTY_SPACE/2) / WIDTH_BUTTON + 1;
-		int y = (mouseY - yPos + height -EMPTY_SPACE/2) / HEIGHT_BUTTON + 1;
+		int x,y;
+		if(!allignFromTop){
+			x = (mouseX - xPos + width - EMPTY_SPACE/2) / WIDTH_BUTTON + 1;
+			y = (mouseY - yPos + height -EMPTY_SPACE/2) / HEIGHT_BUTTON + 1;
+		}else{
+			x = (mouseX - xPos - EMPTY_SPACE/2) / WIDTH_BUTTON + 1;
+			y = (mouseY - yPos - EMPTY_SPACE/2) / HEIGHT_BUTTON + 1;
+		}
 		try{
 			getButton(x, y).onLeftClick();
 		}catch(Exception e){
-			System.out.println("mislukt  ;(");
+			System.out.println("mislukt kan button niet vinden");
+			System.out.println(x + "  " + y);
 		}
 	}
 	
