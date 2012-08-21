@@ -4,19 +4,20 @@ import java.awt.image.BufferedImage;
 
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.structures.BasicStructure;
+import walnoot.rtsgame.screen.GameScreen;
 
 public class TreeStructure extends BasicStructure{
 	
 	BufferedImage image;
 	public final static int ID = 202;
 
-	public TreeStructure(Map map, int xPos, int yPos) {
-		super(map, xPos, yPos, 3, 0, ID);
+	public TreeStructure(Map map, GameScreen screen, int xPos, int yPos) {
+		super(map, screen, xPos, yPos, 3, 0, ID);
 	}
 	
 	
-	public TreeStructure(Map map, int xPos, int yPos, int health){
-		super(map, xPos, yPos, 3, 0, ID);
+	public TreeStructure(Map map, GameScreen screen, int xPos, int yPos, int health){
+		super(map, screen, xPos, yPos, 3, 0, ID);
 		this.health = health;
 	}
 	

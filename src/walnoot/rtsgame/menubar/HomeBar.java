@@ -30,10 +30,11 @@ public class HomeBar extends MenuBar{
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, screen.input, screen) {
 						public Entity toBuild() {
-							screen.pointer = null;
+							return new BaseOfOperations(screen.map, screen, screen.getMapX(), screen.getMapY());
+						}
+						
+						public void afterBuild(){
 							screen.levelUp();
-							return new BaseOfOperations(screen.map, screen.getMapX(), screen.getMapY());
-							
 						}
 					};
 				}

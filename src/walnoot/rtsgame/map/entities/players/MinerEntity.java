@@ -17,14 +17,14 @@ public class MinerEntity extends PlayerEntity {
 	public static int ID = 105, TIME_TO_MINE_ONE_DAMAGE = 10;
 	private int teller = 0;
 
-	public MinerEntity(Map map, int xPos, int yPos) {
-		super(map, xPos, yPos);
+	public MinerEntity(Map map, GameScreen screen, int xPos, int yPos) {
+		super(map, screen, xPos, yPos);
 		name = Util.NAME_GEN.getRandomName() + " the miner";
 		setID(ID);
 	}
 	
-	public MinerEntity(Map map, int xPos, int yPos, int health) {
-		super(map, xPos, yPos);
+	public MinerEntity(Map map, GameScreen screen, int xPos, int yPos, int health) {
+		super(map,screen, xPos, yPos);
 		name = Util.NAME_GEN.getRandomName() + " the Miner";
 		this.health = health;
 		setID(ID);
@@ -42,15 +42,11 @@ public class MinerEntity extends PlayerEntity {
 			if(isMining){ 
 				if(map.getEntity(getxPos() - 1, getyPos() - 1) instanceof MineStructure){
 					map.getEntity(getxPos() -1,  getyPos() - 1).damage(1);
-					map.amountGold+=1;
 				}
 			}
 		}
 		if(isMining && !isMoving() && (map.getEntity(xPos - 1, yPos - 1) != closestMine || closestMine == null)){
 			moveToNearestMine();
-			if(nextDirections.isEmpty()){
-				isMining = false;
-			}
 		}
 	}
 	

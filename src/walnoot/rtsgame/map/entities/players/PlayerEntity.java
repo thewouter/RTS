@@ -32,8 +32,8 @@ public class PlayerEntity extends MovingEntity {
 	private Animation animation;
 	private Animation backwardAnimation;
 	
-	public PlayerEntity(Map map,int xPos, int yPos){
-		super(map, xPos, yPos, ID);
+	public PlayerEntity(Map map, GameScreen screen,int xPos, int yPos){
+		super(map,screen, xPos, yPos, ID);
 		name = Util.NAME_GEN.getRandomName();
 		loadAnimation(Images.player);
 	}
@@ -44,8 +44,8 @@ public class PlayerEntity extends MovingEntity {
 		backwardAnimation.update();
 	}
 	
-	public PlayerEntity(Map map, int xPos, int yPos, int health){
-		super(map,xPos,yPos, ID);
+	public PlayerEntity(Map map, GameScreen screen, int xPos, int yPos, int health){
+		super(map,screen,xPos,yPos, ID);
 		this.health = health;
 		name = Util.NAME_GEN.getRandomName();
 		loadAnimation(Images.player);
@@ -94,12 +94,12 @@ public class PlayerEntity extends MovingEntity {
 			
 			Option option2 = new Option("Add campfire", popup){
 				public void onClick(){
-					map.addEntity(new CampFireStructure(map, xPos, yPos - 1));
+					map.addEntity(new CampFireStructure(map,this.owner.screen, xPos, yPos - 1));
 				}
 			};
 			Option option1 = new Option("Add tent",popup) {
 				public void onClick() {
-					map.addEntity(new TentIStructure(map, xPos, yPos-2));
+					map.addEntity(new TentIStructure(map, this.owner.screen, xPos, yPos-2));
 				}
 			};
 			Option dig = new Option("dig", popup){

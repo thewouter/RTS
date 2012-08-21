@@ -12,12 +12,12 @@ import walnoot.rtsgame.screen.Screen;
 public class DeerEntity extends MovingEntity {
 	public static final int WALK_RANGE = 5, WALK_CHANGE = 5, ID = 103;
 	
-	public DeerEntity(Map map, int xPos, int yPos){
-		super(map, xPos, yPos, ID);
+	public DeerEntity(Map map, GameScreen screen, int xPos, int yPos){
+		super(map, screen, xPos, yPos, ID);
 	}
 	
-	public DeerEntity(Map map, int xPos, int yPos, int health){
-		super(map,xPos, yPos, ID);
+	public DeerEntity(Map map,GameScreen screen, int xPos, int yPos, int health){
+		super(map, screen, xPos, yPos, ID);
 		this.health = health;
 	}
 	

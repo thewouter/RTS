@@ -2,17 +2,18 @@ package walnoot.rtsgame.map.structures.nonnatural;
 
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.structures.BasicStructure;
+import walnoot.rtsgame.screen.GameScreen;
 
 public class CampFireStructure extends BasicStructure{
 	
 	public static final int ID = 200;
 	
-	public CampFireStructure(Map map, int xPos, int yPos){
-		super(map, xPos, yPos, 2, 0, ID);
+	public CampFireStructure(Map map,GameScreen screen, int xPos, int yPos){
+		super(map, screen, xPos, yPos, 2, 0, ID);
 	}
 	
-	public CampFireStructure(Map map, int xPos, int yPos,  int health){
-		super(map,xPos,yPos,2,0,ID);
+	public CampFireStructure(Map map, GameScreen screen, int xPos, int yPos,  int health){
+		super(map,screen, xPos,yPos,2,0,ID);
 		this.health = health;
 	}
 	

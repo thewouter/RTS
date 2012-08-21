@@ -51,7 +51,7 @@ public class StatusBar extends walnoot.rtsgame.menubar.MenuBar{
 		
 		addButton(new MenubarTextField(this) {
 			public String getText() {
-				return new String("" + StatusBar.this.screen.map.amountGold);
+				return new String("" + StatusBar.this.screen.inventory.gold);
 			}
 		});
 		

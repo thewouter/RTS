@@ -7,6 +7,7 @@ import walnoot.rtsgame.Images;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.tiles.Tile;
+import walnoot.rtsgame.screen.GameScreen;
 
 public abstract class MineStructure extends Structure {
 	int size;
@@ -14,8 +15,8 @@ public abstract class MineStructure extends Structure {
 	public int textureX, textureY;
 	
 	
-	public MineStructure(Map map, int xPos, int yPos, int ID, int size) {
-		super(map, xPos, yPos, ID);
+	public MineStructure(Map map, GameScreen screen, int xPos, int yPos, int ID, int size) {
+		super(map, screen,xPos, yPos, ID);
 		if(size < 1) size = 1;
 		if(size > 3) size = 3;
 		this.size = size;
@@ -72,6 +73,11 @@ public abstract class MineStructure extends Structure {
 	
 	public int getExtraOne(){
 		return size;
+	}
+	
+	public void damage(int damage){
+		super.damage(damage);
+		screen.inventory.gold+=damage;
 	}
 	
 	

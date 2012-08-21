@@ -4,6 +4,8 @@ import java.awt.Graphics;
 
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
+import walnoot.rtsgame.map.structures.BasicStructure;
+import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.screen.GameScreen;
 
 public abstract class MousePointer {
@@ -23,13 +25,17 @@ public abstract class MousePointer {
 		y = input.getMouseY();
 		if(input.LMBTapped() && screen.isOnlyOnMap(x, y)){
 			map.addEntity(toBuild());
-			screen.map.amountGold -= toBuild().getCosts();
+			screen.inventory.gold -= toBuild().getCosts();
+			afterBuild();
 		}
 	}
 	
 	public abstract Entity toBuild();
 	
 	public void render(Graphics g){
-		g.fillRect(x, y, 5, 5);
+		if(!(toBuild() instanceof Structure && !(((Structure) toBuild()) instanceof BasicStructure))) g.fillRect(x, y, 5, 5);
+		else ((BasicStructure) toBuild()).render(g, x, y);
 	}
+	
+	public void afterBuild(){} // can be overwritten in some cases
 }

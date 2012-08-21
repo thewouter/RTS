@@ -20,11 +20,12 @@ import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.tiles.Tile;
+import walnoot.rtsgame.screen.GameScreen;
 
 public class Save {
 	
 	private static String EXTENSION = ".rts";
-	public static int CURRENT_VERSION = 2;
+	public static int CURRENT_VERSION = 3;
 	
 	public static void save(Map map, String nameFile){
 		File theDir = new File("saves");
@@ -73,7 +74,7 @@ public class Save {
 	}
 	
 	
-	public static Map load(String nameFile){
+	public static Map load(String nameFile, GameScreen screen){
 		String fileName  = "saves/" + nameFile + EXTENSION;
 		File file = new File(fileName);
 		Map map = null;
@@ -94,6 +95,8 @@ public class Save {
 			case 2:
 				map = loadV2(map, data_in);
 				break;
+			case 3:
+				map = loadV3(map, data_in, screen);
 			default:
 				map = loadV1(map, data_in);
 				break;
@@ -108,6 +111,82 @@ public class Save {
 		return map;
 	}
 	
+	private static Map loadV3(Map map, DataInputStream data_in, GameScreen screen) {
+		try{		
+			int width = data_in.readInt();
+			int height = data_in.readInt();
+				int amountSheepGroups = data_in.readInt();
+			
+			map = new Map(width, amountSheepGroups);
+			
+			for(int x = 0; x < height; x++){
+				for( int y = 0; y < width; y++){
+					int ID = data_in.readInt();
+					map.changeTile(x, y, Tile.getTile(ID));
+				}
+			}
+			
+			
+			int amountEntities = data_in.readInt();
+			
+			
+			
+			for(int i = 0; i < amountEntities; i++){
+				int ID = data_in.readInt();
+				int xPos = data_in.readInt();
+				int yPos = data_in.readInt();
+				int health = data_in.readInt();
+				int extraOne = data_in.readInt();
+				if(ID >= 300){				//mines
+					switch(ID){
+					case 300:
+						map.addEntity(new GoldMine(map, screen, xPos, yPos, extraOne));
+					}	
+				}else if(ID >= 200){		//structures
+					switch(ID){
+					case 200:
+						map.addEntity(new CampFireStructure(map,screen,  xPos, yPos, health));
+						break;
+					case 201:
+						map.addEntity(new TentIStructure(map,screen,  xPos, yPos, health));
+						break;
+					case 202:
+						map.addEntity(new TreeStructure(map,screen,  xPos, yPos, health));
+						break;
+					case 203:
+						map.addEntity(new BaseOfOperations(map,screen,  xPos, yPos, health));
+						break;
+					}
+				}else if(ID >= 100){		//movingEntities
+					switch(ID){
+					case 100:
+						map.addEntity(new SnakeEntity(map,screen,  xPos, yPos, health));
+						break;
+					case 101:
+						map.addEntity(new SheepEntity(map,screen,  xPos, yPos, health));
+						break;
+					case 102:
+						map.addEntity(new PlayerEntity(map,screen,  xPos, yPos, health));
+						break;
+					case 103:
+						map.addEntity(new DeerEntity(map,screen,  xPos, yPos, health));
+						break;
+					case 104:
+						map.addEntity(new HunterEntity(map,screen,  xPos, yPos, health));
+						break;
+					case 105:
+						map.addEntity(new MinerEntity(map,screen,  xPos, yPos, health));
+						break;
+					}
+				}
+			}
+		}catch(Exception e){ //als hij bij het einde van de file is
+			System.out.println("end of file");
+		}
+		return map;
+	}
+
+
 	private static Map loadV2 (Map map, DataInputStream data_in){
 		try{
 			
@@ -139,42 +218,42 @@ public class Save {
 				if(ID >= 300){				//mines
 					switch(ID){
 					case 300:
-						map.addEntity(new GoldMine(map, xPos, yPos, extraOne));
+						map.addEntity(new GoldMine(map,null,  xPos, yPos, extraOne));
 					}	
 				}else if(ID >= 200){		//structures
 					switch(ID){
 					case 200:
-						map.addEntity(new CampFireStructure(map, xPos, yPos, health));
+						map.addEntity(new CampFireStructure(map,null,  xPos, yPos, health));
 						break;
 					case 201:
-						map.addEntity(new TentIStructure(map, xPos, yPos, health));
+						map.addEntity(new TentIStructure(map,null,  xPos, yPos, health));
 						break;
 					case 202:
-						map.addEntity(new TreeStructure(map, xPos, yPos, health));
+						map.addEntity(new TreeStructure(map, null, xPos, yPos, health));
 						break;
 					case 203:
-						map.addEntity(new BaseOfOperations(map, xPos, yPos, health));
+						map.addEntity(new BaseOfOperations(map,null,  xPos, yPos, health));
 						break;
 					}
 				}else if(ID >= 100){		//movingEntities
 					switch(ID){
 					case 100:
-						map.addEntity(new SnakeEntity(map, xPos, yPos, health));
+						map.addEntity(new SnakeEntity(map,null,  xPos, yPos, health));
 						break;
 					case 101:
-						map.addEntity(new SheepEntity(map, xPos, yPos, health));
+						map.addEntity(new SheepEntity(map, null, xPos, yPos, health));
 						break;
 					case 102:
-						map.addEntity(new PlayerEntity(map, xPos, yPos, health));
+						map.addEntity(new PlayerEntity(map, null, xPos, yPos, health));
 						break;
 					case 103:
-						map.addEntity(new DeerEntity(map, xPos, yPos, health));
+						map.addEntity(new DeerEntity(map,null,  xPos, yPos, health));
 						break;
 					case 104:
-						map.addEntity(new HunterEntity(map, xPos, yPos, health));
+						map.addEntity(new HunterEntity(map,null,  xPos, yPos, health));
 						break;
 					case 105:
-						map.addEntity(new MinerEntity(map, xPos, yPos, health));
+						map.addEntity(new MinerEntity(map,null,  xPos, yPos, health));
 						break;
 					}
 				}
@@ -218,28 +297,28 @@ public class Save {
 				if(ID >= 200){
 					switch(ID){
 					case 200:
-						map.addEntity(new CampFireStructure(map, xPos, yPos, health));
+						map.addEntity(new CampFireStructure(map, null, xPos, yPos, health));
 						break;
 					case 201:
-						map.addEntity(new TentIStructure(map, xPos, yPos, health));
+						map.addEntity(new TentIStructure(map,null,  xPos, yPos, health));
 						break;
 					case 202:
-						map.addEntity(new TreeStructure(map, xPos, yPos, health));
+						map.addEntity(new TreeStructure(map,null,  xPos, yPos, health));
 						break;
 					}
 				}else if(ID >= 100){
 					switch(ID){
 					case 100:
-						map.addEntity(new SnakeEntity(map, xPos, yPos, health));
+						map.addEntity(new SnakeEntity(map, null, xPos, yPos, health));
 						break;
 					case 101:
-						map.addEntity(new SheepEntity(map, xPos, yPos, health));
+						map.addEntity(new SheepEntity(map,null,  xPos, yPos, health));
 						break;
 					case 102:
-						map.addEntity(new PlayerEntity(map, xPos, yPos, health));
+						map.addEntity(new PlayerEntity(map,null,  xPos, yPos, health));
 						break;
 					case 103:
-						map.addEntity(new DeerEntity(map, xPos, yPos, health));
+						map.addEntity(new DeerEntity(map,null,  xPos, yPos, health));
 						break;
 					}
 				}

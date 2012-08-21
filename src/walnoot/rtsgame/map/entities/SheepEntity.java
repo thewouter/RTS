@@ -19,8 +19,8 @@ public class SheepEntity extends MovingEntity {
 	private Animation currentAnimation;
 	public static final int WALK_RANGE = 6, WALK_CHANGE = 5, TICKS_PER_SHEEP = 5, APROX_LIFETIME_IN_TICKS = 60000, ID = 101;
 
-	public SheepEntity(Map map, int xPos, int yPos) {
-		super(map, xPos, yPos, ID);
+	public SheepEntity(Map map,GameScreen screen, int xPos, int yPos) {
+		super(map, screen, xPos, yPos, ID);
 		sheepAnimation = new Animation(TICKS_PER_SHEEP);
 		currentAnimation = sheepAnimation;
 		for(int i = 0; i < Images.sheep.length-1; i++){
@@ -28,8 +28,8 @@ public class SheepEntity extends MovingEntity {
 		}
 	}
 	
-	public SheepEntity(Map map, int xPos, int yPos, int health){
-		super(map,xPos, yPos, ID);
+	public SheepEntity(Map map,GameScreen screen, int xPos, int yPos, int health){
+		super(map,screen ,xPos, yPos, ID);
 		this.health = health;
 		sheepAnimation = new Animation(TICKS_PER_SHEEP);
 		currentAnimation = sheepAnimation;

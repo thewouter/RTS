@@ -14,12 +14,14 @@ public abstract class Entity {
 	public int yPos;
 	protected int health;
 	public int ID;
+	public GameScreen screen;
 	
-	public Entity(Map map, int xPos, int yPos, int ID){
+	public Entity(Map map, int xPos, int yPos, int ID, GameScreen screen){
 		this.map = map;
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.ID = ID;
+		this.screen = screen;
 		
 		health = getMaxHealth();
 	}

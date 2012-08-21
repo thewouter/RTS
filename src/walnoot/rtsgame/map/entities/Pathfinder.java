@@ -21,7 +21,7 @@ public class Pathfinder extends Thread {
 	
 	public static void moveTo(MovingEntity requester, Point start, Point goal, Map map){
 		if(map.isSolid(goal)){
-			System.out.println("Goal is unreachable!");
+			//System.out.println("Goal is unreachable!");
 			requester.nextDirections = null;
 		}
 		
@@ -51,7 +51,7 @@ public class Pathfinder extends Thread {
 		while(!openlist.isEmpty() && finalNode == null){
 			getNodeLowestF(openlist).checkNeighbours(currentMap, openlist, closedlist);
 			if(System.nanoTime() - startTimeNano > 1000000000){
-				System.out.println("took too long to calculate");
+				//System.out.println("took too long to calculate");
 				return result;
 			}
 		}

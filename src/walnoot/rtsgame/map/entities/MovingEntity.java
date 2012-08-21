@@ -7,6 +7,7 @@ import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
+import walnoot.rtsgame.screen.GameScreen;
 
 public abstract class MovingEntity extends Entity {
 	protected double timeTraveled; //hoelang hij onderweg is
@@ -15,8 +16,8 @@ public abstract class MovingEntity extends Entity {
 	public LinkedList<Direction> nextDirections = new LinkedList<Direction>();
 	private LinkedList<Direction> nextNextDirections = null;
 	
-	public MovingEntity(Map map, int xPos, int yPos,  int ID){
-		super(map, xPos, yPos, ID);
+	public MovingEntity(Map map, GameScreen screen, int xPos, int yPos,  int ID){
+		super(map, xPos, yPos, ID, screen);
 	}
 	
 	public void update(){

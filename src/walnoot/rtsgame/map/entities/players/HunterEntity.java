@@ -20,13 +20,13 @@ public class HunterEntity extends PlayerEntity {
 	private int teller = 0;
 	private MovingEntity closestMovingEntity;
 
-	public HunterEntity(Map map, int xPos, int yPos, int health) {
-		super(map, xPos, yPos, health);
+	public HunterEntity(Map map, GameScreen screen, int xPos, int yPos, int health) {
+		super(map, screen, xPos, yPos, health);
 		setID(ID);
 		
 	}
-	public HunterEntity(Map map, int xPos, int yPos){
-		super(map, xPos, yPos);
+	public HunterEntity(Map map, GameScreen screen, int xPos, int yPos){
+		super(map, screen, xPos, yPos);
 		setID(ID);
 	}
 
@@ -38,8 +38,9 @@ public class HunterEntity extends PlayerEntity {
 		if(isHunting){
 			if(teller >= TIME_TO_HUNT_ONE_DAMAGE){		// hunting time !
 				teller = 0;
-				if(Util.getDistance(this.xPos, this.yPos, closestMovingEntity.xPos, closestMovingEntity.yPos) < 3){
+				if(Util.getDistance(this.xPos, this.yPos, closestMovingEntity.xPos, closestMovingEntity.yPos) <= 1){
 					closestMovingEntity.damage(1);
+					screen.inventory.meat+=1;
 					if(!map.entities.contains(closestMovingEntity)){
 						huntNearestAnimal();
 					}
@@ -67,12 +68,11 @@ public class HunterEntity extends PlayerEntity {
 		}
 		moveTo(new Point( closestMovingEntity.xPos, closestMovingEntity.yPos));
 		follow(closestMovingEntity);
-		
+		/*
 		if(nextDirections.isEmpty()) {		// if no animal has been found.
 			isHunting = false;
-			System.out.println(1);
 			closestMovingEntity =null;
-		}
+		}*/
 	}
 	
 	public void render(Graphics g){

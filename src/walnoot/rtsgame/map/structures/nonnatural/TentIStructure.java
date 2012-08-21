@@ -17,12 +17,12 @@ public class TentIStructure extends BasicStructure {
 	public final static int ID = 201, TIME_TO_SPAWN_A_PLAYER = 120, MAX_PLAYERS = 8;
 	private int time = 0;
 	LinkedList<PlayerEntity> players = new LinkedList<PlayerEntity>();
-	public TentIStructure(Map map, int xPos, int yPos){
-		super(map, xPos, yPos,  0, 0,ID);
+	public TentIStructure(Map map, GameScreen screen, int xPos, int yPos){
+		super(map, screen, xPos, yPos,  0, 0,ID);
 	}
 	
-	public TentIStructure(Map map, int xPos, int yPos, int health){
-		super(map,xPos,yPos, 0, 0, ID);
+	public TentIStructure(Map map, GameScreen screen ,int xPos, int yPos, int health){
+		super(map,screen,xPos,yPos, 0, 0, ID);
 		this.health = health;
 	}
 	
@@ -38,8 +38,8 @@ public class TentIStructure extends BasicStructure {
 		LinkedList<Entity> toBeAddedToTheMap = new LinkedList<Entity>();
 		if(players.size() < MAX_PLAYERS)time++;
 		if(time >= TIME_TO_SPAWN_A_PLAYER && players.size() < MAX_PLAYERS){
-			toBeAddedToTheMap.add(new PlayerEntity(map, xPos + 3, yPos + 3));
-			map.amountGold-=5;
+			toBeAddedToTheMap.add(new PlayerEntity(map, screen, xPos + 3, yPos + 3));
+			screen.inventory.gold-=5;
 			time = 0;
 		}
 		LinkedList<PlayerEntity> toBeRemoved = new LinkedList<PlayerEntity>();
