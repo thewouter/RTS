@@ -11,6 +11,7 @@ import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.EntityPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 
 public class TentIStructure extends BasicStructure {
 	

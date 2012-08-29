@@ -5,22 +5,24 @@ import java.util.LinkedList;
 
 import walnoot.rtsgame.popups.Popup;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 import walnoot.rtsgame.screen.Screen;
 
 public class ScreenPopup extends Popup{
 	int xPos,yPos, width, height;
 	private static int EMPTY_SPACE = 10;
 	LinkedList<ScreenPopupPart> parts = new LinkedList<ScreenPopupPart>();
-	public GameScreen screen;
+	public Screen screen;
 	
-	public ScreenPopup(int xPos, int yPos, int width, int height, GameScreen screen){
+	public ScreenPopup(int xPos, int yPos, int width, int height, Screen title){
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.width = width;
 		this.height = height;
-		this.screen = screen;
+		this.screen = title;
 	}
 	
+
 	public void render(Graphics g) {
 		drawBox(g,width, height, xPos, yPos);
 		for(ScreenPopupPart p:parts){
@@ -28,7 +30,7 @@ public class ScreenPopup extends Popup{
 		}
 	}
 
-	public void update(int translationX, int translationY, int mouseX, int mouseY) {
+	public void update(int mouseX, int mouseY) {
 		if(isInPopup(mouseX, mouseY));
 		int totalHeight = 0;
 		for(int i = 0; i < parts.size(); i++){
@@ -59,10 +61,12 @@ public class ScreenPopup extends Popup{
 		parts.add(p);
 	}
 	
-	public TextInput getTextInput(){
+	public TextInput getTextInput(int index){
+		int counter = 0;
 		for(ScreenPopupPart p: parts){
 			if(p instanceof TextInput){
-				return (TextInput) p;
+				counter++;
+				if(index == counter)return (TextInput) p;
 			}
 		}
 		return null;

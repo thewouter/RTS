@@ -4,14 +4,17 @@ import java.awt.Point;
 import java.util.LinkedList;
 
 import walnoot.rtsgame.RTSComponent;
-import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
+import walnoot.rtsgame.multiplayer.client.MPMapClient;
+import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 
 public abstract class MovingEntity extends Entity {
 	protected double timeTraveled; //hoelang hij onderweg is
 	private Entity goal = null;
+	private int oldX = 0, oldY = 0;
 	
 	public LinkedList<Direction> nextDirections = new LinkedList<Direction>();
 	private LinkedList<Direction> nextNextDirections = null;
@@ -28,24 +31,17 @@ public abstract class MovingEntity extends Entity {
 		Direction nextDirection = null;
 		if(nextDirections == null) nextDirections = new LinkedList<Direction>();
 		if(nextDirections.isEmpty()){
-			if(goal != null){
-				int dx = goal.xPos - this.xPos;
-				int dy = goal.yPos - this.yPos;
-				
-				if(Util.abs(dx) <= 1 && Util.abs(dy) <= 1) return;
-				
-				if(dx > 1) dx = 1;
-				if(dx < -1) dx = -1;
-				
-				if(dy > 1) dy = 1;
-				if(dy < -1) dy = -1;
-				
-				nextDirections.add(Direction.getDirection(dx, dy));
+			if(goal != null && goal.xPos != oldX && goal.yPos != oldY){
+				Pathfinder.moveTo(this, new Point(xPos, yPos), new Point(goal.xPos, goal.yPos), map);
+				oldX = goal.getxPos();
+				oldY = goal.getyPos();
 			}else return;
 		}
-		nextDirection = nextDirections.get(0);
+		if(nextDirections.size() > 0) {
+			nextDirection = nextDirections.get(0);
+			timeTraveled += RTSComponent.MS_PER_TICK / (getTravelTime() * (nextDirection.isDiagonal() ? Math.sqrt(2) : 1.0));
+		}
 		
-		timeTraveled += RTSComponent.MS_PER_TICK / (getTravelTime() * (nextDirection.isDiagonal() ? Math.sqrt(2) : 1.0));
 		
 		while(timeTraveled > 1){
 			timeTraveled -= 1;
@@ -86,6 +82,14 @@ public abstract class MovingEntity extends Entity {
 	}
 
 	public void moveTo(Point goal){
+		if(map instanceof MPMapClient){
+			return;
+		}
+		this.goal = null;
+		Pathfinder.moveTo(this,new Point(xPos, yPos), goal, map);
+	}
+
+	public void moveToFromHost(Point goal){
 		this.goal = null;
 		Pathfinder.moveTo(this,new Point(xPos, yPos), goal, map);
 	}

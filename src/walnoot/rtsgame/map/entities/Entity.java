@@ -6,8 +6,10 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.MPGameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 
-public abstract class Entity {
+public abstract class Entity implements Cloneable {
 	protected final Map map;
 	private boolean removed;
 	public int xPos;
@@ -22,7 +24,6 @@ public abstract class Entity {
 		this.yPos = yPos;
 		this.ID = ID;
 		this.screen = screen;
-		
 		health = getMaxHealth();
 	}
 	
@@ -86,5 +87,14 @@ public abstract class Entity {
 	
 	public void remove(){
 		removed = true;
+	}
+	
+	public Entity clone() {
+        try {
+            final Entity result = (Entity) super.clone();
+            return result;
+        } catch (final CloneNotSupportedException ex) {
+            throw new AssertionError();
+        }
 	}
 }

@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import walnoot.rtsgame.popups.Popup;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 import walnoot.rtsgame.map.entities.Entity;
 
 public abstract class EntityPopup extends Popup{
@@ -20,7 +21,7 @@ public abstract class EntityPopup extends Popup{
 	}
 	
 	public abstract void render(Graphics g);
-	public abstract void update(int translationX, int translationY, int mouseX, int mouseY);
+	public abstract void update(int mouseX, int mouseY);
 	public abstract void onLeftClick(int mouseX, int mouseY);
 	public abstract boolean isInPopup(int x, int y);
 	

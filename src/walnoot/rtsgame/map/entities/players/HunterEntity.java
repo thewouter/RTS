@@ -6,13 +6,14 @@ import java.util.LinkedList;
 
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
-import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
+import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 
 public class HunterEntity extends PlayerEntity {
 	public boolean isHunting = false;
@@ -25,7 +26,7 @@ public class HunterEntity extends PlayerEntity {
 		setID(ID);
 		
 	}
-	public HunterEntity(Map map, GameScreen screen, int xPos, int yPos){
+	public HunterEntity(Map map, SPGameScreen screen, int xPos, int yPos){
 		super(map, screen, xPos, yPos);
 		setID(ID);
 	}
@@ -79,7 +80,7 @@ public class HunterEntity extends PlayerEntity {
 		g.drawImage(Images.dudes[1][0], getScreenX(), getScreenY(), null);
 	}
 	
-	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
+	public boolean onRightClick(Entity entityClicked, SPGameScreen screen, InputHandler input){
 		EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
 		if(isHunting){
 			popup.addOption(new Option("stop hunting", popup) {

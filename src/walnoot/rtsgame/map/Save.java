@@ -166,7 +166,7 @@ public class Save {
 						map.addEntity(new SheepEntity(map,screen,  xPos, yPos, health));
 						break;
 					case 102:
-						map.addEntity(new PlayerEntity(map,screen,  xPos, yPos, health));
+						map.addEntity(new PlayerEntity(map,screen,  xPos, yPos));
 						break;
 					case 103:
 						map.addEntity(new DeerEntity(map,screen,  xPos, yPos, health));

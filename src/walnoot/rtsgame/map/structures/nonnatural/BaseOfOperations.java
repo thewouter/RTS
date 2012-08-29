@@ -5,6 +5,7 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 
 public class BaseOfOperations extends BasicStructure {
 	
@@ -20,7 +21,7 @@ public class BaseOfOperations extends BasicStructure {
 		
 	}
 	
-	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
+	public boolean onRightClick(Entity entityClicked, SPGameScreen screen, InputHandler input){
 		screen.inventory.showInventory();
 		
 		return false;

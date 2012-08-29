@@ -4,6 +4,13 @@ import java.awt.Graphics;
 
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
+import walnoot.rtsgame.multiplayer.host.MPHost;
+import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
+import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
+import walnoot.rtsgame.popups.screenpopup.ScreenPopupPart;
+import walnoot.rtsgame.popups.screenpopup.ScreenPopupTextField;
+import walnoot.rtsgame.popups.screenpopup.TextInput;
+import walnoot.rtsgame.screen.MPGameScreen;
 import walnoot.rtsgame.screen.Screen;
 import walnoot.rtsgame.screen.TitleScreen;
 
@@ -12,8 +19,10 @@ public class MainMenu extends MenuScreen {
 	private float buttonTransparancy;
 	
 	private MenuButton startGame = new MenuButton("Start Game", 0, 100, -1, -1, this);
-	private MenuButton exitGame = new MenuButton("Exit Game", 0, 160, -1, -1, this);
-	private MenuButton newGame = new MenuButton("New Game", 0, 130, -1, -1, this);
+	private MenuButton newSPGame = new MenuButton("New Game", 0, 130, -1, -1, this);
+	private MenuButton newMPGame = new MenuButton("Join MP Game", 0, 160, -1, -1, this);
+	private MenuButton hostMPGame = new MenuButton("Host MP Game", 0, 190, -1, -1, this);
+	private MenuButton exitGame = new MenuButton("Exit Game", 0, 220, -1, -1, this);
 	
 	public MainMenu(RTSComponent component, TitleScreen title, InputHandler input){
 		super(component, input);
@@ -24,12 +33,14 @@ public class MainMenu extends MenuScreen {
 		title.render(g);
 		
 		super.makeTransparant(g, buttonTransparancy);
+		
 		super.render(g);
+		
 		
 	}
 	
 	protected MenuButton[] getButtons(){
-		MenuButton[] result = {startGame, newGame, exitGame};
+		MenuButton[] result = {startGame, newSPGame, newMPGame, exitGame, hostMPGame};
 		
 		return result;
 	}
@@ -48,6 +59,29 @@ public class MainMenu extends MenuScreen {
 	public void buttonPressed(MenuButton menuButton){
 		if(menuButton.equals(startGame))super.component.setGameScreen(false);
 		else if(menuButton.equals(exitGame)) component.stop();
-		else if(menuButton.equals(newGame)) component.setGameScreen(true);
+		else if(menuButton.equals(newSPGame)) component.setGameScreen(true);
+		else if(menuButton.equals(newMPGame)){
+			ScreenPopup popup = new ScreenPopup((component.getWidth() / 4 )- 50, (component.getHeight() / 4) - 50, 100, 100, title);
+			TextInput IP = new TextInput(popup, input);
+			IP.setText("localhost");
+			popup.addPart(IP);
+			TextInput port = new TextInput(popup, input);
+			port.setText("1995");
+			popup.addPart(port);
+			popup.addPart(new ScreenPopupButton("OK", popup, input) {
+				public void onLeftClick() {
+					String ip = owner.getTextInput(1).getOutput();
+					String port = owner.getTextInput(2).getOutput();
+					try{ owner.screen.component.setScreen(new MPGameScreen(owner.screen.component, input, Integer.parseInt(port), ip));
+					}catch(Exception e){
+						owner.getTextInput(2).clear();
+						owner.getTextInput(2).setText("invalid");
+						System.out.println(e);
+					}
+				}
+			});
+			setPopup(popup);
+		}
+		else if(menuButton.equals(hostMPGame)) component.setHostedGame(1995);
 	}
 }

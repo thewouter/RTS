@@ -82,6 +82,7 @@ public class MenuButton {
 	}
 	
 	public void render(Graphics g){
+		
 		selected = isInRect();
 		
 		g.setColor(Color.BLACK);

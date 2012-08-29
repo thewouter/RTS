@@ -56,6 +56,7 @@ public class TextInput extends ScreenPopupPart {
 		inputKeys.add(input.n7);
 		inputKeys.add(input.n8);
 		inputKeys.add(input.n9);
+		inputKeys.add(input.dot);
 	}
 	
 
@@ -108,5 +109,14 @@ public class TextInput extends ScreenPopupPart {
 			uitput += s;
 		}
 		return uitput;
+	}
+	
+	public void clear(){
+		text.clear();
+	}
+	
+	public void setText(String text){
+		char[] tekst = text.toCharArray();
+		for(char c: tekst) this.text.add(Character.toString(c));
 	}
 }

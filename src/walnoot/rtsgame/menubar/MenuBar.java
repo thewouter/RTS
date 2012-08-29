@@ -11,6 +11,7 @@ import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopupTextField;
 import walnoot.rtsgame.popups.screenpopup.TextInput;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 
 public class MenuBar {
 	public InputHandler input;
@@ -24,7 +25,7 @@ public class MenuBar {
 	public int corner, width, height;
 	/**
 	 * @param input
-	 * @param screen
+	 * @param gameScreen
 	 * @param X_POS_FROM_RIGHT
 	 * @param Y_POS_FROM_BOTTOM
 	 * @param WIDTH_BUTTON
@@ -32,9 +33,9 @@ public class MenuBar {
 	 * @param corner	top left withe te clock 1 , 2 , 3 , 4
 	 */
 	
-	public MenuBar(InputHandler input, GameScreen screen, int X_POS_FROM_RIGHT, int Y_POS_FROM_BOTTOM, int WIDTH_BUTTON, int HEIGHT_BUTTON, int corner) {
+	public MenuBar(InputHandler input, GameScreen gameScreen, int X_POS_FROM_RIGHT, int Y_POS_FROM_BOTTOM, int WIDTH_BUTTON, int HEIGHT_BUTTON, int corner) {
 		this.input = input;
-		this.screen = screen;
+		this.screen = gameScreen;
 		this.corner = corner;
 		width = UITLOOP + X_POS_FROM_RIGHT;
 		height = UITLOOP + HEIGHT_BUTTON + Y_POS_FROM_BOTTOM;

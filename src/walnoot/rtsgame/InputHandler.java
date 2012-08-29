@@ -61,6 +61,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 	public Key n9 = new Key ("9", KeyEvent.VK_9, KeyEvent.VK_NUMPAD9);
 	public Key n0 = new Key ("0", KeyEvent.VK_0, KeyEvent.VK_NUMPAD0);
 	public Key backspace = new Key ("backspace", KeyEvent.VK_BACK_SPACE);
+	public Key dot = new Key (".", KeyEvent.VK_PERIOD);
 	
 	private boolean LMBDown = false, LMBWasDown = false;
 	private boolean RMBDown = false, RMBWasDown = false;

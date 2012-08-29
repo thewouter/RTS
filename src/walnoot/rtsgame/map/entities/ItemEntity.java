@@ -3,11 +3,11 @@ package walnoot.rtsgame.map.entities;
 import java.awt.Graphics;
 
 import walnoot.rtsgame.map.Map;
-import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 
 public abstract class ItemEntity extends Entity {
 	
-	public ItemEntity(GameScreen screen,Map map, int xPos, int yPos, int ID){
+	public ItemEntity(SPGameScreen screen,Map map, int xPos, int yPos, int ID){
 		super(map, xPos, yPos, ID,screen);
 	}
 	

@@ -4,11 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import walnoot.rtsgame.InputHandler;
-import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
+import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 import walnoot.rtsgame.screen.Screen;
 
 public class SnakeEntity extends MovingEntity {
@@ -20,8 +21,8 @@ public class SnakeEntity extends MovingEntity {
 	
 	public static final int WALK_RANGE = 3, WALK_CHANGE_NORMAL = 3, MAX_TICKS_SCARED = 1000, WALK_CHANGE_SCARED = 20;
 
-	public SnakeEntity(Map map, GameScreen screen, int xPos, int yPos) {
-		super(map,screen, xPos, yPos, ID);
+	public SnakeEntity(Map map, GameScreen player, int xPos, int yPos) {
+		super(map,player, xPos, yPos, ID);
 	}
 	
 	public SnakeEntity(Map map, GameScreen screen, int xPos, int yPos, int health){
@@ -50,7 +51,7 @@ public class SnakeEntity extends MovingEntity {
 		
 	}
 	
-	public void onRightClick(GameScreen screen, InputHandler input){
+	public void onRightClick(SPGameScreen screen, InputHandler input){
 		EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
 		Option option1 = new Option("boe!",popup){
 			public void onClick() {

@@ -10,8 +10,6 @@ import sun.awt.geom.AreaOp.AddOp;
 import walnoot.rtsgame.Animation;
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
-import walnoot.rtsgame.Sound;
-import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.ItemEntity;
@@ -21,7 +19,10 @@ import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
+import walnoot.rtsgame.rest.Sound;
+import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 
 public class PlayerEntity extends MovingEntity {
 	public String name;
@@ -131,6 +132,7 @@ public class PlayerEntity extends MovingEntity {
 			popup.addOption(option2);
 			popup.addOption(dig);
 			popup.addOption(raise);
+			
 			screen.setEntityPopup(popup);
 		}else follow(entityClicked);
 		return false;

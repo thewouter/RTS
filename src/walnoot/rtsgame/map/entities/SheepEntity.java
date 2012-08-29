@@ -6,12 +6,13 @@ import java.awt.Graphics;
 import walnoot.rtsgame.Animation;
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
-import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
+import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 
 public class SheepEntity extends MovingEntity {
 	
@@ -19,7 +20,7 @@ public class SheepEntity extends MovingEntity {
 	private Animation currentAnimation;
 	public static final int WALK_RANGE = 6, WALK_CHANGE = 5, TICKS_PER_SHEEP = 5, APROX_LIFETIME_IN_TICKS = 60000, ID = 101;
 
-	public SheepEntity(Map map,GameScreen screen, int xPos, int yPos) {
+	public SheepEntity(Map map, GameScreen screen, int xPos, int yPos) {
 		super(map, screen, xPos, yPos, ID);
 		sheepAnimation = new Animation(TICKS_PER_SHEEP);
 		currentAnimation = sheepAnimation;
@@ -56,7 +57,7 @@ public class SheepEntity extends MovingEntity {
 	
 	
 	
-	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
+	public boolean onRightClick(Entity entityClicked, SPGameScreen screen, InputHandler input){
 		if(entityClicked == this){
 			EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
 			Option option1 = new Option("getclosest",popup){

@@ -12,7 +12,12 @@ import java.io.File;
 
 import javax.swing.JFrame;
 
-import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.multiplayer.host.MPHost;
+import walnoot.rtsgame.multiplayer.host.Player;
+import walnoot.rtsgame.rest.Options;
+import walnoot.rtsgame.rest.Sound;
+import walnoot.rtsgame.rest.Util;
+import walnoot.rtsgame.screen.SPGameScreen;
 import walnoot.rtsgame.screen.Screen;
 import walnoot.rtsgame.screen.TitleScreen;
 
@@ -22,7 +27,7 @@ public class RTSComponent extends Canvas implements Runnable {
 	public static final double MS_PER_TICK = 1000.0 / 60.0;
 	
 	private Screen screen;
-	private GameScreen gameScreen;
+	private SPGameScreen gameScreen;
 	private TitleScreen titleScreen;
 	private boolean running = true;
 	public static final int SCALE = 2;
@@ -41,7 +46,7 @@ public class RTSComponent extends Canvas implements Runnable {
 		
 		input = InputHandler.getInputHandler(this);
 		
-		setGameScreen(true);
+		setTitleScreen();
 		
 		setIgnoreRepaint(true);
 		
@@ -126,7 +131,7 @@ public class RTSComponent extends Canvas implements Runnable {
 	
 	public void setScreen(Screen s){
 		screen = s;
-		if(s instanceof GameScreen && backgroundSoundOn){
+		if(s instanceof SPGameScreen && backgroundSoundOn){
 			backgroundSound.play();
 		}else{
 			backgroundSound.stop();
@@ -136,7 +141,7 @@ public class RTSComponent extends Canvas implements Runnable {
 	public void setGameScreen(boolean newScreen){
 		if(gameScreen == null || newScreen == true) {
 			gameScreen = null;
-			gameScreen = new GameScreen(this, input);
+			gameScreen = new SPGameScreen(this, input);
 		}
 		setScreen(gameScreen);
 		
@@ -147,6 +152,10 @@ public class RTSComponent extends Canvas implements Runnable {
 		if(titleScreen == null) titleScreen = new TitleScreen(this, input);
 		setScreen(titleScreen);
 		backgroundSound.stop();
+	}
+	
+	public void setHostedGame(int port){
+		screen = new MPHost(this, input, port);
 	}
 	
 	public Screen getScreen(){
@@ -188,7 +197,6 @@ public class RTSComponent extends Canvas implements Runnable {
 		frame.setVisible(true);
 		
 		new Thread(comp, "Tribe main").start();
-		
 		while(comp.running){
 			frame.setTitle("Tribe (" + comp.fps + ")");
 			try{

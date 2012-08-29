@@ -8,6 +8,7 @@ import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 import walnoot.rtsgame.screen.Screen;
 
 public class EntityOptionsPopup extends EntityPopup {
@@ -33,7 +34,7 @@ public class EntityOptionsPopup extends EntityPopup {
 		
 		g.setColor(Color.BLACK);
 		
-		drawBox(g, width, height, getScreenX() ,getScreenY());
+		drawBox(g, width, height, screenX ,screenY);
 		
 		for(int i = 0; i < options.size(); i++){
 			if(i == indexSelected){
@@ -56,13 +57,13 @@ public class EntityOptionsPopup extends EntityPopup {
 	}
 
 
-	public void update(int translationX, int translationY, int mouseX, int mouseY){
+	public void update(int mouseX, int mouseY){
 		
-		screenX = getScreenX() + translationX;;
-		screenY = getScreenY() + translationY;;
+		screenX = owner.getScreenX() + screen.translationX;
+		screenY = owner.getScreenY() + screen.translationY;
 		
 		if(isInPopup(mouseX, mouseY)){
-			indexHighlighted = (mouseY  - 16- screenY)/RTSFont.HEIGHT;
+			indexHighlighted = (mouseY  - 16 - screenY)/RTSFont.HEIGHT;
 		}else{
 			indexHighlighted = -1;
 		}

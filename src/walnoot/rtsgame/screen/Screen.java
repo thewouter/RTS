@@ -10,6 +10,7 @@ import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.RTSFont;
+import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
 
 /**
  * Een Screen staat voor een deel van het spel, zoals het hoofdmenu, of game
@@ -19,6 +20,7 @@ public abstract class Screen {
 	public RTSComponent component;
 	public static RTSFont font = new RTSFont(Images.font);
 	public InputHandler input;
+	public ScreenPopup popup = null;
 	
 	public Screen(RTSComponent component, InputHandler input){
 		this.component = component;
@@ -29,17 +31,19 @@ public abstract class Screen {
 		component.setScreen(screen);
 	}
 	
-	/**
-	 * Render method, tekent op het scherm
-	 * 
-	 * @param g Object waarmee je kan tekenen
-	 */
-	public abstract void render(Graphics g);
+	public void render(Graphics g){
+		if(popup!= null){
+			popup.render(g);
+		}
+	}
 	
-	/**
-	 * Update Method
-	 */
-	public abstract void update();
+	public void update(){
+		if(popup!= null) popup.update(input.getMouseX(), input.getMouseY());
+		if(input.escape.isTapped()) {
+			if(popup == null)component.setTitleScreen();
+			else setPopup(null);
+		}
+	}
 	
 	/** @param transparancy hoe transparant, max 1.0, min 0.0 */
 	public void makeTransparant(Graphics g, float transparancy){
@@ -58,5 +62,9 @@ public abstract class Screen {
 	
 	public int getHeight(){
 		return component.getHeight() / RTSComponent.SCALE;
+	}
+	
+	public void setPopup(ScreenPopup popup){
+		this.popup = popup;
 	}
 }

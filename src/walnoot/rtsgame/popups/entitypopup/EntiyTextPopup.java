@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 import walnoot.rtsgame.screen.Screen;
 
 public class EntiyTextPopup extends EntityPopup {
@@ -37,7 +38,7 @@ public class EntiyTextPopup extends EntityPopup {
 		}
 	}
 	
-	public void update(int translationX, int translationY, int mouseX, int mouseY){}
+	public void update(int mouseX, int mouseY){}
 
 	public void onLeftClick(int mouseX, int mouseY) {}
 	public boolean isInPopup(int x , int y){

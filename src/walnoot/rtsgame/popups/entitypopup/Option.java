@@ -21,11 +21,11 @@ public abstract class Option {
 	}
 	
 	public void render(Graphics g, int index){
-		Screen.font.drawLine(g, name, owner.getScreenX() + 16, owner.getScreenY() + 16 + index * RTSFont.HEIGHT);
+		Screen.font.drawLine(g, name, owner.screenX + 16, owner.screenY + 16 + index * RTSFont.HEIGHT);
 	}
 	
 	public void renderInColor(Graphics g, int index, Color c){
-		Screen.font.drawLineAndShadow(g, name, owner.getScreenX() + 16, owner.getScreenY() + 16 + index * RTSFont.HEIGHT, c);
+		Screen.font.drawLineAndShadow(g, name, owner.screenX + 16, owner.screenY + 16 + index * RTSFont.HEIGHT, c);
 	}
 	
 	public EntityOptionsPopup getPopup(){

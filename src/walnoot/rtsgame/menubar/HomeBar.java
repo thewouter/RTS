@@ -6,14 +6,16 @@ import java.util.LinkedList;
 
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
-import walnoot.rtsgame.MousePointer;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.structures.nonnatural.BaseOfOperations;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopupTextField;
 import walnoot.rtsgame.popups.screenpopup.TextInput;
+import walnoot.rtsgame.rest.MousePointer;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.MPGameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 
 
 public class HomeBar extends MenuBar{
@@ -21,12 +23,12 @@ public class HomeBar extends MenuBar{
 	
 		public MenuBarPopup buildmenu;
 		
-		public HomeBar(InputHandler input, GameScreen screen) {
-			super(input, screen, X_POS_FROM_RIGHT, Y_POS_FROM_BOTTOM, WIDTH_BUTTON, HEIGHT_BUTTON, 3);
+		public HomeBar(InputHandler input, GameScreen GameScreen) {
+			super(input, GameScreen, X_POS_FROM_RIGHT, Y_POS_FROM_BOTTOM, WIDTH_BUTTON, HEIGHT_BUTTON, 3);
 			
 			buildmenu = new MenuBarPopup(xPosOnScreen + UITLOOP + (buttons.indexOf(this) + 1)*WIDTH_BUTTON, yPosOnScreen + UITLOOP, buttons.indexOf(this), false);
 			
-			buildmenu.addButton(new MenuBarPopupButton(Images.buttons[0][0], screen) {
+			buildmenu.addButton(new MenuBarPopupButton(Images.buttons[0][0], GameScreen) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, screen.input, screen) {
 						public Entity toBuild() {
@@ -88,7 +90,7 @@ public class HomeBar extends MenuBar{
 							popup.addPart(new TextInput(popup, bar.input));
 							popup.addPart(new ScreenPopupButton("load", popup, bar.input){
 								public void onLeftClick() {
-									bar.screen.load(owner.getTextInput().getOutput());
+									bar.screen.load(owner.getTextInput(1).getOutput());
 									bar.screen.setPopup(null);
 								}
 							});
@@ -109,7 +111,7 @@ public class HomeBar extends MenuBar{
 							popup.addPart(new TextInput(popup, bar.input));
 							popup.addPart(new ScreenPopupButton("Save", popup, bar.input){
 								public void onLeftClick() {
-									screen.save(owner.getTextInput().getOutput());
+									screen.save(owner.getTextInput(1).getOutput());
 									screen.setPopup(null);
 								}
 							});

@@ -6,6 +6,8 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.MPGameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 
 public class GoldMine extends MineStructure {
 	public static int ID = 300, HEALTH_SMALL = 100, HEALTH_MEDIUM = 200, HEALTH_LARGE = 300;
@@ -15,7 +17,11 @@ public class GoldMine extends MineStructure {
 		map.removeEntity(map.getEntity(getxPos() - getSize(), getyPos() - getSize()));
 	}
 	
-	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
+	public GoldMine(Map map, GameScreen screen, int xPos, int yPos, int size, int health) {
+		super(map, screen, xPos, yPos ,ID , size, health);
+	}
+
+	public boolean onRightClick(Entity entityClicked, SPGameScreen screen, InputHandler input){
 		return false;
 	}
 	

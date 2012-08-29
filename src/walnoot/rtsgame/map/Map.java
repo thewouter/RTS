@@ -9,7 +9,6 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
-import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
@@ -19,15 +18,15 @@ import walnoot.rtsgame.map.structures.natural.MineStructure;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.tiles.Tile;
-import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.rest.Util;
 
 public class Map {
-	private Tile[][] surface;
-	public List<Entity> entities = new ArrayList<Entity>();
-	private LinkedList<Entity> toBeRemoved = new LinkedList<Entity>(), toBeAdded = new LinkedList<Entity>();
-	private PerlinNoise2D noiseObj;
+	public Tile[][] surface;
+	public ArrayList<Entity> entities = new ArrayList<Entity>();
+	public LinkedList<Entity> toBeRemoved = new LinkedList<Entity>(), toBeAdded = new LinkedList<Entity>();
+	public PerlinNoise2D noiseObj;
 	public int amountSheepGroups = 0;
-	private GameScreen player;
+	//private GameScreen player;
 	int c1 = 0, c2 = 0;
 	
 	public static final int TREE_GROW_CHANGE = 10, SHEEP_SPAWN_CHANGE_IN_FOREST =2, SHEEP_SPAWN_CHANGE_ON_PLAINS = 5, RADIUS_SHEEP_GROUPS = 5, SIZE_SHEEP_GROUPS = 10, SPAWN_CHANGE_GOLD_MINE = 3;  
@@ -40,31 +39,23 @@ public class Map {
 	
 	private static final Comparator<Entity> spriteSorter = new Comparator<Entity>() {
 		public int compare(Entity e0, Entity e1){
-			int x0 = e0.getxPos();
-			int y0 = e0.getyPos();
-			int x1 = e1.getxPos();
-			int y1 = e1.getyPos();
-			if(x0 == x1 && y0 == y1){
-				return 0;
-			}else if(x0 > x1){
-				return 1;
-			}else if(x0 < x1){
+			int y0 = e0.getxPos() + e0.getyPos(); //aprox. screen y coordinate of e0
+			int y1 = e1.getxPos() + e1.getyPos(); //aprox. screen y coordinate of e1
+
+			if(y1 < y0)
+				return +1;
+			if(y1 > y0)
 				return -1;
-			}else if(y0 > y1){
-				return 1;
-			}else{
-				return -1;
-			}
-			
+			return 0;
 		}
 	};
 	
 	
-	public Map(int mapSize, GameScreen screen){
+	public Map(int mapSize/*, GameScreen screen*/){
 		
 		surface = new Tile[mapSize][mapSize];
 		noiseObj = new PerlinNoise2D();
-		this.player = screen;
+		//this.player = screen;
 		generateMap();
 	}
 	
@@ -84,7 +75,6 @@ public class Map {
 				e.update();
 			}
 		}
-			
 		double fraction = ((double)amountSheepGroups/((double)SheepEntity.APROX_LIFETIME_IN_TICKS));
 		if(Util.RANDOM.nextDouble() <= fraction){
 			addSheepGroup();
@@ -106,7 +96,7 @@ public class Map {
 						int yPos = y - 2 * RADIUS_SHEEP_GROUPS + (Util.RANDOM.nextInt(RADIUS_SHEEP_GROUPS * 2)) - 2;
 						if(xPos > 0 && yPos > 0){
 							if(!getTile(xPos, yPos).isSolid()){
-								addEntity((new SheepEntity(this,player, xPos, yPos)));
+								addEntity((new SheepEntity(this,null, xPos, yPos)));
 								i++;
 							}
 						}
@@ -124,7 +114,7 @@ public class Map {
 				int yPos = y - 2 * RADIUS_SHEEP_GROUPS + (Util.RANDOM.nextInt(RADIUS_SHEEP_GROUPS * 2)) - 2;
 				if(xPos > 0 && yPos > 0){
 					if(!getTile(xPos, yPos).isSolid()){
-						addEntity((new SheepEntity(this,player, xPos, yPos)));
+						addEntity((new SheepEntity(this,null, xPos, yPos)));
 						i++;
 					}
 				}
@@ -151,11 +141,10 @@ public class Map {
 		for(int x = 0; x < getWidth(); x++){
 			for(int y = 0; y < getWidth(); y++){
 				float noise = noiseObj.perlinNoise(x, y, 0.3f, 32f, 4);
-				
 				if(noise > 0) {
 					surface[x][y] = Tile.grass1;
 					if(noise > 0.8) {
-						if(Util.RANDOM.nextInt(TREE_GROW_CHANGE) == 0)addEntity(new TreeStructure(this,player, x, y));
+						if(Util.RANDOM.nextInt(TREE_GROW_CHANGE) == 0)addEntity(new TreeStructure(this,null, x, y));
 						if(Util.RANDOM.nextInt(10000) < SHEEP_SPAWN_CHANGE_IN_FOREST){
 							amountSheepGroups++;
 							addSheepGroup(x,y);
@@ -169,7 +158,7 @@ public class Map {
 					
 					if(Util.RANDOM.nextInt(10000) < SPAWN_CHANGE_GOLD_MINE){
 						int size = Util.RANDOM.nextInt(3) + 1;
-						if(x > size && y > size) addEntity(new GoldMine(this,player, x - size, y - size ,size));
+						if(x > size && y > size) addEntity(new GoldMine(this,null, x - size, y - size ,size));
 					}
 				}
 				else if(noise > -0.2f) surface[x][y] = Tile.sand1;
@@ -197,7 +186,6 @@ public class Map {
 				toSort.add(e);
 			}
 		}
-		
 		Collections.sort(toSort, spriteSorter);
 		
 		for(Entity e: toSort){
@@ -288,7 +276,7 @@ public class Map {
 	public Entity getClosestMine(int x, int y){
 		int closestDistance = 999;
 		int xe, ye;
-		Entity closest = new SnakeEntity(null,player, 0, 0);
+		Entity closest = null;
 		for(Entity e: entities){
 			xe = e.getxPos();
 			ye = e.getyPos();
@@ -303,7 +291,7 @@ public class Map {
 	public Entity getClosestEntity(int x, int y){
 		int closestDistance = 999;
 		int xe, ye;
-		Entity closest = new SnakeEntity(null,player, 0, 0);
+		Entity closest = null;
 		for(Entity e: entities){
 			xe = e.getxPos();
 			ye = e.getyPos();

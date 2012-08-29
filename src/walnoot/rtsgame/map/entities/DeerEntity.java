@@ -4,9 +4,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import walnoot.rtsgame.InputHandler;
-import walnoot.rtsgame.Util;
 import walnoot.rtsgame.map.Map;
+import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 import walnoot.rtsgame.screen.Screen;
 
 public class DeerEntity extends MovingEntity {
@@ -26,7 +27,7 @@ public class DeerEntity extends MovingEntity {
 		if(!isMoving() && Util.RANDOM.nextInt(1000) < WALK_CHANGE) moveRandomLocation(WALK_RANGE);
 	}
 	
-	public void onRightClick(GameScreen screen, InputHandler input){
+	public void onRightClick(SPGameScreen screen, InputHandler input){
 		
 	}
 	

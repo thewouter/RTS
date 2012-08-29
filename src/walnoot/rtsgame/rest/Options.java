@@ -1,4 +1,4 @@
-package walnoot.rtsgame;
+package walnoot.rtsgame.rest;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tiles.Tile;
+import walnoot.rtsgame.multiplayer.host.MPMapHost;
 
 /** tekst en uitleg op http://www.policyalmanac.org/games/aStarTutorial.htm */
 
@@ -37,6 +38,11 @@ public class Pathfinder extends Thread {
 	
 	public void run(){
 		requester.setNextDirections(getPath());
+		if(requester.map instanceof MPMapHost){
+			MPMapHost map = ((MPMapHost) requester.map);
+			map.host.entityMoved(requester.map.entities.indexOf(requester), start.x, start.y, goal.x, goal.y);
+		}
+		
 	}
 	
 	private LinkedList<Direction> getPath(){
@@ -52,7 +58,7 @@ public class Pathfinder extends Thread {
 			getNodeLowestF(openlist).checkNeighbours(currentMap, openlist, closedlist);
 			if(System.nanoTime() - startTimeNano > 1000000000){
 				//System.out.println("took too long to calculate");
-				return result;
+				return null;
 			}
 		}
 		

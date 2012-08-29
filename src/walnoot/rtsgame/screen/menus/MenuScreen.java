@@ -17,9 +17,12 @@ public abstract class MenuScreen extends Screen {
 		for(MenuButton b: getButtons()){
 			b.render(g);
 		}
+		super.render(g);
 	}
 	
 	public void update(){
+		super.update();
+		if(popup != null)return;
 		for(MenuButton b: getButtons()){
 			b.setMouseLocation(super.getMouseLocation(), super.input.LMBTapped());
 		}
