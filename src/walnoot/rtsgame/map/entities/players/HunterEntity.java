@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.LinkedList;
 
+import walnoot.rtsgame.Animation;
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
@@ -36,25 +37,22 @@ public class HunterEntity extends PlayerEntity {
 		if(isHunting){
 			teller++;
 		}
+		if(isHunting && !isMoving() && (!(map.entities.contains(closestMovingEntity)) || closestMovingEntity == null)){
+			huntNearestAnimal();
+		}
+		
 		if(isHunting){
-			if(teller >= TIME_TO_HUNT_ONE_DAMAGE){		// hunting time !
+			if(teller >= TIME_TO_HUNT_ONE_DAMAGE){						// hunting time !
 				teller = 0;
 				if(Util.getDistance(this.xPos, this.yPos, closestMovingEntity.xPos, closestMovingEntity.yPos) <= 1){
 					closestMovingEntity.damage(1);
 					screen.inventory.meat+=1;
-					if(!map.entities.contains(closestMovingEntity)){
+					if(!map.entities.contains(closestMovingEntity)){	// it's dead.
 						huntNearestAnimal();
 					}
 				}
 			}
 		}
-		if(isHunting && !isMoving() && !(map.entities.contains(closestMovingEntity))){
-			huntNearestAnimal();
-		}else if(isHunting && !isMoving() && (closestMovingEntity == null)){
-			huntNearestAnimal();
-		}
-		
-		
 	}
 	
 	public void huntNearestAnimal(){
@@ -67,20 +65,17 @@ public class HunterEntity extends PlayerEntity {
 			}
 			notIncluded.add(closestMovingEntity);
 		}
-		moveTo(new Point( closestMovingEntity.xPos, closestMovingEntity.yPos));
+		//moveTo(new Point( closestMovingEntity.xPos, closestMovingEntity.yPos));
 		follow(closestMovingEntity);
-		/*
-		if(nextDirections.isEmpty()) {		// if no animal has been found.
-			isHunting = false;
-			closestMovingEntity =null;
-		}*/
 	}
 	
-	public void render(Graphics g){
+	/*public void render(Graphics g){
 		g.drawImage(Images.dudes[1][0], getScreenX(), getScreenY(), null);
 	}
+	*/
 	
-	public boolean onRightClick(Entity entityClicked, SPGameScreen screen, InputHandler input){
+	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
+		if(entityClicked != this) return false;
 		EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
 		if(isHunting){
 			popup.addOption(new Option("stop hunting", popup) {

@@ -30,7 +30,7 @@ public class RTSComponent extends Canvas implements Runnable {
 	private SPGameScreen gameScreen;
 	private TitleScreen titleScreen;
 	private boolean running = true;
-	public static final int SCALE = 2;
+	public static final int SCALE = 0;
 	private FullScreenManager fullScreenManager;
 	private InputHandler input;
 	private Container container;

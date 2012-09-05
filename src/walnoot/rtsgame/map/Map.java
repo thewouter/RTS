@@ -19,18 +19,19 @@ import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.rest.Util;
+import walnoot.rtsgame.screen.GameScreen;
 
 public class Map {
 	public Tile[][] surface;
 	public ArrayList<Entity> entities = new ArrayList<Entity>();
+	public ArrayList<Entity> notOnMap = new ArrayList<Entity>();
 	public LinkedList<Entity> toBeRemoved = new LinkedList<Entity>(), toBeAdded = new LinkedList<Entity>();
 	public PerlinNoise2D noiseObj;
 	public int amountSheepGroups = 0;
-	//private GameScreen player;
 	int c1 = 0, c2 = 0;
 	
 	public static final int TREE_GROW_CHANGE = 10, SHEEP_SPAWN_CHANGE_IN_FOREST =2, SHEEP_SPAWN_CHANGE_ON_PLAINS = 5, RADIUS_SHEEP_GROUPS = 5, SIZE_SHEEP_GROUPS = 10, SPAWN_CHANGE_GOLD_MINE = 3;  
-	/**
+	/*
 	 *Sheep_spawn_change out of 10,000 change to spawn a sheep group existing of SIZE_SHEEP_GROUPS_IN_SHEEPS sheeps in a radius of RADIUS_SHEEP_GROUPS
 	 *size_sheep_groups_in_sheeps has a chance of 20% deviation
 	 *  
@@ -51,7 +52,7 @@ public class Map {
 	};
 	
 	
-	public Map(int mapSize/*, GameScreen screen*/){
+	public Map(int mapSize){
 		
 		surface = new Tile[mapSize][mapSize];
 		noiseObj = new PerlinNoise2D();
@@ -67,7 +68,7 @@ public class Map {
 	
 	}
 	
-	public void update(int translationX, int translationY, int screenWidth, int screenHeight){
+	public synchronized void update(int translationX, int translationY, int screenWidth, int screenHeight){
 		for(Entity e: entities){
 			if(e.xPos + e.yPos + 2 > - ((translationY) / 8) && e.xPos + e.yPos - 1 < - ((translationY - screenHeight - 128)/ 8) && e.xPos - e.yPos - 3 < ((translationX) / 16) && e.xPos - e.yPos + 1 > ((translationX - screenWidth) / 16)) {
 				e.update();
@@ -80,6 +81,7 @@ public class Map {
 			addSheepGroup();
 		}
 		entities.removeAll(toBeRemoved);
+		notOnMap.removeAll(toBeRemoved);
 		toBeRemoved.clear();
 		entities.addAll(toBeAdded);
 		toBeAdded.clear();
@@ -209,7 +211,7 @@ public class Map {
 		return false;
 	}
 	
-	public Entity getEntity(int x, int y){
+	public synchronized Entity getEntity(int x, int y){
 		for(Entity e: entities){
 			if(e instanceof Structure){
 				Structure structure = (Structure) e;
@@ -377,5 +379,20 @@ public class Map {
 	
 	public Tile[][] getSurface(){
 		return surface;
+	}
+
+	public Entity getClosestTree(int x, int y) {
+		int closestDistance = 999;
+		int xe, ye;
+		Entity closest = null;
+		for(Entity e: entities){
+			xe = e.getxPos();
+			ye = e.getyPos();
+			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y && e instanceof TreeStructure){
+				closest = e;
+				closestDistance = Util.getDistance(x, y, xe, ye);
+			}
+		}
+		return closest;
 	}
 }

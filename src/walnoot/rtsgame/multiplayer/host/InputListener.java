@@ -23,23 +23,37 @@ public class InputListener extends Thread{
 			while(true){
 				String received = r.readLine();
 				if(r == null){
+					p.quit();
 					break;
 				}
 				p.InputReceived(received);
 			}
 		}catch(IOException e){
 			System.out.println(e);
+			System.out.println("connection lost!");
+			p.quit();
 		}
 		
 		try {
 			r.close();
 			out.close();
+			p.quit();
 		} catch (IOException e) {
 			System.out.println(e);
+			p.quit();
 		}
 	}
 	
 	public void send(String message){
 		out.println(message);
+	}
+	
+	public String read(){
+		try {
+			return r.readLine();
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		return null;
 	}
 }

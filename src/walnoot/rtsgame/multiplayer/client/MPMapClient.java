@@ -23,10 +23,10 @@ public class MPMapClient extends Map{
 	MapLoader loader;
 	
 	
-	public MPMapClient(String map) {
-		super(Integer.parseInt(Util.splitString(map).get(0)), Util.parseInt(Util.splitString(map).get(1)));
+	public MPMapClient(String map, InputListener input) {
+		super(Integer.parseInt(Util.splitString(map).get(1)), Util.parseInt(Util.splitString(map).get(2)));
 		
-		loader = new MapLoader(map, this);
+		loader = new MapLoader(map, this, input);
 		loader.start();
 		grass2 = Images.terrain[0][0];
 		grass = Images.terrain[1][0];

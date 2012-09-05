@@ -13,6 +13,7 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.Save;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
+import walnoot.rtsgame.map.structures.nonnatural.LumberJacker;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.menubar.HomeBar;
 import walnoot.rtsgame.menubar.MenuBarPopupButton;
@@ -59,9 +60,7 @@ public abstract class GameScreen extends Screen {
 		map.render(g, translation, new Dimension(getWidth(), getHeight()), getWidth(), getHeight());
 		bar.render(g, getWidth(), getHeight());
 		statusBar.render(g, getWidth(), getHeight());
-		
 		if(entityPopup != null) entityPopup.render(g);
-		
 		g.setColor(Color.WHITE);
 		
 		if(selectedEntities.size() == 1){
@@ -148,14 +147,21 @@ public abstract class GameScreen extends Screen {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
 						public Entity toBuild() {
-							if(/*screen.inventory.gold >= 10*/ true){
-								return new TentIStructure(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
-								}
-							return null;
+							return new TentIStructure(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
 						}
 					};
 				}
 			});
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[1][0], this.bar.screen) {
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(map, input, screen) {
+						public Entity toBuild() {
+							return new LumberJacker(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+						}
+					};
+				}
+			});
+			
 			bar.buildmenu.removeButton(bar.buildmenu.getButton(1, 1));
 			pointer=null;
 		}

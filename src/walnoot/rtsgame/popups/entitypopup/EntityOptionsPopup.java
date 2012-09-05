@@ -8,7 +8,6 @@ import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 import walnoot.rtsgame.screen.Screen;
 
 public class EntityOptionsPopup extends EntityPopup {
@@ -91,7 +90,6 @@ public class EntityOptionsPopup extends EntityPopup {
 	public Option getOption(int index){
 		if(index < options.size() && index >= 0) return options.get(index);
 		else return null;
-		
 	}
 	
 	public void onLeftClick(int mouseX, int mouseY) {

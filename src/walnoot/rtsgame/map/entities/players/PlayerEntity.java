@@ -2,6 +2,7 @@ package walnoot.rtsgame.map.entities.players;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.ItemEntity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
+import walnoot.rtsgame.map.structures.nonnatural.LumberJacker;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
@@ -134,7 +136,8 @@ public class PlayerEntity extends MovingEntity {
 			popup.addOption(raise);
 			
 			screen.setEntityPopup(popup);
-		}else follow(entityClicked);
+		}else if(entityClicked instanceof LumberJacker) moveTo(new Point(entityClicked.xPos, entityClicked.yPos));
+		else System.out.println(entityClicked);
 		return false;
 	}
 	

@@ -40,12 +40,13 @@ public class TentIStructure extends BasicStructure {
 		if(players.size() < MAX_PLAYERS)time++;
 		if(time >= TIME_TO_SPAWN_A_PLAYER && players.size() < MAX_PLAYERS){
 			toBeAddedToTheMap.add(new PlayerEntity(map, screen, xPos + 3, yPos + 3));
-			screen.inventory.gold-=5;
+			screen.inventory.meat-=5;
+			screen.inventory.gold--;
 			time = 0;
 		}
 		LinkedList<PlayerEntity> toBeRemoved = new LinkedList<PlayerEntity>();
 		for(PlayerEntity p : players){
-			if(!map.entities.contains(p)){
+			if(!map.entities.contains(p) && !map.notOnMap.contains(p)){
 				toBeRemoved.add(p);
 			}
 		}

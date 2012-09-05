@@ -27,14 +27,14 @@ public class DeerEntity extends MovingEntity {
 		if(!isMoving() && Util.RANDOM.nextInt(1000) < WALK_CHANGE) moveRandomLocation(WALK_RANGE);
 	}
 	
-	public void onRightClick(SPGameScreen screen, InputHandler input){
+	public void onRightClick(GameScreen screen, InputHandler input){
+		//you can make a popup os here.
 		
 	}
 	
 	public void render(Graphics g){
 		g.setColor(Color.BLACK);
 		Screen.font.drawLine(g, getName(), getScreenX(), getScreenY());
-		
 	}
 	
 	public int getMaxHealth(){

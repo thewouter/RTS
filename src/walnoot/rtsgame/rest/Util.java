@@ -78,12 +78,15 @@ public class Util {
 	public static int parseInt( final String s ){
 	    if (s == null )
 	        throw new NumberFormatException( "Null string" );
-
-	    // Check for a sign.
+	    else if (s == ""){
+	    	System.out.println("string is '' (empty) ");
+	    	return 0;
+	    }
+	    
 	    int num  = 0;
 	    int sign = -1;
-	    final int len  = s.length( );
-	    final char ch  = s.charAt( 0 );
+	    final int len  = s.length();
+	    final char ch  = s.charAt(0);
 	    if ( ch == '-' ){
 	        if ( len == 1 )
 	            throw new NumberFormatException( "Missing digits:  " + s );
@@ -95,8 +98,7 @@ public class Util {
 	        num = -d;
 	    }
 	    
-	    final int max = (sign == -1) ?
-	        -Integer.MAX_VALUE : Integer.MIN_VALUE;
+	    final int max = (sign == -1) ? -Integer.MAX_VALUE : Integer.MIN_VALUE;
 	    final int multmax = max / 10;
 	    int i = 1;
 	    while ( i < len ){
@@ -110,20 +112,11 @@ public class Util {
 	            throw new NumberFormatException( "Over/underflow:  " + s );
 	        num -= d;
 	    }
-
+	    
 	    return sign * num;
 	}
 	
-	public static Entity getEntity(String entity, Map map){
-		
-		ArrayList<String> entityInstrings = splitString(entity);
-		int length = entityInstrings.size();
-		int ID = parseInt(entityInstrings.get(0));
-		int xPos = parseInt(entityInstrings.get(1));
-		int yPos = parseInt(entityInstrings.get(2));
-		int health = parseInt(entityInstrings.get(3));
-		int extraInfoOne = parseInt(entityInstrings.get(4));
-		
+	public static Entity getEntity(Map map, int ID, int xPos, int yPos, int health, int extraInfoOne){
 		if(ID >= 300){				//mines
 			switch(ID){
 			case 300:
@@ -166,11 +159,20 @@ public class Util {
 				
 			}
 		}
-		
-		
-		
+		System.out.println("no entity found!");
 		return null;
+	}
+	
+	public static Entity getEntity(String entity, Map map){
 		
+		ArrayList<String> entityInstrings = splitString(entity);
+		int ID = parseInt(entityInstrings.get(0));
+		int xPos = parseInt(entityInstrings.get(1));
+		int yPos = parseInt(entityInstrings.get(2));
+		int health = parseInt(entityInstrings.get(3));
+		int extraInfoOne = parseInt(entityInstrings.get(4));
+		
+		return getEntity(map, ID, xPos, yPos, health, extraInfoOne);
 	}
 }	
 	

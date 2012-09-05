@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
+import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.multiplayer.host.MPMapHost;
 
@@ -17,23 +18,25 @@ public class Pathfinder extends Thread {
 	private final Point start;
 	private final MovingEntity requester;
 	private final Tile[][] currentMap;
+	private final Map map;
 	
 	private Node finalNode;
 	
 	public static void moveTo(MovingEntity requester, Point start, Point goal, Map map){
 		if(map.isSolid(goal)){
 			//System.out.println("Goal is unreachable!");
-			requester.nextDirections = null;
+			return;
 		}
 		
-		new Pathfinder(requester, start, goal, map.getSurface()).start();
+		new Pathfinder(requester, start, goal, map.getSurface(), map).start();
 	}
 	
-	private Pathfinder(MovingEntity requester ,Point start, Point goal, Tile[][] currentMap){
+	private Pathfinder(MovingEntity requester ,Point start, Point goal, Tile[][] currentMap, Map map){
 		this.start = start;
 		this.goal = goal;
 		this.currentMap = currentMap;
 		this.requester = requester;
+		this.map = map;
 	}
 	
 	public void run(){
@@ -57,13 +60,15 @@ public class Pathfinder extends Thread {
 		while(!openlist.isEmpty() && finalNode == null){
 			getNodeLowestF(openlist).checkNeighbours(currentMap, openlist, closedlist);
 			if(System.nanoTime() - startTimeNano > 1000000000){
-				//System.out.println("took too long to calculate");
 				return null;
 			}
 		}
 		
 		try{
 		Node node = finalNode;
+		if(node == null){
+			return null;
+		}
 		while(true){
 			Direction dir = node.getDirection();
 			if(dir != null)
@@ -74,9 +79,14 @@ public class Pathfinder extends Thread {
 			}else break;
 		}
 		}catch(Exception e){
+			final Exception e2 = e;
+			new Thread() {
+				public void run(){
+					e2.printStackTrace();
+				}
+			}.start();
 			return null;
 		}
-		
 		return result;
 	}
 	
@@ -169,26 +179,28 @@ public class Pathfinder extends Thread {
 			
 			for(Direction dir: directions){
 				Point newPosition = dir.nextPoint(posX, posY);
-				if(newPosition.x < 0 || newPosition.y < 0 || newPosition.x >= currentMap.length || newPosition.y >= currentMap[0].length) break;
-				if(!currentMap[newPosition.x][newPosition.y].isSolid()){
-					/*
-					 * if(newPosition.equals(goal)) { finalNode = new Node(this,
-					 * newPosition); break; }
-					 */
-
-					Node newNode = new Node(this, newPosition.x, newPosition.y);
+				if(newPosition.x < 0 || newPosition.y < 0 || newPosition.x >= currentMap.length || newPosition.y >= currentMap[0].length) {
+				}else{
+					if(!currentMap[newPosition.x][newPosition.y].isSolid() && map.getEntity(newPosition.x, newPosition.y) == null){
+						/*
+					 	* if(newPosition.equals(goal)) { finalNode = new Node(this,
+					 	* newPosition); break; }
+					 	*/
 					
-					//if(getEqualNode(closedlist, newNode) != null) continue;
-					
-					Node openNode = getEqualNode(openlist, newNode);
-					if(openNode != null){
-						if(openNode.g > newNode.g){
-							openNode.parent = this;
-							openNode.calculateG();
-							openNode.calculateH();
+						Node newNode = new Node(this, newPosition.x, newPosition.y);
+						
+						//if(getEqualNode(closedlist, newNode) != null) continue;
+						
+						Node openNode = getEqualNode(openlist, newNode);
+						if(openNode != null){
+							if(openNode.g > newNode.g){
+								openNode.parent = this;
+								openNode.calculateG();
+								openNode.calculateH();
+							}
+						}else{
+							openlist.add(new Node(this, newPosition.x, newPosition.y));
 						}
-					}else{
-						openlist.add(new Node(this, newPosition.x, newPosition.y));
 					}
 				}
 			}

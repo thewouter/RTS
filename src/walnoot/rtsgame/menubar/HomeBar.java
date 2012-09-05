@@ -132,6 +132,9 @@ public class HomeBar extends MenuBar{
 			addButton(new Button(Images.buttons[3][0], this) {
 				public void onLeftClick() {
 					this.bar.screen.component.setTitleScreen();
+					if(this.bar.screen instanceof MPGameScreen){
+						((MPGameScreen) this.bar.screen).quit();
+					}
 				}
 			});
 			

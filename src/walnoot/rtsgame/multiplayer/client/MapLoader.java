@@ -10,20 +10,26 @@ public class MapLoader extends Thread {
 	
 	String mapInString;
 	MPMapClient map;
+	InputListener input;
 	
 	int counter, length = 1;
 	
-	public MapLoader(String mapInString, MPMapClient map){
+	public MapLoader(String mapInString, MPMapClient map, InputListener input){
 		this.map = map;
 		this.mapInString = mapInString;
+		this.input = input;
 		
 	}
 	
 	public void run(){
 		ArrayList<String> mapInStrings =Util.splitString(mapInString);
 		length = mapInStrings.size();
-		int mapSize = Util.parseInt(mapInStrings.get(0));
-		counter = 2;
+		int mapSize = Util.parseInt(mapInStrings.get(1));
+		counter = 3;
+		if(mapSize == 0){
+			System.out.println(mapInStrings);
+			System.out.println(mapInString);
+		}
 		for(int x = 0 ; x < mapSize ; x++){
 			for(int y = 0; y < mapSize; y++, counter++){
 				String s = mapInStrings.get(counter);
@@ -59,6 +65,8 @@ public class MapLoader extends Thread {
 		}
 		
 		map.hasLoaded = true;
+		input.send("nothing usefull ;)");
+		System.out.println("sendt");
 	}
 	
 	public int checkProgress() {

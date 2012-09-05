@@ -35,6 +35,9 @@ public class MPHost extends Screen{
 	private String entityAdds = "";
 	private String entityDeletes = "";
 	private int adds = 0, deletes = 0, moves = 0;
+
+	private LinkedList<Player> toRemove = new LinkedList<Player>();
+	private LinkedList<Player> toAdd = new LinkedList<Player>();
 	
 	
 			
@@ -45,27 +48,26 @@ public class MPHost extends Screen{
 		
 		map =  new MPMapHost(256, this);
 		
-		
 		clientHandler = new ClientHandler(this);
 		clientHandler.start();
 	}
 	
 	public void addPlayer(Player p){
-		players.add(p);
+		toAdd.add(p);
 	}
 	
 	public void removePlayer(Player p){
-		players.remove(p);
+		toRemove.add(p);
 	}
 	
 	public void update(){
-		toSend = 0 + " " + adds + entityAdds + deletes + entityDeletes + moves + entitymoves;
+		toSend = 0 + " " + moves + entitymoves + " " + adds + entityAdds + " " + deletes + entityDeletes;
 		adds = 0;
 		moves = 0;
 		deletes = 0;
-		entityAdds = " ";
-		entitymoves = " ";
-		entityDeletes = " ";
+		entityAdds = "";
+		entitymoves = "";
+		entityDeletes = "";
 		for(Player p: players){
 			p.update(toSend);
 		}
@@ -78,20 +80,27 @@ public class MPHost extends Screen{
 		if(input.right.isPressed()) translationX -= 5;
 		
 		super.update();
+		
+		players.removeAll(toRemove);
+		players.addAll(toAdd);
+		toRemove.clear();
+		toAdd.clear();
 	}
 	
 	public void entityMoved(int index, int oldX, int oldY, int newX, int newY){
-		entitymoves = entitymoves + index + " " + oldX + " " + oldY + " " + newX + " " + newY; 
+		String entitymoves = " " + index + " " + oldX + " " + oldY + " " + newX + " " + newY; 
+		this.entitymoves = this.entitymoves + entitymoves;
 		moves++;
 	}
 	
 	public void entityAdded(int ID, int xPos, int yPos){
-		entityAdds = entityAdds + ID + " " + xPos + " " + yPos;
+		String entityAdds = " " + ID + " " + xPos + " " + yPos;
+		this.entityAdds = this.entityAdds + entityAdds;
 		adds++;
 	}
 	
 	public void entityRemoved(int index){
-		entityDeletes = entityDeletes + index + " ";
+		entityDeletes = entityDeletes + " " + index;
 		deletes++;
 	}
 

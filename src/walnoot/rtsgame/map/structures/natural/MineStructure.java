@@ -39,7 +39,6 @@ public abstract class MineStructure extends Structure {
 		if(size < 1) size = 1;
 		if(size > 3) size = 3;
 		this.size = size;
-		System.out.println(size);
 		textureX = (ID - 300) * 4;
 		if(size == 1){
 			textureY = 0;
@@ -105,8 +104,6 @@ public abstract class MineStructure extends Structure {
 	
 	public void damage(int damage){
 		super.damage(damage);
-		if(screen == null)System.out.println("screen == null in minerEntity");
-		screen.inventory.gold+=damage;
 	}
 	
 	

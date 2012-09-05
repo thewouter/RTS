@@ -44,6 +44,7 @@ public class MinerEntity extends PlayerEntity {
 			if(isMining){ 
 				if(map.getEntity(getxPos() - 1, getyPos() - 1) instanceof MineStructure){
 					map.getEntity(getxPos() -1,  getyPos() - 1).damage(1);
+					screen.inventory.gold++;
 				}
 			}
 		}
@@ -60,6 +61,7 @@ public class MinerEntity extends PlayerEntity {
 	}
 	
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
+		if(entityClicked != this) return false;
 		EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
 		if(isMining){
 			popup.addOption(new Option("stop mining", popup) {

@@ -16,12 +16,13 @@ public class BaseOfOperations extends BasicStructure {
 		
 	}
 	public BaseOfOperations(Map map, GameScreen screen,int xPos, int yPos, int health) {
-		super(map, screen, xPos, yPos, 0, 0, ID);
+		super(map, screen, xPos, yPos, 0, 4, ID);
 		this.health = health;
 		
 	}
 	
-	public boolean onRightClick(Entity entityClicked, SPGameScreen screen, InputHandler input){
+	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
+		if(entityClicked != this) return true;
 		screen.inventory.showInventory();
 		
 		return false;

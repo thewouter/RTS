@@ -102,6 +102,6 @@ public class SheepEntity extends MovingEntity {
 	}
 	
 	public boolean isMovable(){
-		return false;
+		return true;
 	}
 }

@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
+import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.structures.nonnatural.LumberJacker;
 import walnoot.rtsgame.multiplayer.client.MPMapClient;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
@@ -26,18 +28,29 @@ public abstract class MovingEntity extends Entity {
 	public void update(){
 		if(nextNextDirections != null){
 			nextDirections = nextNextDirections;
+		}else if(nextDirections == null){
+			nextDirections = new LinkedList<Direction>();
 		}
 		
 		Direction nextDirection = null;
-		if(nextDirections == null) nextDirections = new LinkedList<Direction>();
 		if(nextDirections.isEmpty()){
-			if(goal != null && goal.xPos != oldX && goal.yPos != oldY){
-				Pathfinder.moveTo(this, new Point(xPos, yPos), new Point(goal.xPos, goal.yPos), map);
-				oldX = goal.getxPos();
-				oldY = goal.getyPos();
+			if(goal != null){
+				int dx = goal.xPos - this.xPos;
+				int dy = goal.yPos - this.yPos;
+
+				if(Util.abs(dx) <= 1 && Util.abs(dy) <= 1) return;
+
+				if(dx > 1) dx = 1;
+				if(dx < -1) dx = -1;
+
+				if(dy > 1) dy = 1;
+				if(dy < -1) dy = -1;
+
+				nextDirections.add(Direction.getDirection(dx, dy));
 			}else return;
 		}
-		if(nextDirections.size() > 0) {
+		
+		if(!nextDirections.isEmpty()) {
 			nextDirection = nextDirections.get(0);
 			timeTraveled += RTSComponent.MS_PER_TICK / (getTravelTime() * (nextDirection.isDiagonal() ? Math.sqrt(2) : 1.0));
 		}
@@ -86,6 +99,10 @@ public abstract class MovingEntity extends Entity {
 			return;
 		}
 		this.goal = null;
+		if(this instanceof PlayerEntity && map.getEntity(goal.x, goal.y) instanceof LumberJacker){
+			goal.x--;
+			goal.y--;
+		}
 		Pathfinder.moveTo(this,new Point(xPos, yPos), goal, map);
 	}
 

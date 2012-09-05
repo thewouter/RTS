@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import walnoot.rtsgame.Images;
@@ -64,14 +65,14 @@ import walnoot.rtsgame.rest.Util;
 	public Inventory inventory = new Inventory(this);
 	
 	private InputListener listener;
+	
+	private Socket socket;
 
 
 	public MPGameScreen(RTSComponent component, InputHandler input, int port, String IP){
 		super(component, input);
 		this.IP = IP;
 		this.port = port;
-		
-		Socket socket = null;
 		try {
 			socket = new Socket(IP, this.port);
 			listener = new InputListener(this,  new BufferedReader(new InputStreamReader(socket.getInputStream())), new PrintStream(socket.getOutputStream()));
@@ -81,19 +82,19 @@ import walnoot.rtsgame.rest.Util;
 			System.out.println(e);
 			this.component.setTitleScreen();
 		}
-		map = new MPMapClient(listener.read());
+		map = new MPMapClient(listener.read(), listener);
+		bar = new HomeBar(input, this);
+		statusBar = new StatusBar(input, this);
 		
-		
-		
-		
+		listener.start();
 	}
 	
 	public void render(Graphics g){
 		Point translation = new Point((int) translationX, (int) translationY);
 		
 		map.render(g, translation, new Dimension(getWidth(), getHeight()), getWidth(), getHeight());
-		//bar.render(g, getWidth(), getHeight());
-		//statusBar.render(g, getWidth(), getHeight());
+		bar.render(g, getWidth(), getHeight());
+		statusBar.render(g, getWidth(), getHeight());
 		
 		g.translate(translation.x, translation.y);
 		
@@ -151,8 +152,8 @@ import walnoot.rtsgame.rest.Util;
 			
 			map.update((int) Math.floor(translationX), (int) Math.floor(translationY), getWidth(), getHeight());
 			
-			//bar.update(getWidth(), getHeight());
-			//statusBar.update(getWidth(), getHeight());
+			bar.update(getWidth(), getHeight());
+			statusBar.update(getWidth(), getHeight());
 			
 			if(input.space.isPressed() && selectedEntities != null && !selectedEntities.isEmpty()) targetEntity = selectedEntities.getFirst();
 			
@@ -171,22 +172,23 @@ import walnoot.rtsgame.rest.Util;
 					entityPopup.onLeftClick(input.getMouseX(), input.getMouseY());
 				}
 				selectedEntities.clear();
-				//if(bar.isInBar(input.getMouseX(), input.getMouseY())){
 				
-				//}else if(entityPopup != null && !entityPopup.isInPopup(input.getMouseX(), input.getMouseY()) ){
-				//	selectedEntities.addAll(map.getEntities(getMapX(), getMapY()));
-				//}else if( entityPopup == null ){
-				//	selectedEntities.addAll(map.getEntities(getMapX(), getMapY()));
-				//}
+				if(bar.isInBar(input.getMouseX(), input.getMouseY())){
+				
+				}else if(entityPopup != null && !entityPopup.isInPopup(input.getMouseX(), input.getMouseY()) ){
+					selectedEntities.addAll(map.getEntities(getMapX(), getMapY()));
+				}else if( entityPopup == null ){
+					selectedEntities.addAll(map.getEntities(getMapX(), getMapY()));
+				}
 			}
 			
-		
-		
+			
+			
 			if(entityPopup != null){
 				entityPopup.update(input.getMouseX(), input.getMouseY());
 				if(!selectedEntities.contains(entityPopup.getOwner())) entityPopup = null;
 			}	
-		
+			
 			if(input.RMBTapped()){
 			
 				Entity rightClicked = map.getEntity(getMapX(), getMapY()); //the Entity that is right clicked, if any
@@ -208,9 +210,8 @@ import walnoot.rtsgame.rest.Util;
 			LinkedList<Entity> remove = new LinkedList<Entity>();
 			for(Entity e: selectedEntities){
 				if(!map.entities.contains(e)) remove.add(e);
-			}	
-		
-		
+			}
+			
 			selectedEntities.removeAll(remove);
 			if(pointer != null){
 				pointer.update(); 
@@ -228,6 +229,7 @@ import walnoot.rtsgame.rest.Util;
 		if(popup != null){
 			popup.update(input.getMouseX(), input.getMouseY());
 		}
+		if(input.escape.isTapped()) quit();
 	}
 
 	public void setEntityPopup(EntityPopup popup){
@@ -277,7 +279,46 @@ import walnoot.rtsgame.rest.Util;
 	}
 	
 	public void messageReceived(String message){
-		System.out.println(message);
+		if(Util.parseInt(Util.splitString(message).get(0)) == 1){
+			System.out.println(message);
+		}else if(Util.parseInt(Util.splitString(message).get(0)) == 0){
+			update(message);
+		}
+	}
+	
+	private void update(String update){
+		ArrayList<String> inStrings = Util.splitString(update);
+		int adds;
+		int removes;
+		int moves;
+		
+		System.out.print(inStrings.size() + "     ");
+		
+		moves = Util.parseInt(inStrings.get(1));
+		System.out.print(moves + " ");
+		adds = Util.parseInt(inStrings.get((5 * moves) + 2));
+		System.out.print(adds + " ");
+		removes = Util.parseInt(inStrings.get((5 * moves) + (3 * adds) + 2));
+		System.out.println(removes);
+		
+		for(int i  = 2; i < (moves * 5) + 2;){
+			int index = Util.parseInt(inStrings.get(i));
+			i += 3;
+			int x = Util.parseInt(inStrings.get(i));
+			i++;
+			int y = Util.parseInt(inStrings.get(i));
+			i++;
+			try{
+			if(map.entities.get(index) instanceof MovingEntity) {
+				((MovingEntity)map.entities.get(index)).moveToFromHost(new Point(x , y));
+				System.out.println("moved!!!");
+			}else{
+				System.out.println(map.entities.get(index));
+			}
+			}catch(Exception e){
+				System.out.println(map.entities.size() + " requested: " + index);
+			}
+		}
 	}
 
 	public void levelUp(){
@@ -298,6 +339,14 @@ import walnoot.rtsgame.rest.Util;
 			});
 			bar.buildmenu.removeButton(bar.buildmenu.getButton(1, 1));
 			pointer=null;
+		}
+	}
+	
+	public void quit(){
+		try {
+			socket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

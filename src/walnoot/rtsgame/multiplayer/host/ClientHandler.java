@@ -28,9 +28,8 @@ public class ClientHandler extends Thread{
 			while(running){
 				Socket s = serverSocket.accept();
 				Player p;
-				p = new Player(null, null,host, new BufferedReader(new InputStreamReader(s.getInputStream())), new PrintStream(s.getOutputStream()),host.map.getEntities() );
-				host.addPlayer(p);
-			}
+				host.addPlayer(new Player(null, null,host, new BufferedReader(new InputStreamReader(s.getInputStream())), new PrintStream(s.getOutputStream()),host.map.getEntities() ));
+				}
 			
 		} catch (IOException e) {
 			System.out.println(e);

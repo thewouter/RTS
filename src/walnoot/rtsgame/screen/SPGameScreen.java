@@ -21,10 +21,12 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.players.HunterEntity;
+import walnoot.rtsgame.map.entities.players.LumberJackerPlayer;
 import walnoot.rtsgame.map.entities.players.MinerEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.structures.nonnatural.BaseOfOperations;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
+import walnoot.rtsgame.map.structures.nonnatural.LumberJacker;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
@@ -46,7 +48,7 @@ public class SPGameScreen extends GameScreen {
 		
 		for(int i = 4;; i++){
 			if(!map.getTile(4, i).isSolid()){
-				selectedEntities.add(new PlayerEntity(map,this, 4, i));
+				selectedEntities.add(new LumberJackerPlayer(map,this, 4, i));
 				goodYPos = i;
 				break;
 			}
@@ -63,6 +65,8 @@ public class SPGameScreen extends GameScreen {
 		map.addEntity(new HunterEntity(map,this, 4, goodYPos + 9)); // etc...
 		map.addEntity(new GoldMine(map,this, 10, 10, 3));
 		map.addEntity(new MinerEntity(map,this, 10, 20));
+		map.addEntity(new LumberJacker(map, this, 4, goodYPos + 12));
+		
 		
 		translationX = -selectedEntities.getFirst().getScreenX();
 		translationY = -selectedEntities.getFirst().getScreenY();
