@@ -10,8 +10,6 @@ import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.MPGameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 
 public class MinerEntity extends PlayerEntity {
 	private boolean isMining = false;

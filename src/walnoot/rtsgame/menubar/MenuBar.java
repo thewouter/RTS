@@ -4,14 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.LinkedList;
 
-import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
-import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
-import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
-import walnoot.rtsgame.popups.screenpopup.ScreenPopupTextField;
-import walnoot.rtsgame.popups.screenpopup.TextInput;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 
 public class MenuBar {
 	public InputHandler input;

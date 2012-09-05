@@ -1,12 +1,9 @@
 package walnoot.rtsgame.map.entities.players;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-
-import sun.awt.geom.AreaOp.AddOp;
 
 import walnoot.rtsgame.Animation;
 import walnoot.rtsgame.Images;
@@ -16,7 +13,8 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.ItemEntity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
-import walnoot.rtsgame.map.structures.nonnatural.LumberJacker;
+import walnoot.rtsgame.map.structures.nonnatural.HunterSchool;
+import walnoot.rtsgame.map.structures.nonnatural.LumberJackerSchool;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
@@ -24,7 +22,6 @@ import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.rest.Sound;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 
 public class PlayerEntity extends MovingEntity {
 	public String name;
@@ -136,7 +133,7 @@ public class PlayerEntity extends MovingEntity {
 			popup.addOption(raise);
 			
 			screen.setEntityPopup(popup);
-		}else if(entityClicked instanceof LumberJacker) moveTo(new Point(entityClicked.xPos, entityClicked.yPos));
+		}else if(entityClicked instanceof LumberJackerSchool || entityClicked instanceof HunterSchool) moveTo(new Point(entityClicked.xPos, entityClicked.yPos));
 		else System.out.println(entityClicked);
 		return false;
 	}

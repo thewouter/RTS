@@ -1,7 +1,6 @@
 package walnoot.rtsgame.rest;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Random;
 
 import walnoot.rtsgame.map.Map;

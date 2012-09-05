@@ -5,10 +5,8 @@ import java.awt.Point;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
-import walnoot.rtsgame.map.structures.natural.MineStructure;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
-import walnoot.rtsgame.popups.entitypopup.EntityPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.screen.GameScreen;
 

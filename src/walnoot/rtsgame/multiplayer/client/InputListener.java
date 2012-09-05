@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import walnoot.rtsgame.screen.MPGameScreen;
-import walnoot.rtsgame.screen.Screen;
 
 public class InputListener extends Thread{
 	BufferedReader r;

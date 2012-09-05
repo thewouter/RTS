@@ -10,10 +10,8 @@ import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Map;
-import walnoot.rtsgame.map.Save;
 import walnoot.rtsgame.map.entities.Entity;
-import walnoot.rtsgame.map.entities.MovingEntity;
-import walnoot.rtsgame.map.structures.nonnatural.LumberJacker;
+import walnoot.rtsgame.map.structures.nonnatural.HunterSchool;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.menubar.HomeBar;
 import walnoot.rtsgame.menubar.MenuBarPopupButton;
@@ -156,7 +154,7 @@ public abstract class GameScreen extends Screen {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
 						public Entity toBuild() {
-							return new LumberJacker(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+							return new HunterSchool(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
 						}
 					};
 				}

@@ -8,7 +8,6 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 
 public abstract class MousePointer {
 	public Map map;

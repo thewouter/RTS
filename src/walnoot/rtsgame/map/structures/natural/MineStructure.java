@@ -8,7 +8,6 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 
 public abstract class MineStructure extends Structure {
 	int size;

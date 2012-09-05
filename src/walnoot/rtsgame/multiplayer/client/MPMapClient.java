@@ -10,8 +10,6 @@ import walnoot.rtsgame.Images;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
-import walnoot.rtsgame.map.structures.Structure;
-import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.Screen;
 

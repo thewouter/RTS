@@ -1,9 +1,5 @@
 package walnoot.rtsgame.menubar;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.util.LinkedList;
-
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.entities.Entity;
@@ -15,7 +11,6 @@ import walnoot.rtsgame.popups.screenpopup.TextInput;
 import walnoot.rtsgame.rest.MousePointer;
 import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.MPGameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 
 
 public class HomeBar extends MenuBar{

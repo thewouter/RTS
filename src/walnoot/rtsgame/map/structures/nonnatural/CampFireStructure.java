@@ -3,7 +3,6 @@ package walnoot.rtsgame.map.structures.nonnatural;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 
 public class CampFireStructure extends BasicStructure{
 	

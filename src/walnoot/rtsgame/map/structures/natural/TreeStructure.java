@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 
 public class TreeStructure extends BasicStructure{
 	

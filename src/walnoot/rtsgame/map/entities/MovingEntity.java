@@ -7,11 +7,10 @@ import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
-import walnoot.rtsgame.map.structures.nonnatural.LumberJacker;
+import walnoot.rtsgame.map.structures.nonnatural.LumberJackerSchool;
 import walnoot.rtsgame.multiplayer.client.MPMapClient;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 
 public abstract class MovingEntity extends Entity {
 	protected double timeTraveled; //hoelang hij onderweg is
@@ -99,7 +98,7 @@ public abstract class MovingEntity extends Entity {
 			return;
 		}
 		this.goal = null;
-		if(this instanceof PlayerEntity && map.getEntity(goal.x, goal.y) instanceof LumberJacker){
+		if(this instanceof PlayerEntity && map.getEntity(goal.x, goal.y) instanceof LumberJackerSchool){
 			goal.x--;
 			goal.y--;
 		}

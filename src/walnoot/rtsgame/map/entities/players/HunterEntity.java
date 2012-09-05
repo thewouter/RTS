@@ -1,11 +1,7 @@
 package walnoot.rtsgame.map.entities.players;
 
-import java.awt.Graphics;
-import java.awt.Point;
 import java.util.LinkedList;
 
-import walnoot.rtsgame.Animation;
-import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
@@ -14,7 +10,6 @@ import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 
 public class HunterEntity extends PlayerEntity {
 	public boolean isHunting = false;
@@ -27,7 +22,7 @@ public class HunterEntity extends PlayerEntity {
 		setID(ID);
 		
 	}
-	public HunterEntity(Map map, SPGameScreen screen, int xPos, int yPos){
+	public HunterEntity(Map map, GameScreen screen, int xPos, int yPos){
 		super(map, screen, xPos, yPos);
 		setID(ID);
 	}

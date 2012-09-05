@@ -2,20 +2,10 @@ package walnoot.rtsgame.multiplayer.host;
 
 import java.awt.Graphics;
 import java.awt.Point;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
-import walnoot.rtsgame.map.entities.Entity;
-import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.Screen;
 
 

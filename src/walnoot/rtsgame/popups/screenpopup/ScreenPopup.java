@@ -4,8 +4,6 @@ import java.awt.Graphics;
 import java.util.LinkedList;
 
 import walnoot.rtsgame.popups.Popup;
-import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 import walnoot.rtsgame.screen.Screen;
 
 public class ScreenPopup extends Popup{

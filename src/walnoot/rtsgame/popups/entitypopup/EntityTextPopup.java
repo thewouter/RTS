@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 import walnoot.rtsgame.screen.Screen;
 
 public class EntityTextPopup extends EntityPopup {

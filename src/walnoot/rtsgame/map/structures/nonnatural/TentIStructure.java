@@ -8,10 +8,8 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
-import walnoot.rtsgame.popups.entitypopup.EntityPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 
 public class TentIStructure extends BasicStructure {
 	

@@ -6,8 +6,6 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.MPGameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 
 public abstract class Entity implements Cloneable {
 	protected final Map map;

@@ -6,7 +6,6 @@ import java.util.LinkedList;
 
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
-import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.multiplayer.host.MPMapHost;
 

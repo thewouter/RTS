@@ -5,8 +5,6 @@ import java.util.LinkedList;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.MPGameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 
 public class StatusBar extends walnoot.rtsgame.menubar.MenuBar{
 	public InputHandler input;

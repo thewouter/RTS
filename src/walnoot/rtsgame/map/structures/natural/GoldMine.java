@@ -3,10 +3,7 @@ package walnoot.rtsgame.map.structures.natural;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
-import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
-import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.MPGameScreen;
 import walnoot.rtsgame.screen.SPGameScreen;
 
 public class GoldMine extends MineStructure {

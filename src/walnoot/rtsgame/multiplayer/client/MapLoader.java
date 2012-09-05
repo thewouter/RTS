@@ -66,7 +66,7 @@ public class MapLoader extends Thread {
 		
 		map.hasLoaded = true;
 		input.send("nothing usefull ;)");
-		System.out.println("sendt");
+		System.out.println("send");
 	}
 	
 	public int checkProgress() {

@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
@@ -14,8 +13,6 @@ import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.rest.Util;
-import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.Screen;
 
 public class MPMapHost extends Map implements Cloneable{
 	public MPHost host;

@@ -13,10 +13,8 @@ import java.io.File;
 import javax.swing.JFrame;
 
 import walnoot.rtsgame.multiplayer.host.MPHost;
-import walnoot.rtsgame.multiplayer.host.Player;
 import walnoot.rtsgame.rest.Options;
 import walnoot.rtsgame.rest.Sound;
-import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.SPGameScreen;
 import walnoot.rtsgame.screen.Screen;
 import walnoot.rtsgame.screen.TitleScreen;
@@ -30,7 +28,7 @@ public class RTSComponent extends Canvas implements Runnable {
 	private SPGameScreen gameScreen;
 	private TitleScreen titleScreen;
 	private boolean running = true;
-	public static final int SCALE = 0;
+	public static final int SCALE = 2;
 	private FullScreenManager fullScreenManager;
 	private InputHandler input;
 	private Container container;

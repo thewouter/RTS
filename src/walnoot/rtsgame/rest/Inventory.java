@@ -4,7 +4,6 @@ import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopupTextField;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.SPGameScreen;
 
 
 /**
@@ -23,9 +22,7 @@ public class Inventory {
 	public Inventory(GameScreen owner){
 		this.owner = owner;
 	}
-
 	
-
 	public void showInventory() {
 		ScreenPopup popup = new ScreenPopup((owner.getWidth()-84)/2, (owner.getHeight() - 20)/2, 84, 20, owner);
 		popup.addPart(new ScreenPopupTextField(new String("Gold: " + gold)));

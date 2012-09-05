@@ -4,11 +4,8 @@ import java.awt.Graphics;
 
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
-import walnoot.rtsgame.multiplayer.host.MPHost;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
-import walnoot.rtsgame.popups.screenpopup.ScreenPopupPart;
-import walnoot.rtsgame.popups.screenpopup.ScreenPopupTextField;
 import walnoot.rtsgame.popups.screenpopup.TextInput;
 import walnoot.rtsgame.screen.MPGameScreen;
 import walnoot.rtsgame.screen.Screen;
