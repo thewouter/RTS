@@ -21,6 +21,7 @@
 	203	BaseOfOperations
 	204 LumberJacker
 	205 HuntSchool
+	206 StoneMine
 	
 300-399 mines
 	300 GoldMine

@@ -68,5 +68,9 @@ public class GoldMine extends MineStructure {
 			setSize(1);
 		}
 	}
-
+	
+	public void mine(int i){
+		damage(i);
+		screen.inventory.gold++;
+	}
 }

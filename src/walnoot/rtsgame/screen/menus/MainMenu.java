@@ -19,7 +19,7 @@ public class MainMenu extends MenuScreen {
 	private MenuButton newSPGame = new MenuButton("New Game", 0, 130, -1, -1, this);
 	private MenuButton newMPGame = new MenuButton("Join MP Game", 0, 160, -1, -1, this);
 	private MenuButton hostMPGame = new MenuButton("Host MP Game", 0, 190, -1, -1, this);
-	private MenuButton exitGame = new MenuButton("Exit Game", 0, 220, -1, -1, this);
+	private MenuButton exitGame = new MenuButton("Exit Game", 0, 160, -1, -1, this);
 	
 	public MainMenu(RTSComponent component, TitleScreen title, InputHandler input){
 		super(component, input);
@@ -37,7 +37,7 @@ public class MainMenu extends MenuScreen {
 	}
 	
 	protected MenuButton[] getButtons(){
-		MenuButton[] result = {startGame, newSPGame, newMPGame, exitGame, hostMPGame};
+		MenuButton[] result = {startGame, newSPGame, /*newMPGame,*/ exitGame/*, hostMPGame*/};
 		
 		return result;
 	}

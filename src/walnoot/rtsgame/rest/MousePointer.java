@@ -35,8 +35,7 @@ public abstract class MousePointer {
 	public abstract Entity toBuild();
 	
 	public void render(Graphics g){
-		if(!(toBuild() instanceof Structure && !(((Structure) toBuild()) instanceof BasicStructure))) g.fillRect(x, y, 5, 5);
-		else ((BasicStructure) toBuild()).render(g, x, y);
+		g.fillRect(x, y, 5, 5);
 	}
 	
 	public void afterBuild(){} // can be overwritten in some cases

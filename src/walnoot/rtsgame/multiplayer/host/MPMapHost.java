@@ -20,7 +20,7 @@ public class MPMapHost extends Map implements Cloneable{
 	public MPMapHost(int mapSize, MPHost host) {
 		super(mapSize);
 		this.host = host;
-		addEntity(new PlayerEntity(this, null, 10, 10));
+		addEntity(new PlayerEntity(this, null, 10, 10, null));
 	}
 	
 	public void update(int translationX, int translationY, int screenWidth, int screenHeight){

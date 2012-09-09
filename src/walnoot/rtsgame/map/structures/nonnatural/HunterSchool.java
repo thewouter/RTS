@@ -13,10 +13,10 @@ public class HunterSchool extends BasicStructure {
 	public static int ID = 205, TIME_TO_TEACH_ONE_PLAYER = 120;
 	private boolean isTeaching;
 	private int teller = 0;
-	private LinkedList<Entity> playersCollected = new LinkedList<Entity>();
+	private LinkedList<PlayerEntity> playersCollected = new LinkedList<PlayerEntity>();
 
 	public HunterSchool(Map map, GameScreen screen, int xPos, int yPos) {
-		super(map, screen, xPos, yPos, 0, 8, ID);
+		super(map, screen, xPos, yPos, 0, 12, ID);
 	}
 
 	protected int getHeadSpace() {
@@ -32,10 +32,15 @@ public class HunterSchool extends BasicStructure {
 		if(isTeaching){
 			teller++;
 			if(teller > TIME_TO_TEACH_ONE_PLAYER && !playersCollected.isEmpty()){
-				Entity e = playersCollected.getFirst();
-				Entity newPlayer = new HunterEntity(map, screen, e.getxPos(), e.getyPos());
+				PlayerEntity e = playersCollected.getFirst();
+				PlayerEntity newPlayer = new HunterEntity(map, screen, e.getxPos(), e.getyPos(), e.owner);
 				map.addEntity(newPlayer);
 				map.removeEntity(e);
+				if(e.owner instanceof TentIStructure){
+					((TentIStructure)e.owner).players.add(newPlayer);
+				}else if(e.owner instanceof TentIIStructure){
+					((TentIIStructure)e.owner).players.add(newPlayer);
+				}
 				playersCollected.remove(e);
 			}
 			if(teller > TIME_TO_TEACH_ONE_PLAYER){

@@ -12,15 +12,12 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Save;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
-import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.menubar.HomeBar;
-import walnoot.rtsgame.menubar.MenuBarPopupButton;
 import walnoot.rtsgame.menubar.StatusBar;
 import walnoot.rtsgame.multiplayer.client.InputListener;
 import walnoot.rtsgame.multiplayer.client.MPMapClient;
@@ -188,11 +185,11 @@ import walnoot.rtsgame.rest.Util;
 				
 				if(canMove){
 					if(!selectedEntities.isEmpty() && selectedEntities.getFirst() instanceof MovingEntity){
-						for(Entity m:selectedEntities){
+						//for(Entity m:selectedEntities){
 							if(((MovingEntity)selectedEntities.getFirst()).isMovable()){
 								((MovingEntity) selectedEntities.getFirst()).moveTo(new Point(getMapX(), getMapY()));
 								entityPopup = null;
-							}	
+							//}	
 						}
 					}
 				}
@@ -308,27 +305,6 @@ import walnoot.rtsgame.rest.Util;
 			}catch(Exception e){
 				System.out.println(map.entities.size() + " requested: " + index);
 			}
-		}
-	}
-
-	public void levelUp(){
-		level++;
-		switch(level){
-		case 1:
-			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[2][0], this.bar.screen) {
-				public void onLeftClick() {
-					screen.pointer = new MousePointer(map, input, screen) {
-						public Entity toBuild() {
-							if(screen.inventory.gold >= 10){
-								return new TentIStructure(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
-								}
-							return null;
-						}
-					};
-				}
-			});
-			bar.buildmenu.removeButton(bar.buildmenu.getButton(1, 1));
-			pointer=null;
 		}
 	}
 	

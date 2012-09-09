@@ -15,7 +15,7 @@ import walnoot.rtsgame.screen.GameScreen;
 public abstract class MovingEntity extends Entity {
 	protected double timeTraveled; //hoelang hij onderweg is
 	private Entity goal = null;
-	private int oldX = 0, oldY = 0;
+	//private int oldX = 0, oldY = 0;
 	
 	public LinkedList<Direction> nextDirections = new LinkedList<Direction>();
 	private LinkedList<Direction> nextNextDirections = null;

@@ -22,12 +22,12 @@ public class Map {
 	public Tile[][] surface;
 	public ArrayList<Entity> entities = new ArrayList<Entity>();
 	public ArrayList<Entity> notOnMap = new ArrayList<Entity>();
-	public LinkedList<Entity> toBeRemoved = new LinkedList<Entity>(), toBeAdded = new LinkedList<Entity>();
+	public LinkedList<Entity> toBeRemoved = new LinkedList<Entity>(), toBeAdded = new LinkedList<Entity>(), toBeRemovedFromMap = new LinkedList<Entity>();
 	public PerlinNoise2D noiseObj;
 	public int amountSheepGroups = 0;
 	int c1 = 0, c2 = 0;
 	
-	public static final int TREE_GROW_CHANGE = 10, SHEEP_SPAWN_CHANGE_IN_FOREST =2, SHEEP_SPAWN_CHANGE_ON_PLAINS = 5, RADIUS_SHEEP_GROUPS = 5, SIZE_SHEEP_GROUPS = 10, SPAWN_CHANGE_GOLD_MINE = 3;  
+	public static final int TREE_GROW_CHANGE = 15, SHEEP_SPAWN_CHANGE_IN_FOREST =2, SHEEP_SPAWN_CHANGE_ON_PLAINS = 5, RADIUS_SHEEP_GROUPS = 5, SIZE_SHEEP_GROUPS = 10, SPAWN_CHANGE_GOLD_MINE = 3;  
 	/*
 	 *Sheep_spawn_change out of 10,000 change to spawn a sheep group existing of SIZE_SHEEP_GROUPS_IN_SHEEPS sheeps in a radius of RADIUS_SHEEP_GROUPS
 	 *size_sheep_groups_in_sheeps has a chance of 20% deviation
@@ -77,7 +77,10 @@ public class Map {
 		if(Util.RANDOM.nextDouble() <= fraction){
 			addSheepGroup();
 		}
+		
 		entities.removeAll(toBeRemoved);
+		entities.removeAll(toBeRemovedFromMap);
+		toBeRemovedFromMap.clear();
 		notOnMap.removeAll(toBeRemoved);
 		toBeRemoved.clear();
 		entities.addAll(toBeAdded);
@@ -142,7 +145,7 @@ public class Map {
 				float noise = noiseObj.perlinNoise(x, y, 0.3f, 32f, 4);
 				if(noise > 0) {
 					surface[x][y] = Tile.grass1;
-					if(noise > 0.8) {
+					if(noise > 0.6) {
 						if(Util.RANDOM.nextInt(TREE_GROW_CHANGE) == 0)addEntity(new TreeStructure(this,null, x, y));
 						if(Util.RANDOM.nextInt(10000) < SHEEP_SPAWN_CHANGE_IN_FOREST){
 							amountSheepGroups++;
@@ -372,6 +375,10 @@ public class Map {
 	
 	public void removeEntity(Entity u){
 		toBeRemoved.add(u);
+	}
+	
+	public void removeEntityFromMap(Entity u){
+		toBeRemovedFromMap.add(u);
 	}
 	
 	public Tile[][] getSurface(){

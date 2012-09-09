@@ -12,8 +12,9 @@ import javax.sound.sampled.AudioSystem;
 
 public class Sound {
        
-        public static final Sound sound1 = new Sound("/res/Sounds/guns.wav"); // this can be played only once ! 
+        public static final Sound shot = new Sound("/res/Sounds/guns.wav"); // this can be played only once ! 
         public static final Sound RISING_SUN = new Sound("/res/Sounds/risingsun.wav");
+        public static final Sound Victory = new Sound("/res/Sounds/Buildbaseofoperations.wav");
        
         private AudioClip ac;
         private String fileName;

@@ -11,7 +11,11 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
+import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.HunterSchool;
+import walnoot.rtsgame.map.structures.nonnatural.LumberJackerSchool;
+import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
+import walnoot.rtsgame.map.structures.nonnatural.TentIIStructure;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.menubar.HomeBar;
 import walnoot.rtsgame.menubar.MenuBarPopupButton;
@@ -141,7 +145,7 @@ public abstract class GameScreen extends Screen {
 		level++;
 		switch(level){
 		case 1:
-			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[2][0], this.bar.screen) {
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[5][6], this.bar.screen) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
 						public Entity toBuild() {
@@ -149,8 +153,12 @@ public abstract class GameScreen extends Screen {
 						}
 					};
 				}
+
+				public String getName() {
+					return "Tent I";
+				}
 			});
-			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[1][0], this.bar.screen) {
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[7][7], this.bar.screen) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
 						public Entity toBuild() {
@@ -158,10 +166,69 @@ public abstract class GameScreen extends Screen {
 						}
 					};
 				}
+
+				public String getName() {
+					return "Hunter Hut";
+				}
+			});
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[5][7], this) {
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(map, input, screen) {
+						public Entity toBuild() {
+							return new LumberJackerSchool(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+						}
+					};
+				}
+
+				public String getName() {
+					return "LumberJackers Hut";
+				}
+			});
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[6][7], this) {
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(map, input, screen) {
+						public Entity toBuild() {
+							return new TreeStructure(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+						}
+					};
+					
+				}
+
+				public String getName() {
+					return "Tree";
+				}
 			});
 			
 			bar.buildmenu.removeButton(bar.buildmenu.getButton(1, 1));
 			pointer=null;
+			return;
+		case 2:
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][6], this) {
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(screen.map, input, screen) {
+						public Entity toBuild() {
+							return new StoneMine(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+						}
+					};
+				}
+				
+				public String getName() {
+					return "Quarry";
+				}
+			});
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[3][7], this) {
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(screen.map, input, screen) {
+						public Entity toBuild() {
+							return new TentIIStructure(map, screen,Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+						}
+					};
+					
+				}
+				public String getName() {
+					return "Tent II";
+				}
+			}, 1);
 		}
 	}
 	

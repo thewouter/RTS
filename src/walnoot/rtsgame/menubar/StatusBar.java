@@ -2,13 +2,13 @@ package walnoot.rtsgame.menubar;
 
 import java.util.LinkedList;
 
+import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
-import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.screen.GameScreen;
 
 public class StatusBar extends walnoot.rtsgame.menubar.MenuBar{
 	public InputHandler input;
-	public static int X_POS_FROM_RIGHT = 5, Y_POS_FROM_BOTTOM = 5, WIDTH_BUTTON = 16, HEIGHT_BUTTON = RTSFont.HEIGHT, UITLOOP = 5, EXTRA_WIDTH = 30,EXTRA_HEIGHT = 30;
+	public static int X_POS_FROM_RIGHT = 5, Y_POS_FROM_BOTTOM = 5, WIDTH_BUTTON = 16, HEIGHT_BUTTON = Images.buttons[0][0].getHeight(), UITLOOP = 5, EXTRA_WIDTH = 30,EXTRA_HEIGHT = 30;
 	public GameScreen screen;
 	LinkedList <Button> buttons = new LinkedList<Button>();
 	int xPosOnScreen = 0, yPosOnScreen = 0;

@@ -18,14 +18,15 @@ public class Inventory {
 	public int gold;
 	public int meat;
 	public int wood;
+	public int stone;
 	
 	public Inventory(GameScreen owner){
 		this.owner = owner;
 	}
 	
 	public void showInventory() {
-		ScreenPopup popup = new ScreenPopup((owner.getWidth()-84)/2, (owner.getHeight() - 20)/2, 84, 20, owner);
-		popup.addPart(new ScreenPopupTextField(new String("Gold: " + gold)));
+		ScreenPopup popup = new ScreenPopup((owner.getWidth()-84)/2, (owner.getHeight() - 20)/2, 130, 20, owner);
+		popup.addPart(new ScreenPopupTextField(new String("Gold: " + gold + "  stone: " + stone)));
 		popup.addPart(new ScreenPopupTextField(new String("Meat: " + meat)));
 		popup.addPart(new ScreenPopupTextField(new String("Wood: " + wood)));
 		popup.addPart(new ScreenPopupButton("ok",popup,owner.input) {

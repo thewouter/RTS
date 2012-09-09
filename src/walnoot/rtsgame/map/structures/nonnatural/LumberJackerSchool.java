@@ -39,8 +39,8 @@ public class LumberJackerSchool extends BasicStructure {
 		if(isTeaching){
 			teller++;
 			if(teller > TIME_TO_TEACH_ONE_PLAYER && !playersCollected.isEmpty()){
-				Entity e = playersCollected.getFirst();
-				Entity newPlayer = new LumberJackerPlayer(map, screen, e.getxPos(), e.getyPos());
+				PlayerEntity e = playersCollected.getFirst();
+				Entity newPlayer = new LumberJackerPlayer(map, screen, e.getxPos(), e.getyPos(), e.owner);
 				map.addEntity(newPlayer);
 				map.removeEntity(e);
 				playersCollected.remove(e);
@@ -55,8 +55,8 @@ public class LumberJackerSchool extends BasicStructure {
 				if(e != null && e.ID == 102){	//it's a player, no proffession.
 					playersCollected.add((PlayerEntity) e);
 					isTeaching = true;
-					map.removeEntity(e);
 					map.notOnMap.add(e);
+					map.removeEntityFromMap(e);
 				}
 			}
 		}

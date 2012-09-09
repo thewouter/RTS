@@ -18,7 +18,7 @@ public class Player extends GameScreen {
 	public InputListener input;
 	public MPHost host;
 	private boolean hasLoaded = false;
-	private String firstUpdate = "";
+	///private String firstUpdate = "";
 	
 	public Player(RTSComponent component, InputHandler input, MPHost host, BufferedReader r, PrintStream p, List<Entity> entities) {
 		super(component, input);

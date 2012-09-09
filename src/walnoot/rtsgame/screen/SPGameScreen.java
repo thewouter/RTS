@@ -3,41 +3,44 @@ package walnoot.rtsgame.screen;
 import java.awt.Point;
 import java.util.LinkedList;
 
+import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.Save;
-import walnoot.rtsgame.map.entities.DeerEntity;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
-import walnoot.rtsgame.map.entities.SheepEntity;
-import walnoot.rtsgame.map.entities.players.HunterEntity;
-import walnoot.rtsgame.map.entities.players.LumberJackerPlayer;
-import walnoot.rtsgame.map.entities.players.MinerEntity;
-import walnoot.rtsgame.map.structures.natural.GoldMine;
-import walnoot.rtsgame.map.structures.natural.TreeStructure;
-import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
-import walnoot.rtsgame.map.structures.nonnatural.LumberJackerSchool;
-import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
+import walnoot.rtsgame.menubar.Button;
 import walnoot.rtsgame.rest.Util;
 
 public class SPGameScreen extends GameScreen {
+	
+	private boolean isReady = false;
+	private Button levelUpButton;
 	
 	public SPGameScreen(RTSComponent component, InputHandler input){
 		super(component, input);
 		
 		map = new Map(256);
-
-		int goodYPos;
+		
+		inventory.gold = 500;
+		
+		/*int goodYPos;
 		
 		for(int i = 4;; i++){
 			if(!map.getTile(4, i).isSolid()){
-				selectedEntities.add(new LumberJackerPlayer(map,this, 4, i));
+				selectedEntities.add(new PlayerEntity(map,this, 4, i, null));
 				goodYPos = i;
 				break;
 			}
 		}
-
+		*/
+		levelUpButton = new Button(Images.buttons[2][1], statusBar) {
+			public void onLeftClick() {
+				levelUp();
+			}
+		};
+		/*
 		targetEntity = selectedEntities.getFirst();
 		map.addEntity(selectedEntities.getFirst());
 		
@@ -46,16 +49,17 @@ public class SPGameScreen extends GameScreen {
 		map.addEntity(new TentIStructure(map,this, 4, goodYPos + 3)); //voor de test, later weghalen
 		map.addEntity(new CampFireStructure(map,this, 4, goodYPos + 5)); //voor de test, later weghalen
 		map.addEntity(new TreeStructure(map,this, 4, goodYPos + 7)); //voor de test, later weghalen
-		map.addEntity(new HunterEntity(map,this, 4, goodYPos + 9)); // etc...
+		map.addEntity(new HunterEntity(map,this, 4, goodYPos + 9, null)); // etc...
 		map.addEntity(new GoldMine(map,this, 10, 10, 3));
-		map.addEntity(new MinerEntity(map,this, 10, 20));
+		map.addEntity(new MinerEntity(map,this, 10, 20, null));
 		map.addEntity(new LumberJackerSchool(map, this, 4, goodYPos + 12));
+		map.addEntity(new StoneMine(map, this, 4, goodYPos + 15));
 		
 		
 		translationX = -selectedEntities.getFirst().getScreenX();
 		translationY = -selectedEntities.getFirst().getScreenY();
 		
-		
+		*/
 		
 	}
 
@@ -138,12 +142,12 @@ public class SPGameScreen extends GameScreen {
 				
 				if(canMove){
 					if(!selectedEntities.isEmpty() && selectedEntities.getFirst() instanceof MovingEntity){
-						for(Entity m:selectedEntities){
+						//for(Entity m:selectedEntities){
 							if(((MovingEntity)selectedEntities.getFirst()).isMovable()){
 								((MovingEntity) selectedEntities.getFirst()).moveTo(new Point(getMapX(), getMapY()));
 								entityPopup = null;
 							}
-						}
+						//}
 					}
 				}
 			}
@@ -161,6 +165,10 @@ public class SPGameScreen extends GameScreen {
 				}
 			}
 			
+			if(!isReady && isReadyForLevelUp()){
+				statusBar.addButton(levelUpButton, 0);
+				isReady = true;
+			}
 			
 		}
 		if (input.p.isTapped()&& popup == null){
@@ -174,6 +182,24 @@ public class SPGameScreen extends GameScreen {
 		if(popup != null){
 			popup.update(input.getMouseX(), input.getMouseY());
 		}
+	}
+	
+	public void levelUp(){
+		super.levelUp();
+		isReady = false;
+		if(!isReadyForLevelUp() && level != 1) statusBar.removeButton(levelUpButton);
+	}
+	
+	public boolean isReadyForLevelUp(){
+		
+		switch (level) {
+		case 1:
+			if(inventory.gold >= 1 && inventory.meat >= 1)return true;
+		case 2:
+			if(inventory.gold >= 300 && inventory.meat >=  60) return true;
+		}
+		
+		return false;
 	}
 	
 	

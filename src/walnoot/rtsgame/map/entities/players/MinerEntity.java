@@ -5,6 +5,7 @@ import java.awt.Point;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
+import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.natural.MineStructure;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
@@ -17,14 +18,14 @@ public class MinerEntity extends PlayerEntity {
 	public static int ID = 105, TIME_TO_MINE_ONE_DAMAGE = 10;
 	private int teller = 0;
 
-	public MinerEntity(Map map, GameScreen screen, int xPos, int yPos) {
-		super(map, screen, xPos, yPos);
+	public MinerEntity(Map map, GameScreen screen, int xPos, int yPos, Structure owner) {
+		super(map, screen, xPos, yPos, owner);
 		name = Util.NAME_GEN.getRandomName() + " the miner";
 		setID(ID);
 	}
 	
-	public MinerEntity(Map map, GameScreen screen, int xPos, int yPos, int health) {
-		super(map,screen, xPos, yPos);
+	public MinerEntity(Map map, GameScreen screen, int xPos, int yPos, Structure owner, int health) {
+		super(map,screen, xPos, yPos, owner);
 		name = Util.NAME_GEN.getRandomName() + " the Miner";
 		this.health = health;
 		setID(ID);
@@ -41,8 +42,7 @@ public class MinerEntity extends PlayerEntity {
 			teller = 0;
 			if(isMining){ 
 				if(map.getEntity(getxPos() - 1, getyPos() - 1) instanceof MineStructure){
-					map.getEntity(getxPos() -1,  getyPos() - 1).damage(1);
-					screen.inventory.gold++;
+					((MineStructure)map.getEntity(getxPos() -1,  getyPos() - 1)).mine(1);
 				}
 			}
 		}

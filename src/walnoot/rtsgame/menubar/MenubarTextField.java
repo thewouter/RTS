@@ -3,6 +3,7 @@ package walnoot.rtsgame.menubar;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.screen.Screen;
 
 public abstract class MenubarTextField extends Button{
@@ -23,7 +24,7 @@ public abstract class MenubarTextField extends Button{
 	
 	public void render(Graphics g, int xPos, int yPos){
 		g.setColor(Color.WHITE);
-		Screen.font.drawLine(g, text, xPos + 1, yPos + (bar.HEIGHT_BUTTON - Screen.font.HEIGHT) / 2);
+		Screen.font.drawLine(g, text, xPos + 1, yPos + (bar.HEIGHT_BUTTON - RTSFont.HEIGHT) / 2);
 	}
 	
 }

@@ -58,7 +58,7 @@ public class Pathfinder extends Thread {
 		long startTimeNano = System.nanoTime();
 		while(!openlist.isEmpty() && finalNode == null){
 			getNodeLowestF(openlist).checkNeighbours(currentMap, openlist, closedlist);
-			if(System.nanoTime() - startTimeNano > 1000000000){
+			if(System.nanoTime() - startTimeNano > 100000000){
 				return null;
 			}
 		}

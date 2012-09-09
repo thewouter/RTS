@@ -5,6 +5,7 @@ import java.awt.Point;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
+import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
@@ -18,8 +19,8 @@ public class LumberJackerPlayer extends PlayerEntity {
 	private TreeStructure closestTree;
 	private int teller = 0;
 
-	public LumberJackerPlayer(Map map, GameScreen screen, int xPos, int yPos) {
-		super(map, screen, xPos, yPos);
+	public LumberJackerPlayer(Map map, GameScreen screen, int xPos, int yPos, Structure owner) {
+		super(map, screen, xPos, yPos, owner);
 		setID(ID);
 	}
 	

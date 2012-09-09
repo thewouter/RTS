@@ -11,16 +11,16 @@ import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.screen.GameScreen;
 
-public class TentIStructure extends BasicStructure {
+public class TentIIStructure extends BasicStructure {
 	
-	public final static int ID = 201, TIME_TO_SPAWN_A_PLAYER = 120, MAX_PLAYERS = 8;
+	public final static int ID = 201, TIME_TO_SPAWN_A_PLAYER = 120, MAX_PLAYERS = 16;
 	private int time = 0;
 	public LinkedList<PlayerEntity> players = new LinkedList<PlayerEntity>();
-	public TentIStructure(Map map, GameScreen screen, int xPos, int yPos){
+	public TentIIStructure(Map map, GameScreen screen, int xPos, int yPos){
 		super(map, screen, xPos, yPos,  0, 0,ID);
 	}
 	
-	public TentIStructure(Map map, GameScreen screen ,int xPos, int yPos, int health){
+	public TentIIStructure(Map map, GameScreen screen ,int xPos, int yPos, int health){
 		super(map,screen,xPos,yPos, 0, 0, ID);
 		this.health = health;
 	}
@@ -38,21 +38,18 @@ public class TentIStructure extends BasicStructure {
 		if(players.size() < MAX_PLAYERS)time++;
 		if(time >= TIME_TO_SPAWN_A_PLAYER && players.size() < MAX_PLAYERS){
 			toBeAddedToTheMap.add(new PlayerEntity(map, screen, xPos + 3, yPos + 3, this));
-			screen.inventory.meat --;
-			screen.inventory.gold --;
+			screen.inventory.meat-=5;
+			screen.inventory.gold--;
 			time = 0;
 		}
 		LinkedList<PlayerEntity> toBeRemoved = new LinkedList<PlayerEntity>();
-		
 		for(PlayerEntity p : players){
 			if(!map.entities.contains(p) && !map.notOnMap.contains(p)){
 				toBeRemoved.add(p);
-				//System.out.println(p);
 			}
 		}
 		players.removeAll(toBeRemoved);
 		map.addEntity(toBeAddedToTheMap);
-		
 		for(Entity e: toBeAddedToTheMap){
 			if(e instanceof PlayerEntity){
 				players.add((PlayerEntity) e);
@@ -81,12 +78,6 @@ public class TentIStructure extends BasicStructure {
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
 		EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
 		popup.addOption(new Option("switch",popup) {
-			public void onClick() {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		popup.addOption(new Option("" + players.size() ,popup) {
 			
 			@Override
 			public void onClick() {

@@ -11,7 +11,7 @@ import walnoot.rtsgame.screen.GameScreen;
 
 public abstract class MineStructure extends Structure {
 	int size;
-	BufferedImage image;
+	public BufferedImage image;
 	public int textureX, textureY;
 	
 	
@@ -28,7 +28,7 @@ public abstract class MineStructure extends Structure {
 		}else{
 			textureY = 4;
 		}
-		loadImage(textureX, textureY);
+		loadImage(textureX, textureY, Images.mines);
 		health = getMaxHealth();
 		
 	}
@@ -46,12 +46,10 @@ public abstract class MineStructure extends Structure {
 		}else{
 			textureY = 4;
 		}
-		loadImage(textureX, textureY);
+		loadImage(textureX, textureY, Images.mines);
 		health = getMaxHealth();
 		
 		this.health = health;
-		
-		
 	}
 	
 	public void render(Graphics g){
@@ -61,7 +59,7 @@ public abstract class MineStructure extends Structure {
 		g.drawImage(image, x, y, null);
 	}
 	
-	private void loadImage(int textureX, int textureY){
+	public void loadImage(int textureX, int textureY, BufferedImage i){
 		int x = textureX * Tile.WIDTH;
 		int y = textureY * Tile.HEIGHT;
 		
@@ -71,8 +69,8 @@ public abstract class MineStructure extends Structure {
 		try{
 			image = Images.mines.getSubimage(x, y, width, height);
 		}catch(Exception e){
-			System.out.println(e);
-			System.out.println(x + " " + y + " " + width + " " + height + " " + textureX);
+			//System.out.println(e);
+			//System.out.println(x + " " + y + " " + width + " " + height + " " + textureX);
 		}
 		
 	}
@@ -94,7 +92,7 @@ public abstract class MineStructure extends Structure {
 		}else{
 			textureY = 4;
 		}
-		loadImage(textureX, textureY);
+		loadImage(textureX, textureY, Images.mines);
 	}
 	
 	public int getExtraOne(){
@@ -104,6 +102,6 @@ public abstract class MineStructure extends Structure {
 	public void damage(int damage){
 		super.damage(damage);
 	}
-	
-	
+
+	public abstract void mine(int damage);
 }

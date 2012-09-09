@@ -9,6 +9,7 @@ import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopupTextField;
 import walnoot.rtsgame.popups.screenpopup.TextInput;
 import walnoot.rtsgame.rest.MousePointer;
+import walnoot.rtsgame.rest.Sound;
 import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.MPGameScreen;
 
@@ -23,7 +24,7 @@ public class HomeBar extends MenuBar{
 			
 			buildmenu = new MenuBarPopup(xPosOnScreen + UITLOOP + (buttons.indexOf(this) + 1)*WIDTH_BUTTON, yPosOnScreen + UITLOOP, buttons.indexOf(this), false);
 			
-			buildmenu.addButton(new MenuBarPopupButton(Images.buttons[0][0], GameScreen) {
+			buildmenu.addButton(new MenuBarPopupButton(Images.buttons[6][6], GameScreen) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, screen.input, screen) {
 						public Entity toBuild() {
@@ -32,8 +33,13 @@ public class HomeBar extends MenuBar{
 						
 						public void afterBuild(){
 							screen.levelUp();
+							Sound.Victory.play();
 						}
 					};
+				}
+
+				public String getName() {
+					return "Base Of Operations";
 				}
 			});
 			
@@ -70,6 +76,10 @@ public class HomeBar extends MenuBar{
 							});
 							bar.screen.setPopup(options);
 						}
+
+						public String getName() {
+							return "Sound";
+						}
 					});
 					setMenuBarPopup(popup);
 					showPopup = !showPopup;
@@ -97,6 +107,10 @@ public class HomeBar extends MenuBar{
 							bar.screen.setPopup(popup);
 							
 						}
+
+						public String getName() {
+							return "Load";
+						}
 						
 					});
 					
@@ -116,6 +130,10 @@ public class HomeBar extends MenuBar{
 								}
 							});
 							screen.setPopup(popup);
+						}
+
+						public String getName() {
+							return "Save";
 						}
 					});
 					

@@ -166,16 +166,16 @@ public class Save {
 						map.addEntity(new SheepEntity(map,screen,  xPos, yPos, health));
 						break;
 					case 102:
-						map.addEntity(new PlayerEntity(map,screen,  xPos, yPos));
+						map.addEntity(new PlayerEntity(map,screen,  xPos, yPos, null));
 						break;
 					case 103:
 						map.addEntity(new DeerEntity(map,screen,  xPos, yPos, health));
 						break;
 					case 104:
-						map.addEntity(new HunterEntity(map,screen,  xPos, yPos, health));
+						map.addEntity(new HunterEntity(map,screen,  xPos, yPos, null, health));
 						break;
 					case 105:
-						map.addEntity(new MinerEntity(map,screen,  xPos, yPos, health));
+						map.addEntity(new MinerEntity(map,screen,  xPos, yPos, null,  health));
 						break;
 					}
 				}
@@ -244,16 +244,16 @@ public class Save {
 						map.addEntity(new SheepEntity(map, null, xPos, yPos, health));
 						break;
 					case 102:
-						map.addEntity(new PlayerEntity(map, null, xPos, yPos, health));
+						map.addEntity(new PlayerEntity(map, null, xPos, yPos,null, health));
 						break;
 					case 103:
 						map.addEntity(new DeerEntity(map,null,  xPos, yPos, health));
 						break;
 					case 104:
-						map.addEntity(new HunterEntity(map,null,  xPos, yPos, health));
+						map.addEntity(new HunterEntity(map,null,  xPos, yPos, null,health));
 						break;
 					case 105:
-						map.addEntity(new MinerEntity(map,null,  xPos, yPos, health));
+						map.addEntity(new MinerEntity(map,null,  xPos, yPos, null, health));
 						break;
 					}
 				}
@@ -315,7 +315,7 @@ public class Save {
 						map.addEntity(new SheepEntity(map,null,  xPos, yPos, health));
 						break;
 					case 102:
-						map.addEntity(new PlayerEntity(map,null,  xPos, yPos, health));
+						map.addEntity(new PlayerEntity(map,null,  xPos, yPos,null, health));
 						break;
 					case 103:
 						map.addEntity(new DeerEntity(map,null,  xPos, yPos, health));

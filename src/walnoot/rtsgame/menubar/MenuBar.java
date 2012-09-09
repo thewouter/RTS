@@ -52,6 +52,16 @@ public class MenuBar {
 		width += WIDTH_BUTTON;
 	}
 	
+	public void addButton(Button b, int index){
+		buttons.add(index, b);
+		width += WIDTH_BUTTON;
+	}
+	
+	public void removeButton(Button b){
+		buttons.remove(b);
+		width -= WIDTH_BUTTON;
+	}
+	
 	public void showPopup(){
 		showPopup = true;
 	}
@@ -71,11 +81,15 @@ public class MenuBar {
 		}else if(corner == 1){
 			g.fillRoundRect(xPosOnScreen - EXTRA_WIDTH, yPosOnScreen - EXTRA_HEIGHT, width + EXTRA_WIDTH, EXTRA_HEIGHT + height,7,7);
 			for(int i = 0; i < buttons.size(); i++){
+				if(buttons.get(i)==null) System.out.println("tetestestasdfads  " + i + "  " + buttons.size());
 				buttons.get(i).render(g, xPosOnScreen + X_POS_FROM_RIGHT + i*WIDTH_BUTTON , yPosOnScreen + Y_POS_FROM_BOTTOM);
 			}
 		}
 		if(popup!= null && showPopup){
 			popup.render(g);
+			if(popup.isInPopup(input.mouseX, input.mouseY)){
+				popup.onHoverOver(g, input.mouseX, input.mouseY);
+			}
 		}
 	}
 	
@@ -108,9 +122,6 @@ public class MenuBar {
 				popup.onLeftClick(input.getMouseX(),input.getMouseY());
 			}
 		}
-		
-		
-		
 	}
 	
 	private boolean isOnlyInBar(int x, int y) {

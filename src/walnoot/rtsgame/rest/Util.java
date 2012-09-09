@@ -145,16 +145,16 @@ public class Util {
 				return new SheepEntity(map, null,  xPos, yPos, health);
 				
 			case 102:
-				return new PlayerEntity(map, null,  xPos, yPos);
+				return new PlayerEntity(map, null,  xPos, yPos, null);
 				
 			case 103:
 				return new DeerEntity(map, null,  xPos, yPos, health);
 				
 			case 104:
-				return new HunterEntity(map, null,  xPos, yPos, health);
+				return new HunterEntity(map, null,  xPos, yPos, null, health);
 				
 			case 105:
-				return new MinerEntity(map, null,  xPos, yPos, health);
+				return new MinerEntity(map, null,  xPos, yPos, null, health);
 				
 			}
 		}

@@ -6,6 +6,7 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
+import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.rest.Util;
@@ -17,13 +18,13 @@ public class HunterEntity extends PlayerEntity {
 	private int teller = 0;
 	private MovingEntity closestMovingEntity;
 
-	public HunterEntity(Map map, GameScreen screen, int xPos, int yPos, int health) {
-		super(map, screen, xPos, yPos, health);
+	public HunterEntity(Map map, GameScreen screen, int xPos, int yPos, Structure owner, int health) {
+		super(map, screen, xPos, yPos, owner, health);
 		setID(ID);
 		
 	}
-	public HunterEntity(Map map, GameScreen screen, int xPos, int yPos){
-		super(map, screen, xPos, yPos);
+	public HunterEntity(Map map, GameScreen screen, int xPos, int yPos, Structure owner){
+		super(map, screen, xPos, yPos, owner);
 		setID(ID);
 	}
 

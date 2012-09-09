@@ -49,6 +49,11 @@ public class MenuBarPopup extends Popup {
 		System.out.println("button == null !!");
 	}
 	
+	public void addButton(MenuBarPopupButton b, int index){
+		if(b != null) {buttons.add(index, b);return;}
+		System.out.println("button == null !!");
+	}
+	
 	public void removeButton(MenuBarPopupButton b){
 		buttons.remove(b);
 	}
@@ -71,8 +76,7 @@ public class MenuBarPopup extends Popup {
 		try{
 			getButton(x, y).onLeftClick();
 		}catch(Exception e){
-			System.out.println("mislukt kan button niet vinden");
-			System.out.println(x + "  " + y);
+			//no button at that place!
 		}
 	}
 	
@@ -81,6 +85,26 @@ public class MenuBarPopup extends Popup {
 		this.yPos = yPos;
 		height =((int) Math.floor(buttons.size()/BUTTONS_PER_ROW)+1) * HEIGHT_BUTTON + EMPTY_SPACE;
 		width = BUTTONS_PER_ROW * WIDTH_BUTTON +EMPTY_SPACE;
+	}
+	
+	public void onHoverOver(Graphics g, int mouseX, int mouseY){
+		int x, y;
+		int screenX = 0;
+		int screenY = 0;
+		if(!allignFromTop){
+			x = (mouseX - xPos + width - EMPTY_SPACE / 2) / WIDTH_BUTTON + 1;
+			y = (mouseY - yPos + height - EMPTY_SPACE / 2) / HEIGHT_BUTTON + 1;
+			screenX = xPos - width;
+			screenY = yPos - height;
+		}else{
+			x = (mouseX - xPos - EMPTY_SPACE / 2) / WIDTH_BUTTON + 1;
+			y = (mouseY - yPos - EMPTY_SPACE / 2) / HEIGHT_BUTTON + 1;
+			screenX = xPos;
+			screenY = yPos;
+		}
+		try{
+			getButton(x, y).renderHoverOver(g, screenX + EMPTY_SPACE/2 + x * WIDTH_BUTTON, screenY + EMPTY_SPACE/2 + y * HEIGHT_BUTTON);
+		}catch(Exception e){}; // no button at that place
 	}
 	
 	public MenuBarPopupButton getButton(int x, int y){

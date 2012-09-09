@@ -12,6 +12,7 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.ItemEntity;
 import walnoot.rtsgame.map.entities.MovingEntity;
+import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
 import walnoot.rtsgame.map.structures.nonnatural.HunterSchool;
 import walnoot.rtsgame.map.structures.nonnatural.LumberJackerSchool;
@@ -31,11 +32,13 @@ public class PlayerEntity extends MovingEntity {
 	private final static int ID = 102;
 	private Animation animation;
 	private Animation backwardAnimation;
+	public final Structure owner;
 	
-	public PlayerEntity(Map map, GameScreen screen,int xPos, int yPos){
+	public PlayerEntity(Map map, GameScreen screen, int xPos, int yPos, Structure tent){
 		super(map,screen, xPos, yPos, ID);
 		name = Util.NAME_GEN.getRandomName();
 		loadAnimation(Images.player);
+		owner = tent;
 	}
 	
 	public void update(){
@@ -44,11 +47,11 @@ public class PlayerEntity extends MovingEntity {
 		backwardAnimation.update();
 	}
 	
-	public PlayerEntity(Map map, GameScreen screen, int xPos, int yPos, int health){
+	public PlayerEntity(Map map, GameScreen screen, int xPos, int yPos, Structure tent, int health){
 		super(map,screen,xPos,yPos, ID);
 		this.health = health;
 		name = Util.NAME_GEN.getRandomName();
-		loadAnimation(Images.player);
+		owner = tent;
 	}
 	
 	private void loadAnimation(BufferedImage[][] image){
@@ -133,7 +136,7 @@ public class PlayerEntity extends MovingEntity {
 			popup.addOption(raise);
 			
 			screen.setEntityPopup(popup);
-		}else if(entityClicked instanceof LumberJackerSchool || entityClicked instanceof HunterSchool) moveTo(new Point(entityClicked.xPos, entityClicked.yPos));
+		}else if(entityClicked instanceof LumberJackerSchool || entityClicked instanceof HunterSchool) moveTo(new Point(entityClicked.xPos - 1, entityClicked.yPos - 1));
 		else System.out.println(entityClicked);
 		return false;
 	}
