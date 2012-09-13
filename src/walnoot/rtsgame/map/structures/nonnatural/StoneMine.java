@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.map.Map;
+import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.structures.natural.MineStructure;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.screen.GameScreen;
@@ -52,11 +53,11 @@ public class StoneMine extends MineStructure {
 		
 	}
 	
-	public void mine(int i){
+	public void mine(int i, Entity miner){
 		counter ++;
 		if(counter > MINES_PER_DAMAGE){
 			counter = 0;
-			screen.inventory.stone++;
+			miner.screen.inventory.stone++;
 		}
 	}
 	

@@ -27,12 +27,12 @@ public class RTSComponent extends Canvas implements Runnable {
 	private Screen screen;
 	private SPGameScreen gameScreen;
 	private TitleScreen titleScreen;
-	private boolean running = true;
+	boolean running = true;
 	public static final int SCALE = 2;
 	private FullScreenManager fullScreenManager;
 	private InputHandler input;
 	private Container container;
-	private long fps;
+	long fps;
 	private BufferedImage screenImage;
 	private Sound backgroundSound;
 	public boolean backgroundSoundOn = false;
@@ -48,9 +48,9 @@ public class RTSComponent extends Canvas implements Runnable {
 		
 		setIgnoreRepaint(true);
 		
-		if(!new File(Options.fileName).exists()) Options.writeOptions();
+		//if(!new File(Options.fileName).exists()) Options.writeOptions();
 		
-		Options.loadOptions();
+		//Options.loadOptions();
 		
 		
 	}
@@ -88,8 +88,8 @@ public class RTSComponent extends Canvas implements Runnable {
 		
 		int numTicks = 0, numFrames = 0;
 
-		if(Options.SOUND_ON)amplifybackground();
-		if(Options.startFullScreen) fullScreenManager.setFullScreen();
+		//if(Options.SOUND_ON)amplifybackground();
+		//if(Options.startFullScreen) fullScreenManager.setFullScreen();
 		
 		while(running){
 			long timePassed = System.nanoTime() - totalTime; //hoeveel tijd er verstreken is sinds de vorige update
@@ -175,12 +175,12 @@ public class RTSComponent extends Canvas implements Runnable {
 	public void stop(){
 		running = false;
 		
-		Options.window_width = container.getSize().width;
-		Options.window_height = container.getSize().height;
-		Options.startFullScreen = fullScreenManager.isFullScreen();
-		Options.SOUND_ON = backgroundSoundOn;
+		//Options.window_width = container.getSize().width;
+		//Options.window_height = container.getSize().height;
+		//Options.startFullScreen = fullScreenManager.isFullScreen();
+		//Options.SOUND_ON = backgroundSoundOn;
 		
-		Options.writeOptions();
+		//Options.writeOptions();
 	}
 	
 	public static void main(String[] args){

@@ -5,8 +5,6 @@ import java.awt.Graphics;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
-import walnoot.rtsgame.map.structures.BasicStructure;
-import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.screen.GameScreen;
 
 public abstract class MousePointer {

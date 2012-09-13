@@ -15,6 +15,7 @@ import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.MineStructure;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
+import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.rest.Util;
 
@@ -290,6 +291,22 @@ public class Map {
 		return closest;
 	}
 	
+	public Entity getClosestMine(int x, int y, ArrayList<Entity> notIncluded){
+		int closestDistance = 999;
+		int xe, ye;
+		Entity closest = null;
+		for(Entity e: entities){
+			xe = e.getxPos();
+			ye = e.getyPos();
+			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y && (e instanceof MineStructure || e instanceof StoneMine)&& !notIncluded.contains(e)){
+				//System.out.println(e);
+				closest = e;
+				closestDistance = Util.getDistance(x, y, xe, ye);
+			}
+		}
+		return closest;
+	}
+	
 	public Entity getClosestEntity(int x, int y){
 		int closestDistance = 999;
 		int xe, ye;
@@ -379,6 +396,11 @@ public class Map {
 	
 	public void removeEntityFromMap(Entity u){
 		toBeRemovedFromMap.add(u);
+	}
+	
+	public void setEntityBackOnMap(Entity u){
+		removeEntity(u);
+		addEntity(u);
 	}
 	
 	public Tile[][] getSurface(){

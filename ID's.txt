@@ -22,6 +22,8 @@
 	204 LumberJacker
 	205 HuntSchool
 	206 StoneMine
+	207 MinerISchool
+	208 MinerIISchool
 	
 300-399 mines
 	300 GoldMine

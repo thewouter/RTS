@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.map.Map;
+import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.screen.GameScreen;
@@ -103,5 +104,5 @@ public abstract class MineStructure extends Structure {
 		super.damage(damage);
 	}
 
-	public abstract void mine(int damage);
+	public abstract void mine(int damage, Entity miner);
 }
