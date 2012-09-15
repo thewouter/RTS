@@ -399,6 +399,7 @@ public class Map {
 	}
 	
 	public void setEntityBackOnMap(Entity u){
+		if(!notOnMap.contains(u)) return;
 		removeEntity(u);
 		addEntity(u);
 	}

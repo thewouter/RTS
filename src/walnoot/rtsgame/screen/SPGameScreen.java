@@ -12,12 +12,13 @@ import walnoot.rtsgame.map.entities.DeerEntity;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
-import walnoot.rtsgame.map.entities.players.HunterEntity;
-import walnoot.rtsgame.map.entities.players.MinerEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.professions.Hunter;
+import walnoot.rtsgame.map.entities.players.professions.LumberJacker;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
+import walnoot.rtsgame.map.structures.nonnatural.Farm;
 import walnoot.rtsgame.map.structures.nonnatural.LumberJackerSchool;
 import walnoot.rtsgame.map.structures.nonnatural.MinerIISchool;
 import walnoot.rtsgame.map.structures.nonnatural.MinerISchool;
@@ -42,7 +43,9 @@ public class SPGameScreen extends GameScreen {
 		
 		for(int i = 4;; i++){
 			if(!map.getTile(4, i).isSolid()){
-				selectedEntities.add(new PlayerEntity(map,this, 4, i, null));
+				PlayerEntity player = new PlayerEntity(map,this, 4, i, null);
+				player.setProfession(new LumberJacker(player));
+				selectedEntities.add(player);
 				goodYPos = i;
 				break;
 			}
@@ -53,21 +56,22 @@ public class SPGameScreen extends GameScreen {
 				levelUp();
 			}
 		};
+		
+		
 		targetEntity = selectedEntities.getFirst();
 		map.addEntity(selectedEntities.getFirst());
+		
 		
 		map.addEntity(new DeerEntity(map, this,4, goodYPos+1)); //voor de test, later weghalen
 		map.addEntity(new SheepEntity(map,this, 4, goodYPos+2)); //voor de test, later weghalen
 		map.addEntity(new TentIStructure(map,this, 4, goodYPos + 3)); //voor de test, later weghalen
 		map.addEntity(new CampFireStructure(map,this, 4, goodYPos + 5)); //voor de test, later weghalen
 		map.addEntity(new TreeStructure(map,this, 4, goodYPos + 7)); //voor de test, later weghalen
-		map.addEntity(new HunterEntity(map,this, 4, goodYPos + 9, null)); // etc...
-		map.addEntity(new GoldMine(map,null , 10, 10, 3));
-		map.addEntity(new MinerEntity(map,this, 10, 20, null));
+		map.addEntity(new GoldMine(map,null , 10, 10, 3));			//etc...
 		map.addEntity(new LumberJackerSchool(map, this, 4, goodYPos + 12));
 		map.addEntity(new StoneMine(map, this, 4, goodYPos + 15));
 		map.addEntity(new MinerIISchool(map, this, 4, goodYPos + 20));
-		map.addEntity(new MinerISchool(map, this, 12, goodYPos + 20));
+		map.addEntity(new Farm(map, this, 12, goodYPos + 20));
 		
 		
 		translationX = -selectedEntities.getFirst().getScreenX();

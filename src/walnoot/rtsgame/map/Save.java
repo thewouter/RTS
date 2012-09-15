@@ -11,8 +11,6 @@ import walnoot.rtsgame.map.entities.DeerEntity;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.SnakeEntity;
-import walnoot.rtsgame.map.entities.players.HunterEntity;
-import walnoot.rtsgame.map.entities.players.MinerEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
@@ -171,12 +169,6 @@ public class Save {
 					case 103:
 						map.addEntity(new DeerEntity(map,screen,  xPos, yPos, health));
 						break;
-					case 104:
-						map.addEntity(new HunterEntity(map,screen,  xPos, yPos, null, health));
-						break;
-					case 105:
-						map.addEntity(new MinerEntity(map,screen,  xPos, yPos, null,  health));
-						break;
 					}
 				}
 			}
@@ -248,12 +240,6 @@ public class Save {
 						break;
 					case 103:
 						map.addEntity(new DeerEntity(map,null,  xPos, yPos, health));
-						break;
-					case 104:
-						map.addEntity(new HunterEntity(map,null,  xPos, yPos, null,health));
-						break;
-					case 105:
-						map.addEntity(new MinerEntity(map,null,  xPos, yPos, null, health));
 						break;
 					}
 				}

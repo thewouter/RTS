@@ -12,10 +12,14 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.ItemEntity;
 import walnoot.rtsgame.map.entities.MovingEntity;
+import walnoot.rtsgame.map.entities.players.professions.Profession;
+import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
 import walnoot.rtsgame.map.structures.nonnatural.HunterSchool;
 import walnoot.rtsgame.map.structures.nonnatural.LumberJackerSchool;
+import walnoot.rtsgame.map.structures.nonnatural.MinerIISchool;
+import walnoot.rtsgame.map.structures.nonnatural.MinerISchool;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
@@ -33,6 +37,7 @@ public class PlayerEntity extends MovingEntity {
 	private Animation animation;
 	private Animation backwardAnimation;
 	public final Structure owner;
+	public Profession profession;
 	
 	public PlayerEntity(Map map, GameScreen screen, int xPos, int yPos, Structure tent){
 		super(map,screen, xPos, yPos, ID);
@@ -45,6 +50,9 @@ public class PlayerEntity extends MovingEntity {
 		super.update();
 		animation.update();
 		backwardAnimation.update();
+		if(profession != null){
+			profession.update();
+		}
 	}
 	
 	public PlayerEntity(Map map, GameScreen screen, int xPos, int yPos, Structure tent, int health){
@@ -92,6 +100,7 @@ public class PlayerEntity extends MovingEntity {
 	}
 	
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
+		if(profession != null && profession.onRightClick(entityClicked, screen, input)) return false;
 		if(entityClicked == this){
 			EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
 			
@@ -121,7 +130,7 @@ public class PlayerEntity extends MovingEntity {
 			};
 			popup.addOption(new Option("shoot", popup){
 				public void onClick() {
-					new Sound("/res/Sounds/shot.wav").play();
+					new Sound("/res/Sounds/shot.mp3").play();
 				}
 			});
 			
@@ -136,8 +145,10 @@ public class PlayerEntity extends MovingEntity {
 			popup.addOption(raise);
 			
 			screen.setEntityPopup(popup);
-		}else if(entityClicked instanceof LumberJackerSchool || entityClicked instanceof HunterSchool) moveTo(new Point(entityClicked.xPos - 1, entityClicked.yPos - 1));
-		else System.out.println(entityClicked);
+		}else if(entityClicked instanceof BasicStructure){
+			moveTo(entityClicked);
+		}
+		//else System.out.println(entityClicked);
 		return false;
 	}
 	
@@ -167,6 +178,11 @@ public class PlayerEntity extends MovingEntity {
 
 	public boolean isMovable() {
 		return true;
+	}
+	
+	public void setProfession(Profession p){
+		profession = p;
+		name = Util.splitString(name).get(0) + " " + p.getName();
 	}
 
 }

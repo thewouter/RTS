@@ -7,6 +7,7 @@ import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.structures.nonnatural.LumberJackerSchool;
 import walnoot.rtsgame.multiplayer.client.MPMapClient;
 import walnoot.rtsgame.rest.Util;
@@ -34,18 +35,53 @@ public abstract class MovingEntity extends Entity {
 		Direction nextDirection = null;
 		if(nextDirections.isEmpty()){
 			if(goal != null){
-				int dx = goal.xPos - this.xPos;
-				int dy = goal.yPos - this.yPos;
-
-				if(Util.abs(dx) <= 1 && Util.abs(dy) <= 1) return;
-
-				if(dx > 1) dx = 1;
-				if(dx < -1) dx = -1;
-
-				if(dy > 1) dy = 1;
-				if(dy < -1) dy = -1;
-
-				nextDirections.add(Direction.getDirection(dx, dy));
+				if(goal instanceof MovingEntity){
+					int dx = goal.xPos - this.xPos;
+					int dy = goal.yPos - this.yPos;
+	
+					if(Util.abs(dx) <= 1 && Util.abs(dy) <= 1) return;
+	
+					if(dx > 1) dx = 1;
+					if(dx < -1) dx = -1;
+	
+					if(dy > 1) dy = 1;
+					if(dy < -1) dy = -1;
+	
+					nextDirections.add(Direction.getDirection(dx, dy));
+				}else if(goal instanceof BasicStructure){
+					
+					int xGoal = goal.xPos;
+					int yGoal = goal.yPos;
+					int size = ((BasicStructure)goal).getSize();
+					double closest = map.surface.length;
+					int closestX = -1;
+					int closestY = -1;
+					
+					for(int x = 0; x < size; x++){
+						for(int y = 0; y < size; y++){
+							int xp = xGoal - x;
+							int yp = yGoal - y;
+							if(Math.sqrt((xp - xPos) * (xp - xPos) + (yp - yPos)*(yp - yPos)) < closest){
+								 closest = Math.sqrt((xp - xPos) * (xp - xPos) + (yp - yPos)*(yp - yPos));
+								 closestX = x;
+								 closestY = y;
+							}
+						}
+					}
+					
+					if(closestX == 0){
+						
+					}else if(closestX == size - 1){
+						
+					}
+					if(closestY == 0){
+						
+					}else if(closestY == size - 1){
+						
+					}
+					
+					goal = null;
+				}
 			}else return;
 		}
 		
@@ -98,11 +134,11 @@ public abstract class MovingEntity extends Entity {
 			return;
 		}
 		this.goal = null;
-		if(this instanceof PlayerEntity && map.getEntity(goal.x, goal.y) instanceof LumberJackerSchool){
-			goal.x--;
-			goal.y--;
-		}
 		Pathfinder.moveTo(this,new Point(xPos, yPos), goal, map);
+	}
+	
+	public void moveTo(Entity goal){
+		this.goal = goal;
 	}
 
 	public void moveToFromHost(Point goal){

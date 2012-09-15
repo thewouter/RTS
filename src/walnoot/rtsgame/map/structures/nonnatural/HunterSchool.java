@@ -4,8 +4,8 @@ import java.util.LinkedList;
 
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
-import walnoot.rtsgame.map.entities.players.HunterEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.professions.Hunter;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.screen.GameScreen;
 
@@ -33,14 +33,8 @@ public class HunterSchool extends BasicStructure {
 			teller++;
 			if(teller > TIME_TO_TEACH_ONE_PLAYER && !playersCollected.isEmpty()){
 				PlayerEntity e = playersCollected.getFirst();
-				PlayerEntity newPlayer = new HunterEntity(map, screen, e.getxPos(), e.getyPos(), e.owner);
-				map.addEntity(newPlayer);
-				map.removeEntity(e);
-				if(e.owner instanceof TentIStructure){
-					((TentIStructure)e.owner).players.add(newPlayer);
-				}else if(e.owner instanceof TentIIStructure){
-					((TentIIStructure)e.owner).players.add(newPlayer);
-				}
+				e.setProfession(new Hunter(e));
+				map.setEntityBackOnMap(e);
 				playersCollected.remove(e);
 			}
 			if(teller > TIME_TO_TEACH_ONE_PLAYER){
@@ -50,7 +44,7 @@ public class HunterSchool extends BasicStructure {
 		for(int x = -1; x < getSize() + 1; x++){
 			for(int y = -1; y < getSize() + 1; y++){
 				Entity e = map.getEntity(xPos + x, yPos + y);
-				if(e != null && e.ID == 102){	//it's a player, no profession.
+				if(e != null && e instanceof PlayerEntity && ((PlayerEntity)e).profession == null){	//it's a player, no profession.
 					playersCollected.add((PlayerEntity) e);
 					isTeaching = true;
 					map.removeEntity(e);

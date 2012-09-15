@@ -8,7 +8,7 @@ import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.screen.GameScreen;
 
 public abstract class Entity implements Cloneable {
-	protected final Map map;
+	public final Map map;
 	private boolean removed;
 	public int xPos;
 	public int yPos;

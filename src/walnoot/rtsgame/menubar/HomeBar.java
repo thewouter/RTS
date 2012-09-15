@@ -33,7 +33,7 @@ public class HomeBar extends MenuBar{
 						
 						public void afterBuild(){
 							screen.levelUp();
-							Sound.Victory.play();
+							//Sound.Victory.play();
 						}
 					};
 				}

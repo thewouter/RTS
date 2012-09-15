@@ -5,8 +5,8 @@ import java.util.LinkedList;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
-import walnoot.rtsgame.map.entities.players.LumberJackerPlayer;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.professions.LumberJacker;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.popups.entitypopup.EntityTextPopup;
 import walnoot.rtsgame.screen.GameScreen;
@@ -40,9 +40,8 @@ public class LumberJackerSchool extends BasicStructure {
 			teller++;
 			if(teller > TIME_TO_TEACH_ONE_PLAYER && !playersCollected.isEmpty()){
 				PlayerEntity e = playersCollected.getFirst();
-				Entity newPlayer = new LumberJackerPlayer(map, screen, e.getxPos(), e.getyPos(), e.owner);
-				map.addEntity(newPlayer);
-				map.removeEntity(e);
+				e.setProfession(new LumberJacker(e));
+				map.setEntityBackOnMap(e);
 				playersCollected.remove(e);
 			}
 			if(teller > TIME_TO_TEACH_ONE_PLAYER){
@@ -52,7 +51,7 @@ public class LumberJackerSchool extends BasicStructure {
 		for(int x = -1; x < getSize() + 1; x++){
 			for(int y = -1; y < getSize() + 1; y++){
 				Entity e = map.getEntity(xPos + x, yPos + y);
-				if(e != null && e.ID == 102){	//it's a player, no proffession.
+				if(e != null && e instanceof PlayerEntity && ((PlayerEntity)e).profession == null){	//it's a player, no proffession.
 					playersCollected.add((PlayerEntity) e);
 					isTeaching = true;
 					map.notOnMap.add(e);

@@ -8,8 +8,6 @@ import walnoot.rtsgame.map.entities.DeerEntity;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.SnakeEntity;
-import walnoot.rtsgame.map.entities.players.HunterEntity;
-import walnoot.rtsgame.map.entities.players.MinerEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
@@ -23,7 +21,7 @@ import walnoot.rtsgame.map.tiles.Tile;
  */
 
 public class Util {
-	public static final Random RANDOM = new Random();
+	public static final Random RANDOM = new Random(2222);
 	public static final NameGenerator NAME_GEN = new NameGenerator();
 	
 	public static int getScreenX(int mapX, int mapY){
@@ -146,15 +144,10 @@ public class Util {
 				
 			case 102:
 				return new PlayerEntity(map, null,  xPos, yPos, null);
+				//professions not implemented
 				
 			case 103:
 				return new DeerEntity(map, null,  xPos, yPos, health);
-				
-			case 104:
-				return new HunterEntity(map, null,  xPos, yPos, null, health);
-				
-			case 105:
-				return new MinerEntity(map, null,  xPos, yPos, null, health);
 				
 			}
 		}

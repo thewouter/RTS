@@ -8,11 +8,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
 import javax.swing.JFrame;
 
 import walnoot.rtsgame.multiplayer.host.MPHost;
+import walnoot.rtsgame.rest.MP3;
 import walnoot.rtsgame.rest.Options;
 import walnoot.rtsgame.rest.Sound;
 import walnoot.rtsgame.screen.SPGameScreen;
@@ -187,6 +187,7 @@ public class RTSComponent extends Canvas implements Runnable {
 		JFrame frame = new JFrame("Tribe");
 		RTSComponent comp = new RTSComponent(frame);
 		
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(Options.window_width, Options.window_height);
 		frame.setLayout(new BorderLayout(0, 0));
@@ -194,13 +195,14 @@ public class RTSComponent extends Canvas implements Runnable {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
+		new Sound("/res/Sounds/shot.mp3").play();
+		
 		new Thread(comp, "Tribe main").start();
 		while(comp.running){
 			frame.setTitle("Tribe (" + comp.fps + ")");
 			try{
 				Thread.sleep(500L);
-			}catch(InterruptedException e){
-			}
+			}catch(InterruptedException e){}
 		}
 	}
 }

@@ -4,8 +4,8 @@ import java.util.LinkedList;
 
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
-import walnoot.rtsgame.map.entities.players.MinerEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.professions.Miner;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.screen.GameScreen;
 
@@ -32,8 +32,8 @@ public class MinerIISchool extends BasicStructure {
 		if(isTeaching){
 			teller++;
 			if(teller > TIME_TO_TEACH_ONE_PLAYER && !playersCollected .isEmpty()){
-				MinerEntity e = (MinerEntity) playersCollected.getFirst();
-				e.level = 2;
+				PlayerEntity e = playersCollected.getFirst();
+				e.setProfession(new Miner(e, 2));
 				map.setEntityBackOnMap(e);
 				playersCollected.remove(e);
 			}
@@ -44,7 +44,7 @@ public class MinerIISchool extends BasicStructure {
 		for(int x = -1; x < getSize() + 1; x++){
 			for(int y = -1; y < getSize() + 1; y++){
 				Entity e = map.getEntity(xPos + x, yPos + y);
-				if(e != null && e.ID == 105 && ((MinerEntity)e).level == 1){	//it's a player, minerI.
+				if(e != null && e instanceof PlayerEntity && ((PlayerEntity)e).profession instanceof Miner && ((Miner)((PlayerEntity)e).profession).level == 1){	//it's a player, minerI.
 					playersCollected.add((PlayerEntity) e);
 					isTeaching = true;
 					map.notOnMap.add(e);
