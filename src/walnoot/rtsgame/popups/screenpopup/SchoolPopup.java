@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
+import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.professions.Profession;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
@@ -130,7 +131,7 @@ public class SchoolPopup extends ScreenPopup{
 		
 		public void render(Graphics g){
 			g.drawImage(button, x, y, width, height, null);
-			Screen.font.drawLine(g, "" + amountToBuild, x + width - Screen.font.getLineWidth("" + amountToBuild), y + height - Screen.font.HEIGHT);
+			Screen.font.drawLine(g, "" + amountToBuild, x + width - Screen.font.getLineWidth("" + amountToBuild), y + height - RTSFont.HEIGHT);
 		}
 		
 		public void onSelect(){

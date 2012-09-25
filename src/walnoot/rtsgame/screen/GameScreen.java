@@ -11,7 +11,6 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
-import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
 import walnoot.rtsgame.map.structures.nonnatural.TentIIStructure;
@@ -160,34 +159,34 @@ public abstract class GameScreen extends Screen {
 				}
 			});
 			
-			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[7][6], this.bar.screen) {
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[5][6], this.bar.screen) {
 				
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input,screen) {
 						
 						public Entity toBuild() {
-							return new SchoolI(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+							return new TentIStructure(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
 						}
 					};
 				}
 				
 				public String getName() {
-					return "School";
+					return "Tent";
 				}
 			});
 			
-			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[6][7], this) {
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[7][6], this) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
 						public Entity toBuild() {
-							return new TreeStructure(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+							return new SchoolI(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
 						}
 					};
 					
 				}
 
 				public String getName() {
-					return "Tree";
+					return "School";
 				}
 			});
 			

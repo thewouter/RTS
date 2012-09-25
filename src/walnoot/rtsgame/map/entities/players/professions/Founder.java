@@ -7,6 +7,7 @@ import walnoot.rtsgame.map.structures.nonnatural.BaseOfOperations;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.rest.MousePointer;
+import walnoot.rtsgame.rest.Sound;
 import walnoot.rtsgame.screen.GameScreen;
 
 public class Founder extends Profession {
@@ -30,6 +31,8 @@ public class Founder extends Profession {
 					}
 					public void afterBuild(){
 						map.removeEntity(owner.owner);
+						new Sound("/res/Sounds/Buildbaseofoperations.mp3").play();
+						screen.levelUp();
 					}
 				};
 			}
