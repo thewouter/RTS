@@ -15,8 +15,8 @@ import walnoot.rtsgame.screen.GameScreen;
 public class Inventory {
 	private GameScreen owner;
 	
-	public int gold;
-	public int meat;
+	public int gold = 10000;
+	public int meat = 10000;
 	public int wood;
 	public int stone;
 	

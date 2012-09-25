@@ -7,9 +7,11 @@ import walnoot.rtsgame.screen.GameScreen;
 
 public abstract class Profession {
 	public PlayerEntity owner;
+	public final int ID;
 
-	public Profession(PlayerEntity owner) {
+	public Profession(PlayerEntity owner, int ID) {
 		this.owner = owner;
+		this.ID = ID;
 	}
 	
 	/**
@@ -22,7 +24,29 @@ public abstract class Profession {
 		return false;
 	}
 	
+	public static void setProfession(int ID, PlayerEntity p){
+		switch(ID){
+		case 400:
+			p.setProfession(new LumberJacker(p));
+			return;
+		case 401:
+			p.setProfession(new Miner(p, 1));
+			System.out.println("test");
+			return;
+		case 402:
+			p.setProfession(new Hunter(p));
+			return;
+		case 403:
+			p.setProfession(new Founder(p));
+			return;
+		}
+	}
+	
 	public abstract void update();
 
 	public abstract String getName();
+	
+	public void setOwner(PlayerEntity owner){
+		this.owner = owner;
+	}
 }

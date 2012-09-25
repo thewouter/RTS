@@ -13,15 +13,13 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
-import walnoot.rtsgame.map.entities.players.professions.Hunter;
-import walnoot.rtsgame.map.entities.players.professions.LumberJacker;
+import walnoot.rtsgame.map.entities.players.professions.Founder;
+import walnoot.rtsgame.map.entities.players.professions.Miner;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
 import walnoot.rtsgame.map.structures.nonnatural.Farm;
-import walnoot.rtsgame.map.structures.nonnatural.LumberJackerSchool;
-import walnoot.rtsgame.map.structures.nonnatural.MinerIISchool;
-import walnoot.rtsgame.map.structures.nonnatural.MinerISchool;
+import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.menubar.Button;
@@ -39,14 +37,14 @@ public class SPGameScreen extends GameScreen {
 		
 		inventory.gold = 500;
 		
-		int goodYPos;
+		//int goodYPos;
 		
 		for(int i = 4;; i++){
 			if(!map.getTile(4, i).isSolid()){
 				PlayerEntity player = new PlayerEntity(map,this, 4, i, null);
-				player.setProfession(new LumberJacker(player));
+				player.setProfession(new Founder(player));
 				selectedEntities.add(player);
-				goodYPos = i;
+				//goodYPos = i;
 				break;
 			}
 		}
@@ -57,21 +55,21 @@ public class SPGameScreen extends GameScreen {
 			}
 		};
 		
-		
 		targetEntity = selectedEntities.getFirst();
 		map.addEntity(selectedEntities.getFirst());
 		
-		
+		/*
 		map.addEntity(new DeerEntity(map, this,4, goodYPos+1)); //voor de test, later weghalen
 		map.addEntity(new SheepEntity(map,this, 4, goodYPos+2)); //voor de test, later weghalen
 		map.addEntity(new TentIStructure(map,this, 4, goodYPos + 3)); //voor de test, later weghalen
 		map.addEntity(new CampFireStructure(map,this, 4, goodYPos + 5)); //voor de test, later weghalen
 		map.addEntity(new TreeStructure(map,this, 4, goodYPos + 7)); //voor de test, later weghalen
 		map.addEntity(new GoldMine(map,null , 10, 10, 3));			//etc...
-		map.addEntity(new LumberJackerSchool(map, this, 4, goodYPos + 12));
 		map.addEntity(new StoneMine(map, this, 4, goodYPos + 15));
-		map.addEntity(new MinerIISchool(map, this, 4, goodYPos + 20));
+		map.addEntity(new SchoolI(map, this, 4, goodYPos + 20));
 		map.addEntity(new Farm(map, this, 12, goodYPos + 20));
+		*/
+		
 		
 		
 		translationX = -selectedEntities.getFirst().getScreenX();
@@ -81,14 +79,9 @@ public class SPGameScreen extends GameScreen {
 		
 	}
 
-	
-	
-	
 	public void save(){
 		Save.save(map, "save1"); 
 	}
-	
-	
 	
 	public void save(String fileName){
 		Save.save(map, fileName);
@@ -113,6 +106,7 @@ public class SPGameScreen extends GameScreen {
 			map.update((int) Math.floor(translationX), (int) Math.floor(translationY), getWidth(), getHeight());
 
 			bar.update(getWidth(), getHeight());
+			
 			statusBar.update(getWidth(), getHeight());
 		
 			if(input.space.isPressed() && selectedEntities != null && !selectedEntities.isEmpty()) targetEntity = selectedEntities.getFirst();
@@ -142,11 +136,16 @@ public class SPGameScreen extends GameScreen {
 				}
 			}
 			
-			
-			
 			if(entityPopup != null){
 				entityPopup.update(input.getMouseX(), input.getMouseY());
 				if(!selectedEntities.contains(entityPopup.getOwner())) entityPopup = null;
+			}
+			
+			if(pointer != null){
+				pointer.update(); 
+				if(bar.showPopup == false){
+					pointer = null;
+				}
 			}
 			
 			if(input.RMBTapped()){
@@ -160,12 +159,10 @@ public class SPGameScreen extends GameScreen {
 				
 				if(canMove){
 					if(!selectedEntities.isEmpty() && selectedEntities.getFirst() instanceof MovingEntity){
-						//for(Entity m:selectedEntities){
-							if(((MovingEntity)selectedEntities.getFirst()).isMovable()){
-								((MovingEntity) selectedEntities.getFirst()).moveTo(new Point(getMapX(), getMapY()));
-								entityPopup = null;
-							}
-						//}
+						if(((MovingEntity)selectedEntities.getFirst()).isMovable()){
+							((MovingEntity) selectedEntities.getFirst()).moveTo(new Point(getMapX(), getMapY()));
+							entityPopup = null;
+						}
 					}
 				}
 			}
@@ -176,12 +173,7 @@ public class SPGameScreen extends GameScreen {
 			
 			
 			selectedEntities.removeAll(remove);
-			if(pointer != null){
-				pointer.update(); 
-				if(bar.showPopup == false){
-					pointer = null;
-				}
-			}
+			
 			
 			if(!isReady && isReadyForLevelUp()){
 				statusBar.addButton(levelUpButton, 0);
@@ -204,8 +196,10 @@ public class SPGameScreen extends GameScreen {
 	
 	public void levelUp(){
 		super.levelUp();
-		isReady = false;
-		if(!isReadyForLevelUp() && level != 1) statusBar.removeButton(levelUpButton);
+		if(!isReadyForLevelUp() && level != 1) {
+			statusBar.removeButton(levelUpButton);
+			isReady = false;
+		}
 	}
 	
 	public boolean isReadyForLevelUp(){

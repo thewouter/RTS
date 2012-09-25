@@ -79,8 +79,10 @@ public class Map {
 			addSheepGroup();
 		}
 		
+		
 		entities.removeAll(toBeRemoved);
 		entities.removeAll(toBeRemovedFromMap);
+		notOnMap.addAll(toBeRemovedFromMap);
 		toBeRemovedFromMap.clear();
 		notOnMap.removeAll(toBeRemoved);
 		toBeRemoved.clear();
@@ -207,7 +209,9 @@ public class Map {
 		if(surface[x][y].isSolid()) return true;
 		
 		for(Entity e: entities){
-			if(e.isSolid(x, y)) return true;
+			if(e.isSolid(x, y)) {
+				return true;
+			}
 		}
 		return false;
 	}

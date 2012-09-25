@@ -12,7 +12,6 @@ import java.awt.image.BufferedImage;
 import javax.swing.JFrame;
 
 import walnoot.rtsgame.multiplayer.host.MPHost;
-import walnoot.rtsgame.rest.MP3;
 import walnoot.rtsgame.rest.Options;
 import walnoot.rtsgame.rest.Sound;
 import walnoot.rtsgame.screen.SPGameScreen;
@@ -194,8 +193,6 @@ public class RTSComponent extends Canvas implements Runnable {
 		frame.add(comp, BorderLayout.CENTER);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-		
-		new Sound("/res/Sounds/shot.mp3").play();
 		
 		new Thread(comp, "Tribe main").start();
 		while(comp.running){

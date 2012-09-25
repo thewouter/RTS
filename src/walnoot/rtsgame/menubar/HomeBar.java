@@ -24,24 +24,7 @@ public class HomeBar extends MenuBar{
 			
 			buildmenu = new MenuBarPopup(xPosOnScreen + UITLOOP + (buttons.indexOf(this) + 1)*WIDTH_BUTTON, yPosOnScreen + UITLOOP, buttons.indexOf(this), false);
 			
-			buildmenu.addButton(new MenuBarPopupButton(Images.buttons[6][6], GameScreen) {
-				public void onLeftClick() {
-					screen.pointer = new MousePointer(screen.map, screen.input, screen) {
-						public Entity toBuild() {
-							return new BaseOfOperations(screen.map, screen, screen.getMapX(), screen.getMapY());
-						}
-						
-						public void afterBuild(){
-							screen.levelUp();
-							//Sound.Victory.play();
-						}
-					};
-				}
-
-				public String getName() {
-					return "Base Of Operations";
-				}
-			});
+			
 			
 			
 			addButton(new Button(Images.buttons[0][0], this) {

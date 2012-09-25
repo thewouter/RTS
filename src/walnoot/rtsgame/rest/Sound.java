@@ -1,12 +1,5 @@
 package walnoot.rtsgame.rest;
 
-import java.applet.Applet;
-import java.applet.AudioClip;
-import java.io.File;
-
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 
 public class Sound {
        private MP3 mp3;

@@ -25,9 +25,16 @@
 	207 MinerISchool
 	208 MinerIISchool
 	209 Farm
+	210 SchoolI
 	
 300-399 mines
 	300 GoldMine
+	
+400-499 Professions
+	400 LumberJacker
+	401 Miner
+	402 Hunter
+	403 Founder
 	
 	
 	

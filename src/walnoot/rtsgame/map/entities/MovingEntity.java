@@ -6,9 +6,7 @@ import java.util.LinkedList;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
-import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.structures.BasicStructure;
-import walnoot.rtsgame.map.structures.nonnatural.LumberJackerSchool;
 import walnoot.rtsgame.multiplayer.client.MPMapClient;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
@@ -16,6 +14,7 @@ import walnoot.rtsgame.screen.GameScreen;
 public abstract class MovingEntity extends Entity {
 	protected double timeTraveled; //hoelang hij onderweg is
 	private Entity goal = null;
+	public Entity entityGoal = null;
 	//private int oldX = 0, oldY = 0;
 	
 	public LinkedList<Direction> nextDirections = new LinkedList<Direction>();
@@ -69,18 +68,23 @@ public abstract class MovingEntity extends Entity {
 						}
 					}
 					
+					int moveToX = goal.xPos;
+					int moveToY  = goal.yPos;
+					
 					if(closestX == 0){
-						
+						moveToX += size;
 					}else if(closestX == size - 1){
-						
+						moveToX -= 1;
 					}
 					if(closestY == 0){
-						
+						moveToY += size;
 					}else if(closestY == size - 1){
-						
+						moveToY -= 1;
 					}
-					
+					moveTo(new Point(moveToX,moveToY));
+					entityGoal = goal;
 					goal = null;
+					
 				}
 			}else return;
 		}

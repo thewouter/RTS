@@ -6,8 +6,6 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-import walnoot.rtsgame.rest.Options;
-
 public class GameApplet extends Applet {
 	private static final long serialVersionUID = -4657281424449019830L;
 

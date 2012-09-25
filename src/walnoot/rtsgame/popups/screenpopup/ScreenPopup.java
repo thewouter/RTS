@@ -38,6 +38,7 @@ public class ScreenPopup extends Popup{
 		if(this.height < (parts.size() + 1) * EMPTY_SPACE + totalHeight){
 			this.height = (parts.size() + 1) * EMPTY_SPACE + totalHeight;
 		}
+		
 	}
 
 	public void onLeftClick(int mouseX, int mouseY) {

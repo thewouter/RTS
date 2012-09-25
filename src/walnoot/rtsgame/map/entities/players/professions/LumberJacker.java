@@ -1,7 +1,5 @@
 package walnoot.rtsgame.map.entities.players.professions;
 
-import java.awt.Point;
-
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
@@ -13,13 +11,13 @@ import walnoot.rtsgame.screen.GameScreen;
 
 public class LumberJacker extends Profession {
 
-	private static final int TIME_TO_CHOP_ONE_DAMAGE = 120;
+	private static final int TIME_TO_CHOP_ONE_DAMAGE = 120, ID = 400;
 	private boolean isChopping;
 	private int teller;
 	private TreeStructure closestTree;
 
 	public LumberJacker(PlayerEntity owner) {
-		super(owner);
+		super(owner, ID);
 	}
 
 	public void update() {

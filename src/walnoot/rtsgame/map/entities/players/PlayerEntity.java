@@ -1,7 +1,6 @@
 package walnoot.rtsgame.map.entities.players;
 
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -16,10 +15,6 @@ import walnoot.rtsgame.map.entities.players.professions.Profession;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
-import walnoot.rtsgame.map.structures.nonnatural.HunterSchool;
-import walnoot.rtsgame.map.structures.nonnatural.LumberJackerSchool;
-import walnoot.rtsgame.map.structures.nonnatural.MinerIISchool;
-import walnoot.rtsgame.map.structures.nonnatural.MinerISchool;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;

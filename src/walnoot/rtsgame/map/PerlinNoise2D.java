@@ -1,6 +1,5 @@
 package walnoot.rtsgame.map;
 
-import java.util.Random;
 
 public class PerlinNoise2D {
 	private int seed = /*new Random().nextInt()*/222222;

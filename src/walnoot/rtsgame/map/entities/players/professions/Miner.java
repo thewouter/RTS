@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
-import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.MineStructure;
 import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
@@ -16,24 +15,24 @@ import walnoot.rtsgame.screen.GameScreen;
 
 public class Miner extends Profession {
 
-	private static final int TIME_TO_MINE_ONE_DAMAGE = 120;
+	private static final int TIME_TO_MINE_ONE_DAMAGE = 120, ID = 401;
 	private boolean isMining;
 	private int teller;
-	private Structure closestMine;
+	private MineStructure closestMine;
 	public final int level;
 
 	public Miner(PlayerEntity owner, int i) {
-		super(owner);
+		super(owner, ID);
 		level = i;
 	}
 
 	public void update() {
-		if(isMining)teller++;
+		if(isMining) teller++;
 		if(teller >= TIME_TO_MINE_ONE_DAMAGE){
 			teller = 0;
 			if(isMining){ 
-				if(owner.map.getEntity(owner.getxPos() - 1, owner.getyPos() - 1) instanceof MineStructure){
-					((MineStructure)owner.map.getEntity(owner.getxPos() -1,  owner.getyPos() - 1)).mine(1, owner);
+				if(owner.map.getEntity(owner.getxPos() - 1, owner.getyPos() - 1) == closestMine){
+					closestMine.mine(1, owner);
 				}
 			}
 		}
@@ -46,8 +45,7 @@ public class Miner extends Profession {
 		isMining = true;
 		ArrayList<Entity> notValid = new ArrayList<Entity>();
 		do{
-			//System.out.println(notValid.get(notValid.size()-1));
-			closestMine = (Structure) owner.map.getClosestMine(owner.getxPos(), owner.getyPos(), notValid);
+			closestMine = (MineStructure) owner.map.getClosestMine(owner.getxPos(), owner.getyPos(), notValid);
 			if(canIMineIt(closestMine))break;
 			notValid.add(closestMine);
 		}while(true);
@@ -73,14 +71,9 @@ public class Miner extends Profession {
 				}
 			});
 		}
-		popup.addOption(new Option("" + level,popup) {
-			
-			public void onClick() {
-			}
-		});
 		screen.setEntityPopup(popup);	
 		
-		return false;
+		return true;
 	}
 	
 	private boolean canIMineIt(Object o){

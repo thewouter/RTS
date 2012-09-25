@@ -13,13 +13,13 @@ import walnoot.rtsgame.screen.GameScreen;
 
 public class Hunter extends Profession {
 
-	private static final int TIME_TO_HUNT_ONE_DAMAGE = 120;
+	private static final int TIME_TO_HUNT_ONE_DAMAGE = 120, ID = 402;
 	private boolean isHunting;
 	private int teller;
 	private MovingEntity closestMovingEntity;
 
 	public Hunter(PlayerEntity owner) {
-		super(owner);
+		super(owner, ID);
 	}
 	
 	public void update() {
