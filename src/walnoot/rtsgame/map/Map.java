@@ -15,6 +15,7 @@ import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.MineStructure;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
+import walnoot.rtsgame.map.structures.nonnatural.Farm;
 import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.rest.Util;
@@ -420,6 +421,21 @@ public class Map {
 			xe = e.getxPos();
 			ye = e.getyPos();
 			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y && e instanceof TreeStructure){
+				closest = e;
+				closestDistance = Util.getDistance(x, y, xe, ye);
+			}
+		}
+		return closest;
+	}
+
+	public Entity getClosestFarm(int x, int y) {
+		int closestDistance = 999;
+		int xe, ye;
+		Entity closest = null;
+		for(Entity e: entities){
+			xe = e.getxPos();
+			ye = e.getyPos();
+			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y && e instanceof Farm){
 				closest = e;
 				closestDistance = Util.getDistance(x, y, xe, ye);
 			}

@@ -31,13 +31,18 @@ public abstract class Profession {
 			return;
 		case 401:
 			p.setProfession(new Miner(p, 1));
-			System.out.println("test");
 			return;
 		case 402:
 			p.setProfession(new Hunter(p));
 			return;
 		case 403:
 			p.setProfession(new Founder(p));
+			return;
+		case 404:
+			p.setProfession(new Farmer(p));
+			return;
+		case 405:
+			p.setProfession(new Miner(p, 2));
 			return;
 		}
 	}

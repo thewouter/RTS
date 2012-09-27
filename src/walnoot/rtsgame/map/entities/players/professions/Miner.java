@@ -88,7 +88,14 @@ public class Miner extends Profession {
 	}
 
 	public String getName() {
-		return null;
+		switch (level) {
+		case 1:
+			return "the MinerI";
+		case 2:
+			return "the MinerII";
+		default:
+			return "the Miner";
+		}
 	}
 
 }

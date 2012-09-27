@@ -19,10 +19,11 @@ public class SchoolPopup extends ScreenPopup{
 	SchoolI owner;
 	InputHandler input;
 
-	private Button lumberJacker;
-	private Button hunter;
-	private Button founder;
-	private Button minerI ;
+	public Button lumberJacker;
+	public Button hunter;
+	public Button founder;
+	public Button minerI;
+	public Button minerII;
 	
 	LinkedList<Button> buttons = new LinkedList<Button>();
 	
@@ -37,6 +38,7 @@ public class SchoolPopup extends ScreenPopup{
 		hunter = new Button(owner, xPos + 40, yPos + 20 * 1 + 10, 120, 402, Images.buttons[7][7]);
 		founder = new Button(owner, xPos + 40, yPos + 20 * 2 + 10, 120, 403, Images.buttons[6][6]);
 		minerI = new Button(owner, xPos + 40, yPos + 20 * 3 + 10, 120, 401, Images.buttons[2][6]);
+		minerII = new Button(owner, xPos + 60, yPos + 20 * 0 + 10, 120, 405, Images.buttons[3][6]);
 		setButtons();
 	}
 	
@@ -46,6 +48,7 @@ public class SchoolPopup extends ScreenPopup{
 		buttons.add(minerI);
 		buttons.add(hunter);
 		buttons.add(founder);
+		buttons.add(minerII);
 	}
 
 	public void render(Graphics g) {
@@ -65,13 +68,18 @@ public class SchoolPopup extends ScreenPopup{
 	
 	public void update(int mouseX, int mouseY){
 		super.update(mouseX, mouseY);
-		boolean mouseDown = input.LMBTapped();
+		boolean LmouseDown = input.LMBTapped(), RMouseDown = input.RMBTapped();
 		for(Button b: buttons){
-			if(mouseDown){
+			if(LmouseDown){
 				if(b.isInButton(mouseX, mouseY)){
 					b.onSelect();
 				}
+			}else if (RMouseDown){
+				if(b.isInButton(mouseX, mouseY)){
+					b.deSelect();
+				}
 			}
+			
 		}
 	}
 	
@@ -89,7 +97,7 @@ public class SchoolPopup extends ScreenPopup{
 	
 	// PRIVATE INNER CLASS BUTTON
 	
-	private class Button{
+	public class Button{
 		int x, y, width,height;
 		BufferedImage button;
 		int amountToBuild;
@@ -97,6 +105,7 @@ public class SchoolPopup extends ScreenPopup{
 		PlayerEntity pupil = null;
 		int teller = 0;
 		private final int professionID;
+		boolean isActive = false;
 		
 		public final int TICKS_TO_TEACH;
 		
@@ -110,6 +119,10 @@ public class SchoolPopup extends ScreenPopup{
 			height = button.getHeight();
 			amountToBuild = 0;
 			TICKS_TO_TEACH = teachTime;
+		}
+		
+		public void activate(){
+			isActive = true;
 		}
 		
 		public void update(){
@@ -131,11 +144,19 @@ public class SchoolPopup extends ScreenPopup{
 		
 		public void render(Graphics g){
 			g.drawImage(button, x, y, width, height, null);
+			g.setColor(new Color(128, 128, 255, 64));
+			if(!isActive)g.fillRect(x, y, width, height);
+			
+			g.setColor(Color.WHITE);
 			Screen.font.drawLine(g, "" + amountToBuild, x + width - Screen.font.getLineWidth("" + amountToBuild), y + height - RTSFont.HEIGHT);
 		}
 		
 		public void onSelect(){
-			amountToBuild ++;
+			if(isActive)amountToBuild++;
+		}
+		
+		public void deSelect(){
+			if(isActive && amountToBuild > 0) amountToBuild--;
 		}
 		
 		public boolean isInButton(int x, int y){

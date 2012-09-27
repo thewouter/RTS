@@ -18,11 +18,20 @@ public class SchoolI extends BasicStructure {
 	public static int ID = 210;
 	public boolean isSelected = false;
 	public ArrayList<PlayerEntity> playersCollected = new ArrayList<PlayerEntity>();
-	SchoolPopup popup = new SchoolPopup(screen, image, this, screen.input);
+	public SchoolPopup popup = new SchoolPopup(screen, image, this, screen.input);
 	
 	
 	public SchoolI(Map map, GameScreen screen, int xPos, int yPos) {
 		super(map, screen, xPos, yPos, 0, 12, ID);
+		int level = screen.level;
+		
+		if(level <= 0) return;
+		popup.founder.activate();
+		popup.hunter.activate();
+		popup.lumberJacker.activate();
+		popup.minerI.activate();
+		if(level <= 1) return;
+		popup.minerII.activate();
 	}
 
 	protected int getHeadSpace() {

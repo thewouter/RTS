@@ -32,9 +32,11 @@
 	
 400-499 Professions
 	400 LumberJacker
-	401 Miner
+	401 MinerI
 	402 Hunter
 	403 Founder
+	404 Farmer
+	405 MinerII
 	
 	
 	

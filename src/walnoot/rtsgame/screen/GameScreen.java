@@ -159,22 +159,6 @@ public abstract class GameScreen extends Screen {
 				}
 			});
 			
-			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[5][6], this.bar.screen) {
-				
-				public void onLeftClick() {
-					screen.pointer = new MousePointer(map, input,screen) {
-						
-						public Entity toBuild() {
-							return new TentIStructure(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
-						}
-					};
-				}
-				
-				public String getName() {
-					return "Tent";
-				}
-			});
-			
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[7][6], this) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
@@ -189,9 +173,16 @@ public abstract class GameScreen extends Screen {
 					return "School";
 				}
 			});
-			
-			bar.buildmenu.removeButton(bar.buildmenu.getButton(1, 1));
 			pointer=null;
+			for(Entity e:map.entities){
+				if(e instanceof SchoolI){
+					SchoolI s = ((SchoolI)e);
+					s.popup.founder.activate();
+					s.popup.minerI.activate();
+					s.popup.lumberJacker.activate();
+					s.popup.hunter.activate();
+				}
+			}
 			return;
 		case 2:
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][6], this) {
@@ -207,7 +198,7 @@ public abstract class GameScreen extends Screen {
 					return "Quarry";
 				}
 			});
-			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[3][7], this) {
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][7], this) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, input, screen) {
 						public Entity toBuild() {
@@ -220,6 +211,13 @@ public abstract class GameScreen extends Screen {
 					return "Tent II";
 				}
 			}, 1);
+
+			for(Entity e:map.entities){
+				if(e instanceof SchoolI){
+					SchoolI s = ((SchoolI)e);
+					s.popup.minerII.activate();
+				}
+			}
 		}
 	}
 	
