@@ -3,6 +3,8 @@ package walnoot.rtsgame.screen;
 import java.awt.Point;
 import java.util.LinkedList;
 
+import sun.awt.geom.AreaOp.AddOp;
+
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
@@ -12,17 +14,20 @@ import walnoot.rtsgame.map.entities.DeerEntity;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
+import walnoot.rtsgame.map.entities.players.AlertComponent;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
-import walnoot.rtsgame.map.entities.players.professions.Farmer;
+import walnoot.rtsgame.map.entities.players.Soldier;
+import walnoot.rtsgame.map.entities.players.SoldierComponent;
 import walnoot.rtsgame.map.entities.players.professions.Founder;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
 import walnoot.rtsgame.map.structures.nonnatural.Farm;
-import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
+import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
 import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.menubar.Button;
+import walnoot.rtsgame.rest.Sound;
 import walnoot.rtsgame.rest.Util;
 
 public class SPGameScreen extends GameScreen {
@@ -41,8 +46,8 @@ public class SPGameScreen extends GameScreen {
 		
 		for(int i = 4;; i++){
 			if(!map.getTile(4, i).isSolid()){
-				PlayerEntity player = new PlayerEntity(map,this, 4, i, null);
-				player.setProfession(new Founder(player));
+				Soldier player = new Soldier(map,this, 4, i, null);
+				player.addSoldierComponent(new AlertComponent(player , 3));
 				selectedEntities.add(player);
 				goodYPos = i;
 				break;
@@ -55,10 +60,10 @@ public class SPGameScreen extends GameScreen {
 			}
 		};
 		
-		targetEntity = selectedEntities.getFirst();
+		//targetEntity = selectedEntities.getFirst();
 		map.addEntity(selectedEntities.getFirst());
 		
-		
+		/*
 		map.addEntity(new DeerEntity(map, this,4, goodYPos+1)); //voor de test, later weghalen
 		map.addEntity(new SheepEntity(map,this, 4, goodYPos+2)); //voor de test, later weghalen
 		map.addEntity(new TentIStructure(map,this, 4, goodYPos + 3)); //voor de test, later weghalen
@@ -66,14 +71,14 @@ public class SPGameScreen extends GameScreen {
 		map.addEntity(new TreeStructure(map,this, 4, goodYPos + 7)); //voor de test, later weghalen
 		map.addEntity(new GoldMine(map,null , 10, 10, 3));			//etc...
 		map.addEntity(new StoneMine(map, this, 4, goodYPos + 15));
-		map.addEntity(new SchoolI(map, this, 4, goodYPos + 20));
+		map.addEntity(new SchoolII(map, this, 4, goodYPos + 20));
 		map.addEntity(new Farm(map, this, 12, goodYPos + 20));
+		*/
 		
 		
 		
-		
-		translationX = -selectedEntities.getFirst().getScreenX();
-		translationY = -selectedEntities.getFirst().getScreenY();
+		//translationX = -selectedEntities.getFirst().getScreenX();
+		//translationY = -selectedEntities.getFirst().getScreenY();
 		
 		
 		
@@ -191,6 +196,9 @@ public class SPGameScreen extends GameScreen {
 		}
 		if(popup != null){
 			popup.update(input.getMouseX(), input.getMouseY());
+		}
+		if(input.LMBTapped() || input.RMBTapped()) {
+			new Sound("/res/Sounds/klick.mp3").play();
 		}
 	}
 	

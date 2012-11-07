@@ -10,13 +10,15 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.professions.Profession;
+import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
+import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
 import walnoot.rtsgame.screen.Screen;
 
 public class SchoolPopup extends ScreenPopup{
 	BufferedImage image, faceImage = Images.buttons[4][2];
 	int xPos, yPos;
-	SchoolI owner;
+	BasicStructure owner;
 	InputHandler input;
 
 	public Button lumberJacker;
@@ -27,18 +29,18 @@ public class SchoolPopup extends ScreenPopup{
 	
 	LinkedList<Button> buttons = new LinkedList<Button>();
 	
-	public SchoolPopup(Screen title, BufferedImage image, SchoolI owner, InputHandler input) {
+	public SchoolPopup(Screen title, BufferedImage image, BasicStructure owner, InputHandler input) {
 		super(title.getWidth() - (image.getWidth() / 2), title.getHeight() - (image.getHeight() / 2), image.getWidth(), image.getHeight(), title);
 		this.image = image;
 		this.input = input;
 		xPos = title.getWidth() / 2 - (image.getWidth() / 2);
 		yPos = title.getHeight() / 2 - (image.getHeight() / 2);
 		this.owner = owner;
-		lumberJacker = new Button(owner, xPos + 40, yPos + 20 * 0 + 10, 120, 400, Images.buttons[5][7]);
-		hunter = new Button(owner, xPos + 40, yPos + 20 * 1 + 10, 120, 402, Images.buttons[7][7]);
-		founder = new Button(owner, xPos + 40, yPos + 20 * 2 + 10, 120, 403, Images.buttons[6][6]);
-		minerI = new Button(owner, xPos + 40, yPos + 20 * 3 + 10, 120, 401, Images.buttons[2][6]);
-		minerII = new Button(owner, xPos + 60, yPos + 20 * 0 + 10, 120, 405, Images.buttons[3][6]);
+		lumberJacker = new Button(owner, xPos + 40, yPos + 20 * 0 + 10, 120, 400, Images.buttons[5][7],1);
+		hunter = new Button(owner, xPos + 40, yPos + 20 * 1 + 10, 120, 402, Images.buttons[7][7],1);
+		founder = new Button(owner, xPos + 60, yPos + 20 * 1 + 10, 120, 403, Images.buttons[6][6],1);
+		minerI = new Button(owner, xPos + 40, yPos + 20 * 2 + 10, 120, 401, Images.buttons[2][6],1);
+		minerII = new Button(owner, xPos + 60, yPos + 20 * 0 + 10, 120, 405, Images.buttons[3][6],1);
 		setButtons();
 	}
 	
@@ -58,12 +60,18 @@ public class SchoolPopup extends ScreenPopup{
 		for(Button b: buttons){
 			b.render(g);
 		}
-		
-		int size = owner.playersCollected.size();
+		int size = 0;
+		if(owner instanceof SchoolI)size = ((SchoolI)owner).playersCollected.size();
+		else if (owner instanceof SchoolII){
+			size = ((SchoolII)owner).playersCollected.size();
+			g.setColor(Color.WHITE);
+			Screen.font.drawBoldLine(g, ""+((SchoolII)owner).Knowledge, xPos + width - 15, yPos + 10, Color.BLACK);
+		}
 		if(size > 6) size = 6;
 		for(int i = 0; i < size; i++){
 			g.drawImage(faceImage, xPos + 5, yPos + 5 + i * 16, null);
 		}
+		
 	}
 	
 	public void update(int mouseX, int mouseY){
@@ -101,18 +109,22 @@ public class SchoolPopup extends ScreenPopup{
 		int x, y, width,height;
 		BufferedImage button;
 		int amountToBuild;
-		SchoolI owner;
+		SchoolI ownerA;
+		SchoolII ownerB;
 		PlayerEntity pupil = null;
 		int teller = 0;
 		private final int professionID;
 		boolean isActive = false;
+		private int knowledge;
 		
 		public final int TICKS_TO_TEACH;
 		
-		private Button(SchoolI owner, int x, int y,int teachTime, int professionID, BufferedImage image){
-			this.owner = owner;
+		private Button(BasicStructure owner, int x, int y,int teachTime, int professionID, BufferedImage image, int knowledge){
+			if(owner instanceof SchoolI) this.ownerA = (SchoolI) owner;
+			else if (owner instanceof SchoolII) this.ownerB = (SchoolII) owner;
 			this.x = x;
 			this.y = y;
+			this.knowledge = knowledge;
 			this.professionID = professionID;
 			button = image;
 			width = button.getWidth();
@@ -130,13 +142,22 @@ public class SchoolPopup extends ScreenPopup{
 				teller++;
 				if(teller > TICKS_TO_TEACH){ // Time to teach!
 					Profession.setProfession(professionID, pupil);
-					owner.releasePupil(pupil);
+					if(ownerA != null)ownerA.releasePupil(pupil);
+					else if (ownerB != null) {
+						ownerB.releasePupil(pupil);
+						ownerB.Knowledge += knowledge;
+					}
 					pupil = null;
 					
 				}
-			}else if(amountToBuild >= 1 && owner.playersCollected.size() >=1){
-				pupil = owner.getPupil();
-				owner.playersCollected.remove(pupil);
+			}else if(ownerA != null && amountToBuild >= 1 && ownerA.playersCollected.size() >=1){
+				pupil = ownerA.getPupil();
+				ownerA.playersCollected.remove(pupil);
+				amountToBuild --;
+				
+			}else if(ownerB != null && amountToBuild >= 1 && ownerB.playersCollected.size() >=1){
+				pupil = ownerB.getPupil();
+				ownerB.playersCollected.remove(pupil);
 				amountToBuild --;
 				
 			}

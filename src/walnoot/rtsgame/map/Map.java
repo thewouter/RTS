@@ -281,6 +281,23 @@ public class Map {
 		toBeRemoved.add(getEntity(x, y));
 	}
 	
+	public LinkedList<Entity> getEntities(int x, int y , int radius, Entity ... exept){
+		LinkedList<Entity> except = new LinkedList<Entity>();
+		LinkedList<Entity> result = new LinkedList<Entity>();
+		for (Entity e : exept){
+			except.add(e);
+		}
+		
+		for(Entity e: entities ){
+			if(Util.abs(Util.getDistance(x, y, e.xPos , e.yPos )) <= radius && !except.contains(e)){
+				result.add(e);
+			}
+		}
+		
+		
+		return result;
+	}
+	
 	public Entity getClosestMine(int x, int y){
 		int closestDistance = 999;
 		int xe, ye;

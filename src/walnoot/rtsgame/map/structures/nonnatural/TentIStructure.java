@@ -77,24 +77,4 @@ public class TentIStructure extends BasicStructure {
 	public int getCosts(){
 		return 60;
 	}
-	
-	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
-		EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
-		popup.addOption(new Option("switch",popup) {
-			public void onClick() {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		popup.addOption(new Option("" + players.size() ,popup) {
-			
-			@Override
-			public void onClick() {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		screen.setEntityPopup(popup);
-		return false;
-	}
 }

@@ -88,6 +88,7 @@ public class RTSComponent extends Canvas implements Runnable {
 		int numTicks = 0, numFrames = 0;
 
 		//if(Options.SOUND_ON)amplifybackground();
+		
 		//if(Options.startFullScreen) fullScreenManager.setFullScreen();
 		
 		while(running){

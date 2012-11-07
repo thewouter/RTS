@@ -156,7 +156,8 @@ public class PlayerEntity extends MovingEntity {
 	}
 	
 	public String getName(){
-		return name;
+		if(profession == null) return name;
+		return name + " " + profession.getName();
 	}
 	
 	public void setSelectedOption(int index){
@@ -177,7 +178,6 @@ public class PlayerEntity extends MovingEntity {
 	
 	public void setProfession(Profession p){
 		profession = p;
-		name = Util.splitString(name).get(0) + " " + p.getName();
 	}
 
 }

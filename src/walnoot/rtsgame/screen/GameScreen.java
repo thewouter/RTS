@@ -12,6 +12,7 @@ import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
+import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
 import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
 import walnoot.rtsgame.map.structures.nonnatural.TentIIStructure;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
@@ -69,7 +70,7 @@ public abstract class GameScreen extends Screen {
 		}else if(!selectedEntities.isEmpty()){
 			font.drawBoldLine(g, "Multiple Select: " + selectedEntities.size(), 20, getHeight() - 30, Color.BLACK);
 		}
-		font.drawBoldLine(g, getMapX() + ":" + getMapY(), 20, 20, Color.BLACK);
+		font.drawBoldLine(g, input.getMouseX() + ":" + input.getMouseY(), 20, 20, Color.BLACK);
 		
 		if(popup!= null){
 			popup.render(g);
@@ -101,13 +102,21 @@ public abstract class GameScreen extends Screen {
 	public void removePopup(){
 		entityPopup = null;
 	}
-	
+
 	public int getMapX(){
 		return Util.getMapX(input.getMouseX() - translationX, input.getMouseY() - translationY);
 	}
 	
 	public int getMapY(){
 		return Util.getMapY(input.getMouseX() - translationX, input.getMouseY() - translationY);
+	}
+	
+	public int getMapX(int x, int y){
+		return Util.getMapX(x - translationX, y - translationY);
+	}
+	
+	public int getMapY(int x, int y){
+		return Util.getMapY(x - translationX, y - translationY);
 	}
 	
 	public void deselectEntity(){
@@ -177,7 +186,11 @@ public abstract class GameScreen extends Screen {
 			for(Entity e:map.entities){
 				if(e instanceof SchoolI){
 					SchoolI s = ((SchoolI)e);
-					s.popup.founder.activate();
+					s.popup.minerI.activate();
+					s.popup.lumberJacker.activate();
+					s.popup.hunter.activate();
+				}else if(e instanceof SchoolII){
+					SchoolII s = ((SchoolII)e);
 					s.popup.minerI.activate();
 					s.popup.lumberJacker.activate();
 					s.popup.hunter.activate();
@@ -216,6 +229,11 @@ public abstract class GameScreen extends Screen {
 				if(e instanceof SchoolI){
 					SchoolI s = ((SchoolI)e);
 					s.popup.minerII.activate();
+					s.popup.founder.activate();
+				}else if(e instanceof SchoolII){
+					SchoolII s = ((SchoolII)e);
+					s.popup.minerII.activate();
+					s.popup.founder.activate();
 				}
 			}
 		}
