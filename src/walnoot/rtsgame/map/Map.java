@@ -19,6 +19,7 @@ import walnoot.rtsgame.map.structures.nonnatural.Farm;
 import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.rest.Util;
+import walnoot.rtsgame.screen.GameScreen;
 
 public class Map {
 	public Tile[][] surface;
@@ -249,6 +250,27 @@ public class Map {
 				}
 			}else{
 				if(e.getxPos() == x && e.getyPos() == y) result.add(e);
+			}
+		}
+		return result;
+	}
+	
+	public LinkedList<Entity> getEntities(int x1, int y1 , int x2, int y2, Dimension translation){
+		/**
+		 * IN SCREEN COORDINATS!!
+		 */
+		LinkedList<Entity> result = new LinkedList<Entity>();
+		int xMin = Math.min(x1, x2);
+		int yMin = Math.min(y1, y2);
+		int xMax = Math.max(x1, x2);
+		int yMax = Math.max(y1, y2);
+		
+		for (Entity e:entities ){
+			int x = e.getScreenX() + translation.width;
+			int y = e.getScreenY() + translation.height;
+			
+			if(x < xMax && x > xMin && y < yMax && y > yMin){
+				result.add(e);
 			}
 		}
 		return result;

@@ -21,6 +21,8 @@ public class StatusBar extends walnoot.rtsgame.menubar.MenuBar{
 		this.input = input;
 		this.screen = screen;
 		
+		System.out.println("statusbar");
+		
 		addButton(new MenubarTextField(this) {
 			public String getText() {
 				return "LvL";

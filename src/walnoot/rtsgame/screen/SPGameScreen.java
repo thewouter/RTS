@@ -1,5 +1,6 @@
 package walnoot.rtsgame.screen;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.util.LinkedList;
 
@@ -47,7 +48,7 @@ public class SPGameScreen extends GameScreen {
 		for(int i = 4;; i++){
 			if(!map.getTile(4, i).isSolid()){
 				Soldier player = new Soldier(map,this, 4, i, null);
-				player.addSoldierComponent(new AlertComponent(player , 3));
+				player.addSoldierComponent(new AlertComponent(player , 1));
 				selectedEntities.add(player);
 				goodYPos = i;
 				break;
@@ -62,6 +63,9 @@ public class SPGameScreen extends GameScreen {
 		
 		//targetEntity = selectedEntities.getFirst();
 		map.addEntity(selectedEntities.getFirst());
+		PlayerEntity p = new PlayerEntity(map, this, 10, 10, null);
+		p.setProfession(new Founder(p));
+		map.addEntity(p);
 		
 		/*
 		map.addEntity(new DeerEntity(map, this,4, goodYPos+1)); //voor de test, later weghalen
@@ -139,6 +143,16 @@ public class SPGameScreen extends GameScreen {
 				}else if( entityPopup == null ){
 					selectedEntities.addAll(map.getEntities(getMapX(), getMapY()));
 				}
+				
+				
+				
+				
+			}
+			if(input.isDragging()){
+				int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
+				selectedEntities.clear();
+				selectedEntities.addAll(map.getEntities(x1, y1, x2, y2, new Dimension(translationX, translationY)));
+				System.out.println("dragging...");
 			}
 			
 			if(entityPopup != null){

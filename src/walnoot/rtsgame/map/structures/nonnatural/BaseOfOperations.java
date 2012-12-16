@@ -22,6 +22,7 @@ public class BaseOfOperations extends BasicStructure {
 	
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
 		if(entityClicked != this) return true;
+		
 		screen.inventory.showInventory();
 		
 		return false;

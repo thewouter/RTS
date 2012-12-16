@@ -26,6 +26,7 @@ import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
 import walnoot.rtsgame.rest.Inventory;
 import walnoot.rtsgame.rest.MousePointer;
+import walnoot.rtsgame.rest.Sound;
 import walnoot.rtsgame.rest.Util;
 
 	public class MPGameScreen extends GameScreen {
@@ -74,44 +75,8 @@ import walnoot.rtsgame.rest.Util;
 		statusBar = new StatusBar(input, this);
 		
 		listener.start();
-	}
-	
-	public void render(Graphics g){
-		Point translation = new Point((int) translationX, (int) translationY);
 		
-		map.render(g, translation, new Dimension(getWidth(), getHeight()), getWidth(), getHeight());
-		bar.render(g, getWidth(), getHeight());
-		statusBar.render(g, getWidth(), getHeight());
 		
-		g.translate(translation.x, translation.y);
-		
-		if(entityPopup != null) entityPopup.render(g);
-		g.translate(-translation.x, -translation.y);
-		
-		g.setColor(Color.WHITE);
-		
-		if(selectedEntities.size() == 1){
-			font.drawBoldLine(g, selectedEntities.getFirst().getName(), 20, getHeight() - 40, Color.BLACK);
-			font.drawBoldLine(g, "Health: " + selectedEntities.getFirst().getHealth(), 20, getHeight() - 30, Color.BLACK);
-		}else if(!selectedEntities.isEmpty()){
-			font.drawBoldLine(g, "Multiple Select: " + selectedEntities.size(), 20, getHeight() - 30, Color.BLACK);
-		}
-		
-		if(popup!= null){
-			popup.render(g);
-		}
-		
-		if(pointer != null){
-			pointer.render(g);
-		}
-		
-		if(input.escape.isTapped()){
-			component.setTitleScreen();
-		}
-	}
-	
-	public Entity getSelectedEntity(){
-		return selectedEntities.getFirst();
 	}
 	
 	public void save(){
@@ -136,60 +101,75 @@ import walnoot.rtsgame.rest.Util;
 			if(input.down.isPressed()) translationY -= 5;
 			if(input.left.isPressed()) translationX += 5;
 			if(input.right.isPressed()) translationX -= 5;
-			
+	
 			map.update((int) Math.floor(translationX), (int) Math.floor(translationY), getWidth(), getHeight());
-			
+
 			bar.update(getWidth(), getHeight());
+			
 			statusBar.update(getWidth(), getHeight());
-			
+		
 			if(input.space.isPressed() && selectedEntities != null && !selectedEntities.isEmpty()) targetEntity = selectedEntities.getFirst();
-			
+		
 			if(targetEntity != null){
 				int dx = targetEntity.getScreenX() + (translationX - getWidth() / 2);
 				int dy = targetEntity.getScreenY() + (translationY - getHeight() / 2);
 				
 				translationX -= dx / 10;
 				translationY -= dy / 10;
-				
+			
 				if(Util.abs(dx) < 10 && Util.abs(dy) < 10) targetEntity = null;
 			}
-	
+		
 			if(input.LMBTapped()){
 				if(entityPopup != null){
 					entityPopup.onLeftClick(input.getMouseX(), input.getMouseY());
-				}
-				selectedEntities.clear();
+				}else selectedEntities.clear();
 				
 				if(bar.isInBar(input.getMouseX(), input.getMouseY())){
-				
+					
 				}else if(entityPopup != null && !entityPopup.isInPopup(input.getMouseX(), input.getMouseY()) ){
+					selectedEntities.clear();
 					selectedEntities.addAll(map.getEntities(getMapX(), getMapY()));
 				}else if( entityPopup == null ){
 					selectedEntities.addAll(map.getEntities(getMapX(), getMapY()));
 				}
+				
+				
+				
+				
 			}
-			
-			
+			if(input.isDragging()){
+				int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
+				selectedEntities.clear();
+				selectedEntities.addAll(map.getEntities(x1, y1, x2, y2, new Dimension(translationX, translationY)));
+			}
 			
 			if(entityPopup != null){
 				entityPopup.update(input.getMouseX(), input.getMouseY());
 				if(!selectedEntities.contains(entityPopup.getOwner())) entityPopup = null;
-			}	
+			}
+			
+			if(pointer != null){
+				pointer.update(); 
+				if(bar.showPopup == false){
+					pointer = null;
+				}
+			}
 			
 			if(input.RMBTapped()){
-			
+				
 				Entity rightClicked = map.getEntity(getMapX(), getMapY()); //the Entity that is right clicked, if any
-			
 				boolean canMove = true;
-				if(rightClicked != null && !selectedEntities.isEmpty()) canMove = selectedEntities.getFirst().onRightClick(rightClicked, this, input);
+				
+				if(rightClicked != null && !selectedEntities.isEmpty()) {
+					canMove = selectedEntities.getFirst().onRightClick(rightClicked, this, input);
+				}
 				
 				if(canMove){
 					if(!selectedEntities.isEmpty() && selectedEntities.getFirst() instanceof MovingEntity){
-						//for(Entity m:selectedEntities){
-							if(((MovingEntity)selectedEntities.getFirst()).isMovable()){
-								((MovingEntity) selectedEntities.getFirst()).moveTo(new Point(getMapX(), getMapY()));
-								entityPopup = null;
-							//}	
+						if(((MovingEntity)selectedEntities.getFirst()).isMovable()){
+							((MovingEntity) selectedEntities.getFirst()).moveTo(new Point(getMapX(), getMapY()));
+							entityPopup = null;
 						}
 					}
 				}
@@ -200,24 +180,30 @@ import walnoot.rtsgame.rest.Util;
 			}
 			
 			selectedEntities.removeAll(remove);
-			if(pointer != null){
-				pointer.update(); 
-				if(bar.showPopup == false){
-					pointer = null;
-				}
-			}
 			
-		
 		}
 		if (input.p.isTapped()&& popup == null){
 			if(!pause)pause();
 			else dePause();
 		}
+		if(input.escape.isTapped()){
+			if(popup == null)component.setTitleScreen();
+			else setPopup(null);
+		}
 		if(popup != null){
 			popup.update(input.getMouseX(), input.getMouseY());
 		}
-		if(input.escape.isTapped()) quit();
+		if(input.LMBTapped() || input.RMBTapped()) {
+			new Sound("/res/Sounds/klick.mp3").play();
+		}
 	}
+	
+	public void render(Graphics g){
+		Point translation = new Point((int) translationX, (int) translationY);
+		map.render(g, translation, new Dimension(getWidth(), getHeight()), getWidth(), getHeight());
+		super.render(g);
+	}
+	
 
 	public void setEntityPopup(EntityPopup popup){
 		this.entityPopup = popup;
@@ -244,7 +230,7 @@ import walnoot.rtsgame.rest.Util;
 		popup = new ScreenPopup((getWidth()-84)/2, (getHeight() - 20)/2, 84, 20, this);
 		popup.addPart(new ScreenPopupButton("play", popup, input) {
 			public void onLeftClick() {
-				dePause();			
+				dePause();
 			}
 		});
 	}

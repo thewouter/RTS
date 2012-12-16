@@ -3,6 +3,8 @@ package walnoot.rtsgame.multiplayer.client;
 import java.util.ArrayList;
 
 import walnoot.rtsgame.map.entities.Entity;
+import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.professions.Founder;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.rest.Util;
 
@@ -26,10 +28,6 @@ public class MapLoader extends Thread {
 		length = mapInStrings.size();
 		int mapSize = Util.parseInt(mapInStrings.get(1));
 		counter = 3;
-		if(mapSize == 0){
-			System.out.println(mapInStrings);
-			System.out.println(mapInString);
-		}
 		for(int x = 0 ; x < mapSize ; x++){
 			for(int y = 0; y < mapSize; y++, counter++){
 				String s = mapInStrings.get(counter);
@@ -57,6 +55,10 @@ public class MapLoader extends Thread {
 		}
 		
 		int amountEntities = Util.parseInt(mapInStrings.get(counter++));
+		PlayerEntity p = new PlayerEntity(map, null, 10, 10, null);
+		p.setProfession(new Founder(p));
+		map.addEntityFromHost(p);
+		
 		
 		for(int i = 0; i < amountEntities; i++){
 			String entity = mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++); 
@@ -64,7 +66,6 @@ public class MapLoader extends Thread {
 			map.addEntityFromHost(e);
 		}
 		
-		map.hasLoaded = true;
 		input.send("nothing usefull ;)");
 		System.out.println("send");
 	}

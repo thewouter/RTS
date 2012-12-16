@@ -11,11 +11,14 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
+import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.professions.Founder;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
 import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
 import walnoot.rtsgame.map.structures.nonnatural.TentIIStructure;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
+import walnoot.rtsgame.menubar.Button;
 import walnoot.rtsgame.menubar.HomeBar;
 import walnoot.rtsgame.menubar.MenuBarPopupButton;
 import walnoot.rtsgame.menubar.StatusBar;
@@ -45,7 +48,11 @@ public abstract class GameScreen extends Screen {
 	
 	public int level = 0;
 	
+	private Color gameColor = Color.CYAN;
+	
 	public Inventory inventory = new Inventory(this);
+	
+	public Button levelUpButton;
 
 	public GameScreen(RTSComponent component, InputHandler input) {
 		super(component, input);
@@ -53,12 +60,20 @@ public abstract class GameScreen extends Screen {
 		bar = new HomeBar(input, this);
 		statusBar = new StatusBar(input,this);
 		
+		levelUpButton = new Button(Images.buttons[2][1], statusBar) {
+			public void onLeftClick() {
+				levelUp();
+			}
+		};
+		
+		/**/
 	}
 	
 	public void render(Graphics g){
-		Point translation = new Point((int) translationX, (int) translationY);
 		
-		map.render(g, translation, new Dimension(getWidth(), getHeight()), getWidth(), getHeight());
+		
+		Point translation = new Point((int) translationX, (int) translationY);
+		if(map != null) map.render(g, translation, new Dimension(getWidth(), getHeight()), getWidth(), getHeight());
 		bar.render(g, getWidth(), getHeight());
 		statusBar.render(g, getWidth(), getHeight());
 		if(entityPopup != null) entityPopup.render(g);
@@ -71,6 +86,23 @@ public abstract class GameScreen extends Screen {
 			font.drawBoldLine(g, "Multiple Select: " + selectedEntities.size(), 20, getHeight() - 30, Color.BLACK);
 		}
 		font.drawBoldLine(g, input.getMouseX() + ":" + input.getMouseY(), 20, 20, Color.BLACK);
+		
+		if(input.isDragging()){
+			int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
+			int xMin = Math.min(x1, x2);
+			int yMin = Math.min(y1, y2);
+			int xMax = Math.max(x1, x2);
+			int yMax = Math.max(y1, y2);
+			g.setColor(new Color(0,0,0,28));
+			g.fillRect(xMin, yMin, xMax - xMin, yMax - yMin);
+			
+		}
+		
+		for(Entity e:selectedEntities){
+			g.translate(translationX, translationY);
+			e.renderSelected(g);
+			g.translate(-translationX, -translationY);
+		}
 		
 		if(popup!= null){
 			popup.render(g);
@@ -145,9 +177,17 @@ public abstract class GameScreen extends Screen {
 		}else pause = true;
 	}
 	
+	public Color getColor(){
+		return gameColor;
+	}
+	
 	public boolean isOnlyOnMap(int x, int y){
 		if(entityPopup != null)return (x >0 && x < getWidth() && y > 0 && y < getHeight() && !bar.isInBar(x, y) && !statusBar.isInBar(x, y) && entityPopup.isInPopup(x, y));
 		return (x >0 && x < getWidth() && y > 0 && y < getHeight() && !bar.isInBar(x, y) && !statusBar.isInBar(x, y));
+	}
+	
+	public boolean isSelected(Entity e){
+		return selectedEntities.contains(e);
 	}
 	
 	public void levelUp(){

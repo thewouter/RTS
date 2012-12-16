@@ -24,6 +24,37 @@ public class Util {
 	public static final Random RANDOM = new Random(2222);
 	public static final NameGenerator NAME_GEN = new NameGenerator();
 	
+	public static int getDistance(Entity a, Entity b){
+		int x1 = a.getxPos();
+		int y1 = a.getyPos();
+		int x2 = b.getxPos();
+		int y2 = b.getyPos();
+		return getDistance(x1, y1, x2, y2);
+	}
+	
+	public static int getDirectionInDegrees(Entity a, Entity b){
+		int x = b.getScreenX() - a.getScreenX();
+		int y =-( b.getScreenY() - a.getScreenY());
+		
+		int reminder = 0;
+		if(x >= 0 && y <= 0){
+			reminder = 90;
+		}else if(x < 0 && y <= 0){
+			reminder = 180;
+		}else if(x < 0 && y >= 0){
+			reminder = 270;
+		}else{
+			return (int) Math.toDegrees(Math.atan2(y, x));
+		}
+		
+		x = abs(x);
+		y = abs(y);
+		
+		
+		return (int) (reminder + 90 - Math.toDegrees(Math.atan2(y, x)));
+		
+	}
+	
 	public static int getScreenX(int mapX, int mapY){
 		return (mapX - mapY) * (-Tile.WIDTH / 2);
 	}

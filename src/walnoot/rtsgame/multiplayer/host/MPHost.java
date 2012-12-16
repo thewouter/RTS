@@ -59,7 +59,7 @@ public class MPHost extends Screen{
 		entitymoves = "";
 		entityDeletes = "";
 		for(Player p: players){
-			p.update(toSend);
+			//p.update(toSend);
 		}
 		
 		map.update(translationX, translationY, component.getWidth(), component.getHeight());

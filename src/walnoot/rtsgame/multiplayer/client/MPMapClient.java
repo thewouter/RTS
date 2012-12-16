@@ -14,7 +14,7 @@ import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.Screen;
 
 public class MPMapClient extends Map{
-	boolean hasLoaded = false;
+	private boolean hasLoaded = false;
 	private BufferedImage grass;
 	private BufferedImage grass2;
 	private boolean[][] tiles = new boolean[32][32];
@@ -36,29 +36,19 @@ public class MPMapClient extends Map{
 			}
 		}
 		
+		setHasLoaded(true);
 	}
 	
 	public void update(int translationX, int translationY,int screenWidth,int screenHeight){
-		if(!hasLoaded){
+		if(!isHasLoaded()){
 			return;
 		}
+		super.update(translationX, translationY, screenWidth, screenHeight);
 		
-		for(Entity e: entities){
-			if(e.xPos + e.yPos + 2 > - ((translationY) / 8) && e.xPos + e.yPos - 1 < - ((translationY - screenHeight - 128)/ 8) && e.xPos - e.yPos - 3 < ((translationX) / 16) && e.xPos - e.yPos + 1 > ((translationX - screenWidth) / 16)) {
-				e.update();
-			}else if(e instanceof MovingEntity){
-				e.update();
-			}
-		}
-		
-		entities.removeAll(toBeRemoved);
-		toBeRemoved.clear();
-		entities.addAll(toBeAdded);
-		toBeAdded.clear();
 	}
 	
 	public void render(Graphics g, Point translation, Dimension screenSize, int screenWidth, int screenHeight){
-		if(!hasLoaded){
+		if(!isHasLoaded()){
 			for(int x = 0; x < tiles.length; x++){
 				for(int y = 0; y < tiles[x].length; y++){
 					if(tiles[x][y]){
@@ -100,5 +90,13 @@ public class MPMapClient extends Map{
 	
 	public void removeEntity(Entity u){
 		// MPMapClient may remove entities.
+	}
+
+	public boolean isHasLoaded() {
+		return hasLoaded;
+	}
+
+	public void setHasLoaded(boolean hasLoaded) {
+		this.hasLoaded = hasLoaded;
 	}
 }

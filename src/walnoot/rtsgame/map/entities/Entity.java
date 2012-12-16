@@ -1,5 +1,6 @@
 package walnoot.rtsgame.map.entities;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import walnoot.rtsgame.InputHandler;
@@ -35,6 +36,13 @@ public abstract class Entity implements Cloneable {
 	public abstract String getName();
 	public abstract int getCosts();
 	
+	
+	public void renderSelected(Graphics g){
+		if(screen != null) g.setColor(screen.getColor());
+		else g.setColor(Color.GREEN);
+		g.drawOval(getScreenX(), getScreenY(), Tile.getWidth(), Tile.getHeight());
+		render(g);
+	}
 	/**
 	 * @return extra additional information for save
 	 */
