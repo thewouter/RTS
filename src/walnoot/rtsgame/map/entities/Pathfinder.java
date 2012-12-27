@@ -18,36 +18,39 @@ public class Pathfinder extends Thread {
 	private final MovingEntity requester;
 	private final Tile[][] currentMap;
 	private final Map map;
+	private final ArrayList<Entity> copyOfEntities;
 	
 	private Node finalNode;
 	
-	public static void moveTo(MovingEntity requester, Point start, Point goal, Map map){
+	public static void moveTo(MovingEntity requester, Point start, Point goal, Map map, ArrayList<Entity> copyOfEntities){
 		if(map.isSolid(goal)){
-			//System.out.println("Goal is unreachable!");
 			return;
 		}
 		
-		new Pathfinder(requester, start, goal, map.getSurface(), map).start();
+		new Pathfinder(requester, start, goal, map.getSurface(), map, copyOfEntities).start();
 	}
 	
-	private Pathfinder(MovingEntity requester ,Point start, Point goal, Tile[][] currentMap, Map map){
+	private Pathfinder(MovingEntity requester ,Point start, Point goal, Tile[][] currentMap, Map map, ArrayList<Entity> copyOfEntities){
 		this.start = start;
 		this.goal = goal;
 		this.currentMap = currentMap;
 		this.requester = requester;
 		this.map = map;
+		this.copyOfEntities = copyOfEntities;
 	}
 	
 	public void run(){
 		requester.setNextDirections(getPath());
+		requester.setEndPoint(goal);
+		
 		if(requester.map instanceof MPMapHost){
 			MPMapHost map = ((MPMapHost) requester.map);
-			map.host.entityMoved(requester.map.entities.indexOf(requester), start.x, start.y, goal.x, goal.y);
+			map.host.entityMoved(requester, goal.x, goal.y);
 		}
 		
 	}
 	
-	private LinkedList<Direction> getPath(){
+	private synchronized LinkedList<Direction> getPath(){
 		LinkedList<Direction> result = new LinkedList<Direction>();
 		
 		ArrayList<Node> openlist = new ArrayList<Node>();
@@ -180,7 +183,7 @@ public class Pathfinder extends Thread {
 				Point newPosition = dir.nextPoint(posX, posY);
 				if(newPosition.x < 0 || newPosition.y < 0 || newPosition.x >= currentMap.length || newPosition.y >= currentMap[0].length) {
 				}else{
-					if(!currentMap[newPosition.x][newPosition.y].isSolid() && map.getEntity(newPosition.x, newPosition.y) == null){
+					if(!currentMap[newPosition.x][newPosition.y].isSolid() && map.getEntity(newPosition.x, newPosition.y, copyOfEntities) == null){
 						/*
 					 	* if(newPosition.equals(goal)) { finalNode = new Node(this,
 					 	* newPosition); break; }

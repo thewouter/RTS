@@ -31,7 +31,7 @@ public class LumberJacker extends Profession {
 				}
 			}
 		}
-		if(isChopping && !owner.isMoving() && (closestTree  == null || !owner.map.entities.contains(closestTree))){
+		if(isChopping && !owner.isMoving() && (closestTree  == null || !owner.map.getEntities().contains(closestTree))){
 			moveToNearestTree();
 			
 		}

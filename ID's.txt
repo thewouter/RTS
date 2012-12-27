@@ -40,7 +40,10 @@
 	
 	
 	
-	
+	MP messages:
+	 starting with:
+	 	1:		message;
+	 	2: 		entity movement;
 	
 	
 	

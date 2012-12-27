@@ -1,25 +1,29 @@
 package walnoot.rtsgame.multiplayer.client;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import walnoot.rtsgame.map.entities.Entity;
+import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.professions.Founder;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.rest.Util;
+import walnoot.rtsgame.screen.MPGameScreen;
 
 public class MapLoader extends Thread {
 	
 	String mapInString;
 	MPMapClient map;
 	InputListener input;
-	
+	MPGameScreen screen;
 	int counter, length = 1;
 	
-	public MapLoader(String mapInString, MPMapClient map, InputListener input){
+	public MapLoader(String mapInString, MPMapClient map, InputListener input, MPGameScreen screen){
 		this.map = map;
 		this.mapInString = mapInString;
 		this.input = input;
+		this.screen = screen;
 		
 	}
 	
@@ -55,19 +59,21 @@ public class MapLoader extends Thread {
 		}
 		
 		int amountEntities = Util.parseInt(mapInStrings.get(counter++));
-		PlayerEntity p = new PlayerEntity(map, null, 10, 10, null);
-		p.setProfession(new Founder(p));
-		map.addEntityFromHost(p);
-		
 		
 		for(int i = 0; i < amountEntities; i++){
-			String entity = mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++); 
-			Entity e = Util.getEntity(entity, map);
+			String entity = mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++); 
+			Entity e = Util.getEntity(map, entity, screen);
 			map.addEntityFromHost(e);
 		}
 		
-		input.send("nothing usefull ;)");
-		System.out.println("send");
+		int amountMovements = Util.parseInt(mapInStrings.get(counter++));
+		
+		for (int i = 0; i < amountMovements; i++){
+			int uniqueNumber = Util.parseInt(mapInStrings.get(counter++));
+			((MovingEntity)map.getEntity(uniqueNumber)).moveToFromHost(new Point(Util.parseInt(mapInStrings.get(counter++)),Util.parseInt(mapInStrings.get(counter++))));
+		}
+		
+		input.send("1 Received!");
 	}
 	
 	public int checkProgress() {

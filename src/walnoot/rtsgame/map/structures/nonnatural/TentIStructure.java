@@ -45,7 +45,7 @@ public class TentIStructure extends BasicStructure {
 		LinkedList<PlayerEntity> toBeRemoved = new LinkedList<PlayerEntity>();
 		
 		for(PlayerEntity p : players){
-			if(!map.entities.contains(p) && !map.notOnMap.contains(p)){
+			if(!map.getEntities().contains(p) && !map.notOnMap.contains(p)){
 				toBeRemoved.add(p);
 				//System.out.println(p);
 			}

@@ -152,7 +152,6 @@ public class SPGameScreen extends GameScreen {
 				int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
 				selectedEntities.clear();
 				selectedEntities.addAll(map.getEntities(x1, y1, x2, y2, new Dimension(translationX, translationY)));
-				System.out.println("dragging...");
 			}
 			
 			if(entityPopup != null){
@@ -187,7 +186,7 @@ public class SPGameScreen extends GameScreen {
 			}
 			LinkedList<Entity> remove = new LinkedList<Entity>();
 			for(Entity e: selectedEntities){
-				if(!map.entities.contains(e)) remove.add(e);
+				if(!map.getEntities().contains(e)) remove.add(e);
 			}
 			
 			

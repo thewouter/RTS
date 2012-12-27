@@ -6,6 +6,11 @@ import java.util.LinkedList;
 
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
+import walnoot.rtsgame.map.entities.Entity;
+import walnoot.rtsgame.map.entities.MovingEntity;
+import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
+import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
+import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.Screen;
 
 
@@ -51,17 +56,6 @@ public class MPHost extends Screen{
 	}
 	
 	public void update(){
-		toSend = 0 + " " + moves + entitymoves + " " + adds + entityAdds + " " + deletes + entityDeletes;
-		adds = 0;
-		moves = 0;
-		deletes = 0;
-		entityAdds = "";
-		entitymoves = "";
-		entityDeletes = "";
-		for(Player p: players){
-			//p.update(toSend);
-		}
-		
 		map.update(translationX, translationY, component.getWidth(), component.getHeight());
 		
 		if(input.up.isPressed()) translationY += 5;
@@ -75,12 +69,19 @@ public class MPHost extends Screen{
 		players.addAll(toAdd);
 		toRemove.clear();
 		toAdd.clear();
+		if(input.y.isTapped()){ // test for moving
+			System.out.println("y");
+			for(Player p:players){
+				p.update("2 0 10 10 12 12");
+			}
+		}
 	}
 	
-	public void entityMoved(int index, int oldX, int oldY, int newX, int newY){
-		String entitymoves = " " + index + " " + oldX + " " + oldY + " " + newX + " " + newY; 
-		this.entitymoves = this.entitymoves + entitymoves;
-		moves++;
+	public void entityMoved(Entity e, int newX, int newY){
+		String toSend = "2 " + e.uniqueNumber + " " + newX + " " + newY; 
+		for(Player p: players){
+			p.update(toSend);
+		}
 	}
 	
 	public void entityAdded(int ID, int xPos, int yPos){
@@ -96,6 +97,26 @@ public class MPHost extends Screen{
 
 	public void render(Graphics g) {
 		map.render(g, new Point(translationX, translationY), component.getSize(), component.getWidth(), component.getHeight());
+	}
+
+	public void messageReceived(String message) {
+		System.out.println(message);
+		switch(Util.parseInt(Util.splitString(message).get(0))){
+		case 2:
+			moveEntity(message);
+			break;
+		case 1:
+			for(Player p: players){
+				p.sendTextMessage(message);
+			}
+		}
+	}
+
+	private void moveEntity(String message){
+		Entity e = map.getEntity(Util.parseInt(Util.splitString(message).get(1)));
+		if(e instanceof MovingEntity){
+			((MovingEntity)e).moveTo(new Point(Util.parseInt(Util.splitString(message).get(2)),Util.parseInt(Util.splitString(message).get(3))));
+		}
 	}
 	
 }

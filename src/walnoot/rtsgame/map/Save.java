@@ -53,10 +53,10 @@ public class Save {
 				}
 			}
 			
-			data_out.writeInt(map.entities.size());		//the amount of entities
+			data_out.writeInt(map.getEntities().size());		//the amount of entities
 			
 			
-			for(Entity e: map.entities){		  		// then the Entities
+			for(Entity e: map.getEntities()){		  		// then the Entities
 				data_out.writeInt(e.ID);
 				data_out.writeInt(e.getxPos());
 				data_out.writeInt(e.getyPos());

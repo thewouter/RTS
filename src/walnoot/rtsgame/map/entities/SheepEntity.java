@@ -8,6 +8,7 @@ import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tiles.Tile;
+import walnoot.rtsgame.multiplayer.client.MPMapClient;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.rest.Util;
@@ -18,7 +19,7 @@ public class SheepEntity extends MovingEntity {
 	
 	private Animation sheepAnimation;
 	private Animation currentAnimation;
-	public static final int WALK_RANGE = 6, WALK_CHANGE = 5, TICKS_PER_SHEEP = 5, APROX_LIFETIME_IN_TICKS = 60000, ID = 101;
+	public static final int WALK_RANGE = 6, WALK_CHANGE = 1, TICKS_PER_SHEEP = 5, APROX_LIFETIME_IN_TICKS = 60000, ID = 101;
 
 	public SheepEntity(Map map, GameScreen screen, int xPos, int yPos) {
 		super(map, screen, xPos, yPos, ID);
@@ -51,10 +52,11 @@ public class SheepEntity extends MovingEntity {
 	public void update(){
 		super.update();
 		sheepAnimation.update();
-		if(!isMoving() && Util.RANDOM.nextInt(1000) < WALK_CHANGE) moveRandomLocation(WALK_RANGE);
-		if(Util.RANDOM.nextInt(APROX_LIFETIME_IN_TICKS) == 0)map.removeEntity(xPos, yPos);
+		if(!(map instanceof MPMapClient)){
+			if(!isMoving() && Util.RANDOM.nextInt(1000) < WALK_CHANGE) moveRandomLocation(WALK_RANGE);
+			//if(Util.RANDOM.nextInt(APROX_LIFETIME_IN_TICKS) == 0)map.removeEntity(xPos, yPos);
+		}
 	}
-	
 	
 	
 	public boolean onRightClick(Entity entityClicked, SPGameScreen screen, InputHandler input){

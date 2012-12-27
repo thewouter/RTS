@@ -18,8 +18,6 @@ public class HomeBar extends MenuBar{
 		public HomeBar(InputHandler input, GameScreen GameScreen) {
 			super(input, GameScreen, X_POS_FROM_RIGHT, Y_POS_FROM_BOTTOM, WIDTH_BUTTON, HEIGHT_BUTTON, 3);
 			
-			System.out.println("HomeBar");
-			
 			buildmenu = new MenuBarPopup(xPosOnScreen + UITLOOP + (buttons.indexOf(this) + 1)*WIDTH_BUTTON, yPosOnScreen + UITLOOP, buttons.indexOf(this), false);
 			
 			

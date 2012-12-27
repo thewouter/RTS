@@ -11,6 +11,7 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.rest.Util;
+import walnoot.rtsgame.screen.MPGameScreen;
 import walnoot.rtsgame.screen.Screen;
 
 public class MPMapClient extends Map{
@@ -21,10 +22,10 @@ public class MPMapClient extends Map{
 	MapLoader loader;
 	
 	
-	public MPMapClient(String map, InputListener input) {
+	public MPMapClient(String map, InputListener input, MPGameScreen screen) {
 		super(Integer.parseInt(Util.splitString(map).get(1)), Util.parseInt(Util.splitString(map).get(2)));
 		
-		loader = new MapLoader(map, this, input);
+		loader = new MapLoader(map, this, input, screen);
 		loader.start();
 		grass2 = Images.terrain[0][0];
 		grass = Images.terrain[1][0];

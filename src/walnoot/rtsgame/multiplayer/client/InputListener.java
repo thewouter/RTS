@@ -25,20 +25,19 @@ public class InputListener extends Thread{
 				if(r == null){
 					System.out.println("null");
 					break;
-					
 				}
+				System.out.println(received);
 				owner.messageReceived(received);
-				System.out.println("received ");
 			}
 		}catch(IOException e){
-			System.out.println(e);
+			e.printStackTrace();
 		}
 		
 		try {
 			r.close();
 			p.close();
 		} catch (IOException e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
 	
@@ -53,5 +52,9 @@ public class InputListener extends Thread{
 	
 	public void send(String message){
 		p.println(message);
+	}
+	
+	public void update(String update){
+		p.println(update);
 	}
 }

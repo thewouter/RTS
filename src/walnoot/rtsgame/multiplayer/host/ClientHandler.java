@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+
+import walnoot.rtsgame.map.entities.Entity;
 
 
 public class ClientHandler extends Thread{
@@ -18,12 +21,16 @@ public class ClientHandler extends Thread{
 	}
 	
 	public void run(){
+		ArrayList<Entity> entities= new ArrayList<Entity>();
+		
 		try {
 			serverSocket = new ServerSocket(host.port);
 			while(running){
 				Socket s = serverSocket.accept();
-				host.addPlayer(new Player(null, null,host, new BufferedReader(new InputStreamReader(s.getInputStream())), new PrintStream(s.getOutputStream()),host.map.getEntities() ));
-				}
+				entities.addAll(host.map.getEntities());
+				host.addPlayer(new Player(null, null,host, new BufferedReader(new InputStreamReader(s.getInputStream())), new PrintStream(s.getOutputStream()),entities));
+				
+			}
 			
 		} catch (IOException e) {
 			System.out.println(e);

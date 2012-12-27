@@ -24,7 +24,7 @@ public class MPMapHost extends Map implements Cloneable{
 	}
 	
 	public void update(int translationX, int translationY, int screenWidth, int screenHeight){
-		for(Entity e: entities){
+		for(Entity e: getEntities()){
 			if(e.xPos + e.yPos + 2 > - ((translationY) / 8) && e.xPos + e.yPos - 1 < - ((translationY - screenHeight - 128)/ 8) && e.xPos - e.yPos - 3 < ((translationX) / 16) && e.xPos - e.yPos + 1 > ((translationX - screenWidth) / 16)) {
 				e.update();
 			}else if(e instanceof MovingEntity){
@@ -37,14 +37,14 @@ public class MPMapHost extends Map implements Cloneable{
 			addSheepGroup();
 		}
 		for(Entity e: toBeRemoved){
-			host.entityRemoved(entities.indexOf(e));
+			host.entityRemoved(getEntities().indexOf(e));
 		}
 		for(Entity e: toBeAdded){
 			host.entityAdded(e.ID, e.xPos, e.yPos);
 		}
-		entities.removeAll(toBeRemoved);
+		getEntities().removeAll(toBeRemoved);
 		toBeRemoved.clear();
-		entities.addAll(toBeAdded);
+		getEntities().addAll(toBeAdded);
 		toBeAdded.clear();
 	}
 	
@@ -72,16 +72,6 @@ public class MPMapHost extends Map implements Cloneable{
 			toBeAdded.add(u);
 			
 		}
-	}
-	
-	public ArrayList<Entity> getEntities(){
-		ArrayList<Entity> copy = new ArrayList<Entity>();
-		
-		for(Entity e:entities){
-			copy.add(e.clone());
-		}
-		
-		return copy;
 	}
 	
 	public void addEntity(LinkedList<Entity> entities){

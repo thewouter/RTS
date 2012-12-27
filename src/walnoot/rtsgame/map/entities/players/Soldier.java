@@ -54,7 +54,7 @@ public class Soldier extends PlayerEntity {
 	public void update(){
 		super.update();
 		for(SoldierComponent c:comp){c.update();}
-		if(!map.entities.contains(target)) target = null;
+		if(!map.getEntities().contains(target)) target = null;
 		
 		if(target != null){ 					//fighting !! :)
 			if(!isMoving() && isMovable()){

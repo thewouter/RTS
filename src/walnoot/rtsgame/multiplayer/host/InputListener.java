@@ -10,6 +10,7 @@ public class InputListener extends Thread{
 	private Player p;
 	private BufferedReader r;
 	private PrintStream out;
+	private boolean running = true;
 	
 	public InputListener(Player p, BufferedReader r, PrintStream out){
 		this.p = p;
@@ -21,6 +22,9 @@ public class InputListener extends Thread{
 		try{
 			while(true){
 				String received = r.readLine();
+				if(!running){
+					break;
+				}
 				if(r == null){
 					p.quit();
 					break;
@@ -37,8 +41,12 @@ public class InputListener extends Thread{
 			r.close();
 			out.close();
 			p.quit();
-		} catch (IOException e) {
-			System.out.println(e);
+		} catch (final IOException e) {
+			new Thread(){
+				public void run(){
+					e.printStackTrace();
+				}
+			}.run();
 			p.quit();
 		}
 	}
@@ -49,10 +57,15 @@ public class InputListener extends Thread{
 	
 	public String read(){
 		try {
+			System.out.println("test");
 			return r.readLine();
 		} catch (IOException e) {
-			System.out.println(e);
+			
 		}
 		return null;
+	}
+
+	public void quit() {
+		running = false;
 	}
 }

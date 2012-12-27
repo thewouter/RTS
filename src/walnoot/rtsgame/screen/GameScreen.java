@@ -11,6 +11,7 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
+import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.professions.Founder;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
@@ -66,7 +67,6 @@ public abstract class GameScreen extends Screen {
 			}
 		};
 		
-		/**/
 	}
 	
 	public void render(Graphics g){
@@ -85,7 +85,7 @@ public abstract class GameScreen extends Screen {
 		}else if(!selectedEntities.isEmpty()){
 			font.drawBoldLine(g, "Multiple Select: " + selectedEntities.size(), 20, getHeight() - 30, Color.BLACK);
 		}
-		font.drawBoldLine(g, input.getMouseX() + ":" + input.getMouseY(), 20, 20, Color.BLACK);
+		font.drawBoldLine(g, getMapX() + ":" + getMapY(), 20, 20, Color.BLACK);
 		
 		if(input.isDragging()){
 			int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
@@ -103,6 +103,7 @@ public abstract class GameScreen extends Screen {
 			e.renderSelected(g);
 			g.translate(-translationX, -translationY);
 		}
+		
 		
 		if(popup!= null){
 			popup.render(g);
@@ -223,7 +224,7 @@ public abstract class GameScreen extends Screen {
 				}
 			});
 			pointer=null;
-			for(Entity e:map.entities){
+			for(Entity e:map.getEntities()){
 				if(e instanceof SchoolI){
 					SchoolI s = ((SchoolI)e);
 					s.popup.minerI.activate();
@@ -265,7 +266,7 @@ public abstract class GameScreen extends Screen {
 				}
 			}, 1);
 
-			for(Entity e:map.entities){
+			for(Entity e:map.getEntities()){
 				if(e instanceof SchoolI){
 					SchoolI s = ((SchoolI)e);
 					s.popup.minerII.activate();
@@ -278,5 +279,6 @@ public abstract class GameScreen extends Screen {
 			}
 		}
 	}
+
 	
 }

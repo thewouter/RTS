@@ -21,6 +21,7 @@ import walnoot.rtsgame.menubar.HomeBar;
 import walnoot.rtsgame.menubar.StatusBar;
 import walnoot.rtsgame.multiplayer.client.InputListener;
 import walnoot.rtsgame.multiplayer.client.MPMapClient;
+import walnoot.rtsgame.multiplayer.host.Player;
 import walnoot.rtsgame.popups.entitypopup.EntityPopup;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
@@ -31,26 +32,10 @@ import walnoot.rtsgame.rest.Util;
 
 	public class MPGameScreen extends GameScreen {
 	public MPMapClient map;
-	private int translationX, translationY;
-	private EntityPopup entityPopup = null;
 	
-	private LinkedList<Entity> selectedEntities = new LinkedList<Entity>();
+	public int port;
 	
-	private Entity targetEntity; //the Entity the camera will go to
-	
-	private HomeBar bar;
-	private StatusBar statusBar;	
-	
-	public MousePointer pointer;
-	
-	private ScreenPopup popup = null;
-	
-	boolean pause = false;
-	
-	public int level = 0, port;
 	public String IP;
-	
-	public Inventory inventory = new Inventory(this);
 	
 	private InputListener listener;
 	
@@ -70,20 +55,16 @@ import walnoot.rtsgame.rest.Util;
 			System.out.println(e);
 			this.component.setTitleScreen();
 		}
-		map = new MPMapClient(listener.read(), listener);
-		bar = new HomeBar(input, this);
-		statusBar = new StatusBar(input, this);
+		//System.out.println("trying to read.... hold on....");
+		map = new MPMapClient(listener.read(), listener, this);
+		//System.out.println("done reading from stream!");
 		
 		listener.start();
-		
-		
 	}
 	
 	public void save(){
 		Save.save(map, "save1");
 	}
-	
-	
 	
 	public void save(String fileName){
 		Save.save(map, fileName);
@@ -176,7 +157,7 @@ import walnoot.rtsgame.rest.Util;
 			}
 			LinkedList<Entity> remove = new LinkedList<Entity>();
 			for(Entity e: selectedEntities){
-				if(!map.entities.contains(e)) remove.add(e);
+				if(!map.getEntities().contains(e)) remove.add(e);
 			}
 			
 			selectedEntities.removeAll(remove);
@@ -254,43 +235,16 @@ import walnoot.rtsgame.rest.Util;
 	public void messageReceived(String message){
 		if(Util.parseInt(Util.splitString(message).get(0)) == 1){
 			System.out.println(message);
-		}else if(Util.parseInt(Util.splitString(message).get(0)) == 0){
-			update(message);
+		}else if(Util.parseInt(Util.splitString(message).get(0)) == 2){
+			moveEntity(message);
 		}
 	}
 	
-	private void update(String update){
-		ArrayList<String> inStrings = Util.splitString(update);
-		int adds;
-		int removes;
-		int moves;
-		
-		System.out.print(inStrings.size() + "     ");
-		
-		moves = Util.parseInt(inStrings.get(1));
-		System.out.print(moves + " ");
-		adds = Util.parseInt(inStrings.get((5 * moves) + 2));
-		System.out.print(adds + " ");
-		removes = Util.parseInt(inStrings.get((5 * moves) + (3 * adds) + 2));
-		System.out.println(removes);
-		
-		for(int i  = 2; i < (moves * 5) + 2;){
-			int index = Util.parseInt(inStrings.get(i));
-			i += 3;
-			int x = Util.parseInt(inStrings.get(i));
-			i++;
-			int y = Util.parseInt(inStrings.get(i));
-			i++;
-			try{
-			if(map.entities.get(index) instanceof MovingEntity) {
-				((MovingEntity)map.entities.get(index)).moveToFromHost(new Point(x , y));
-				System.out.println("moved!!!");
-			}else{
-				System.out.println(map.entities.get(index));
-			}
-			}catch(Exception e){
-				System.out.println(map.entities.size() + " requested: " + index);
-			}
+	private void moveEntity(String entity){
+		int uniqueNumber = Util.parseInt(Util.splitString(entity).get(1));
+		Entity e = map.getEntity(uniqueNumber);
+		if(e instanceof MovingEntity){
+			((MovingEntity)e).moveToFromHost(new Point(Util.parseInt(Util.splitString(entity).get(2)),Util.parseInt(Util.splitString(entity).get(3))));
 		}
 	}
 	
@@ -300,6 +254,12 @@ import walnoot.rtsgame.rest.Util;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+
+	public void moveEntity(MovingEntity movingEntity, int x, int y) {
+		String update = 2 + " " + movingEntity.uniqueNumber + " " + x + " " + y; 
+		listener.update(update);
 	}
 }
 

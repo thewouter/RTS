@@ -16,6 +16,9 @@ public abstract class Entity implements Cloneable {
 	protected int health;
 	public int ID;
 	public GameScreen screen;
+	public int uniqueNumber;
+	
+	public static int ENTITY_ID_COUNTER = 1;
 	
 	public Entity(Map map, int xPos, int yPos, int ID, GameScreen screen){
 		this.map = map;
@@ -24,6 +27,9 @@ public abstract class Entity implements Cloneable {
 		this.ID = ID;
 		this.screen = screen;
 		health = getMaxHealth();
+		uniqueNumber = ENTITY_ID_COUNTER;
+		Entity.ENTITY_ID_COUNTER = ENTITY_ID_COUNTER + 1;
+		
 	}
 	
 	public void setID(int ID){

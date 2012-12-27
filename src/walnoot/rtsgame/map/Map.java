@@ -23,7 +23,7 @@ import walnoot.rtsgame.screen.GameScreen;
 
 public class Map {
 	public Tile[][] surface;
-	public ArrayList<Entity> entities = new ArrayList<Entity>();
+	private ArrayList<Entity> entities = new ArrayList<Entity>();
 	public ArrayList<Entity> notOnMap = new ArrayList<Entity>();
 	public LinkedList<Entity> toBeRemoved = new LinkedList<Entity>(), toBeAdded = new LinkedList<Entity>(), toBeRemovedFromMap = new LinkedList<Entity>();
 	public PerlinNoise2D noiseObj;
@@ -49,6 +49,17 @@ public class Map {
 				return -1;
 			return 0;
 		}
+	};
+	
+	private static final Comparator<Entity> entitySorter = new Comparator<Entity>(){
+
+		public int compare(Entity arg0, Entity arg1) {
+			int number = (arg0.uniqueNumber - arg1.uniqueNumber);
+			if(number > 0) return 1;
+			else if(number < 0) return -1;
+			return 0;
+		}
+		
 	};
 	
 	
@@ -88,8 +99,38 @@ public class Map {
 		toBeRemovedFromMap.clear();
 		notOnMap.removeAll(toBeRemoved);
 		toBeRemoved.clear();
-		entities.addAll(toBeAdded);
+		if(toBeAdded.size() > 0){
+			entities.addAll(toBeAdded);
+			Collections.sort(entities, entitySorter);
+		}
 		toBeAdded.clear();
+	}
+	
+	public synchronized Entity getEntity(int uniqueNumber){
+		if(uniqueNumber > entities.size()) uniqueNumber = entities.size();
+		int high = uniqueNumber;
+		int low = 0;
+		
+		while(true){
+			int mid = (high + low) / 2;
+			Entity e = entities.get(mid);
+			int num = e.uniqueNumber;
+			
+			if(low == high){
+				if(num == uniqueNumber){
+					return e;
+				}
+				return null;
+			}
+			
+			if(num > uniqueNumber){
+				high = mid;
+			}else if(num < uniqueNumber){
+				low = mid;
+			}else{
+				return e;
+			}
+		}
 	}
 	
 	public void addSheepGroup(){
@@ -174,7 +215,7 @@ public class Map {
 		}
 	}
 	
-	public void render(Graphics g, Point translation, Dimension screenSize, int screenWidth, int screenHeight){
+	public synchronized void render(Graphics g, Point translation, Dimension screenSize, int screenWidth, int screenHeight){
 		g.translate(translation.x, translation.y);
 		
 		for(int x = 0; x < getWidth(); x++){
@@ -206,7 +247,7 @@ public class Map {
 		return isSolid(pos.x, pos.y);
 	}
 	
-	public boolean isSolid(int x, int y){
+	public synchronized boolean isSolid(int x, int y){
 		if(x < 0 || y < 0 || x >= surface.length || y >= surface.length) return true; //outside the map
 		if(surface[x][y].isSolid()) return true;
 		
@@ -219,7 +260,7 @@ public class Map {
 	}
 	
 	public synchronized Entity getEntity(int x, int y){
-		for(Entity e: entities){
+		for(Entity e: getEntities()){
 			if(e instanceof Structure){
 				Structure structure = (Structure) e;
 				
@@ -236,9 +277,31 @@ public class Map {
 		return null;
 	}
 	
-	public LinkedList<Entity> getEntities(int x, int y){
+	public Entity getEntity(int x, int y, ArrayList<Entity> copyOfEntities){
+		for(Entity e: copyOfEntities){
+			if(e instanceof Structure){
+				Structure structure = (Structure) e;
+				
+				int dx = x - structure.getxPos();
+				int dy = y - structure.getyPos();
+				
+				if(dx >= 0 && dy >= 0){
+					if(dx < structure.getSize() && dy < structure.getSize()) return structure;
+				}
+			}else{
+				if(e.getxPos() == x && e.getyPos() == y) return e;
+			}
+		}
+		return null;
+	}
+	
+	public synchronized ArrayList<Entity> getEntities(){
+		return entities;
+	}
+	
+	public synchronized LinkedList<Entity> getEntities(int x, int y){
 		LinkedList<Entity> result = new LinkedList<Entity>();
-		for(Entity e: entities){
+		for(Entity e: getEntities()){
 			if(e instanceof Structure){
 				Structure structure = (Structure) e;
 				
@@ -255,7 +318,7 @@ public class Map {
 		return result;
 	}
 	
-	public LinkedList<Entity> getEntities(int x1, int y1 , int x2, int y2, Dimension translation){
+	public synchronized LinkedList<Entity> getEntities(int x1, int y1 , int x2, int y2, Dimension translation){
 		/**
 		 * IN SCREEN COORDINATS!!
 		 */
@@ -265,7 +328,7 @@ public class Map {
 		int xMax = Math.max(x1, x2);
 		int yMax = Math.max(y1, y2);
 		
-		for (Entity e:entities ){
+		for (Entity e:getEntities() ){
 			int x = e.getScreenX() + translation.width;
 			int y = e.getScreenY() + translation.height;
 			
@@ -310,7 +373,7 @@ public class Map {
 			except.add(e);
 		}
 		
-		for(Entity e: entities ){
+		for(Entity e: getEntities() ){
 			if(Util.abs(Util.getDistance(x, y, e.xPos , e.yPos )) <= radius && !except.contains(e)){
 				result.add(e);
 			}
@@ -324,7 +387,7 @@ public class Map {
 		int closestDistance = 999;
 		int xe, ye;
 		Entity closest = null;
-		for(Entity e: entities){
+		for(Entity e: getEntities()){
 			xe = e.getxPos();
 			ye = e.getyPos();
 			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y && e instanceof MineStructure){
@@ -339,7 +402,7 @@ public class Map {
 		int closestDistance = 999;
 		int xe, ye;
 		Entity closest = null;
-		for(Entity e: entities){
+		for(Entity e: getEntities()){
 			xe = e.getxPos();
 			ye = e.getyPos();
 			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y && (e instanceof MineStructure || e instanceof StoneMine)&& !notIncluded.contains(e)){
@@ -355,7 +418,7 @@ public class Map {
 		int closestDistance = 999;
 		int xe, ye;
 		Entity closest = null;
-		for(Entity e: entities){
+		for(Entity e: getEntities()){
 			xe = e.getxPos();
 			ye = e.getyPos();
 			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y){
@@ -370,7 +433,7 @@ public class Map {
 		int closestDistance = 999;
 		int xe, ye;
 		Entity closest = null;
-		for(Entity e: entities){
+		for(Entity e: getEntities()){
 			xe = e.getxPos();
 			ye = e.getyPos();
 			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y && e instanceof MovingEntity){
@@ -385,7 +448,7 @@ public class Map {
 		int closestDistance = 999;
 		int xe, ye;
 		Entity closest = null;
-		for(Entity e: entities){
+		for(Entity e: getEntities()){
 			xe = e.getxPos();
 			ye = e.getyPos();
 			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y && e instanceof MovingEntity && !(notIncluded.contains(e))){
@@ -456,7 +519,7 @@ public class Map {
 		int closestDistance = 999;
 		int xe, ye;
 		Entity closest = null;
-		for(Entity e: entities){
+		for(Entity e: getEntities()){
 			xe = e.getxPos();
 			ye = e.getyPos();
 			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y && e instanceof TreeStructure){
@@ -471,7 +534,7 @@ public class Map {
 		int closestDistance = 999;
 		int xe, ye;
 		Entity closest = null;
-		for(Entity e: entities){
+		for(Entity e: getEntities()){
 			xe = e.getxPos();
 			ye = e.getyPos();
 			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y && e instanceof Farm){

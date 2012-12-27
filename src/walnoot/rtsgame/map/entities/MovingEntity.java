@@ -1,7 +1,12 @@
 package walnoot.rtsgame.map.entities;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.LinkedList;
+
+import org.omg.CORBA.UserException;
+
+import com.sun.xml.internal.ws.encoding.MimeMultipartParser;
 
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Direction;
@@ -10,12 +15,13 @@ import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.multiplayer.client.MPMapClient;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.MPGameScreen;
 
 public abstract class MovingEntity extends Entity {
 	protected double timeTraveled; //hoelang hij onderweg is
 	private Entity goal = null;
 	public Entity entityGoal = null;
-	//private int oldX = 0, oldY = 0;
+	private Point entPoint = new Point(0,0);
 	
 	public LinkedList<Direction> nextDirections = new LinkedList<Direction>();
 	private LinkedList<Direction> nextNextDirections = null;
@@ -135,10 +141,13 @@ public abstract class MovingEntity extends Entity {
 
 	public void moveTo(Point goal){
 		if(map instanceof MPMapClient){
+			((MPGameScreen)screen).moveEntity(this, goal.x, goal.y);
 			return;
 		}
 		this.goal = null;
-		Pathfinder.moveTo(this,new Point(xPos, yPos), goal, map);
+		ArrayList<Entity> e = new ArrayList<Entity>();
+		e.addAll(map.getEntities());
+		Pathfinder.moveTo(this,new Point(xPos, yPos), goal, map, e);
 	}
 	
 	public void moveTo(Entity goal){
@@ -147,7 +156,9 @@ public abstract class MovingEntity extends Entity {
 
 	public void moveToFromHost(Point goal){
 		this.goal = null;
-		Pathfinder.moveTo(this,new Point(xPos, yPos), goal, map);
+		ArrayList<Entity> e = new ArrayList<Entity>();
+		e.addAll(map.getEntities());
+		Pathfinder.moveTo(this,new Point(xPos, yPos), goal, map, e);
 	}
 	
 	public boolean isMoving(){
@@ -185,10 +196,19 @@ public abstract class MovingEntity extends Entity {
 		}while(map.isSolid(x, y) && x != xPos && y != yPos);
 	
 		moveTo(new Point(x, y));
+		
 	}
 	
 	public Entity getGoal(){
 		return goal;
+	}
+	
+	public void setEndPoint(Point p){
+		entPoint = p;    		//fuck spelling.
+	}
+	
+	public Point getEndPoint(){
+		return entPoint;
 	}
 	
 	/** @return tijd die het duurt om over 1 tile te bewegen */

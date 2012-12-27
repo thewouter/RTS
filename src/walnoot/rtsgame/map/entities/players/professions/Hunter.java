@@ -26,7 +26,7 @@ public class Hunter extends Profession {
 		if(isHunting){
 			teller++;
 		}
-		if(isHunting && !owner.isMoving() && (!(owner.map.entities.contains(closestMovingEntity)) || closestMovingEntity == null)){
+		if(isHunting && !owner.isMoving() && (!(owner.map.getEntities().contains(closestMovingEntity)) || closestMovingEntity == null)){
 			huntNearestAnimal();
 		}
 		
@@ -36,7 +36,7 @@ public class Hunter extends Profession {
 				if(Util.getDistance(owner.xPos, owner.yPos, closestMovingEntity.xPos, closestMovingEntity.yPos) <= 1){
 					closestMovingEntity.damage(1);
 					owner.screen.inventory.meat+=1;
-					if(!owner.map.entities.contains(closestMovingEntity)){	// it's dead.
+					if(!owner.map.getEntities().contains(closestMovingEntity)){	// it's dead.
 						huntNearestAnimal();
 					}
 				}

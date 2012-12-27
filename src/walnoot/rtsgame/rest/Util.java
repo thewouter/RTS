@@ -15,6 +15,7 @@ import walnoot.rtsgame.map.structures.nonnatural.BaseOfOperations;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.map.tiles.Tile;
+import walnoot.rtsgame.screen.GameScreen;
 
 /**
  * Class met handige static methods en waarden
@@ -108,6 +109,7 @@ public class Util {
 	        throw new NumberFormatException( "Null string" );
 	    else if (s == ""){
 	    	System.out.println("string is '' (empty) ");
+	    	new Exception().printStackTrace();
 	    	return 0;
 	    }
 	    
@@ -144,46 +146,64 @@ public class Util {
 	    return sign * num;
 	}
 	
-	public static Entity getEntity(Map map, int ID, int xPos, int yPos, int health, int extraInfoOne){
+	public static Entity getEntity(Map map, String entity, GameScreen screen){
+		Entity e = getEntity(entity, map);
+		e.screen = screen;
+		return e;
+	}
+	
+	public static Entity getEntity(Map map, int ID, int xPos, int yPos, int health, int extraInfoOne, int uniqeNumber){
+		Entity e = null;
 		if(ID >= 300){				//mines
 			switch(ID){
 			case 300:
-				return new GoldMine(map, null, xPos, yPos, extraInfoOne, health);
+				e = new GoldMine(map, null, xPos, yPos, extraInfoOne, health);
+				break;
 			}	
 		}else if(ID >= 200){		//structures
 			switch(ID){
 			case 200:
-				return new CampFireStructure(map, null,  xPos, yPos, health);
+				e = new CampFireStructure(map, null,  xPos, yPos, health);
+				break;
 				
 			case 201:
-				return new TentIStructure(map, null,  xPos, yPos, health);
+				e = new TentIStructure(map, null,  xPos, yPos, health);
+				break;
 				
 			case 202:
-				return new TreeStructure(map, null,  xPos, yPos, health);
+				e = new TreeStructure(map, null,  xPos, yPos, health);
+				break;
 				
 			case 203:
-				return new BaseOfOperations(map, null,  xPos, yPos, health);
+				e = new BaseOfOperations(map, null,  xPos, yPos, health);
+				break;
 				
 			}
 		}else if(ID >= 100){		//movingEntities
 			switch(ID){
 			case 100:
-				return new SnakeEntity(map, null,  xPos, yPos, health);
+				e = new SnakeEntity(map, null,  xPos, yPos, health);
+				break;
 				
 			case 101:
-				return new SheepEntity(map, null,  xPos, yPos, health);
+				e = new SheepEntity(map, null,  xPos, yPos, health);
+				break;
 				
 			case 102:
-				return new PlayerEntity(map, null,  xPos, yPos, null);
+				e = new PlayerEntity(map, null,  xPos, yPos, null);
+				break;
 				//professions not implemented
 				
 			case 103:
-				return new DeerEntity(map, null,  xPos, yPos, health);
+				e = new DeerEntity(map, null,  xPos, yPos, health);
+				break;
 				
 			}
+		}else{
+			System.out.println("no entity found!");
 		}
-		System.out.println("no entity found!");
-		return null;
+		e.uniqueNumber = uniqeNumber;
+		return e;
 	}
 	
 	public static Entity getEntity(String entity, Map map){
@@ -194,8 +214,10 @@ public class Util {
 		int yPos = parseInt(entityInstrings.get(2));
 		int health = parseInt(entityInstrings.get(3));
 		int extraInfoOne = parseInt(entityInstrings.get(4));
+		int uniqueNumber = parseInt(entityInstrings.get(5));
 		
-		return getEntity(map, ID, xPos, yPos, health, extraInfoOne);
+		
+		return getEntity(map, ID, xPos, yPos, health, extraInfoOne, uniqueNumber);
 	}
 }	
 	
