@@ -12,12 +12,19 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Save;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
+import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
+import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
+import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
+import walnoot.rtsgame.map.structures.nonnatural.TentIIStructure;
+import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.menubar.HomeBar;
+import walnoot.rtsgame.menubar.MenuBarPopupButton;
 import walnoot.rtsgame.menubar.StatusBar;
 import walnoot.rtsgame.multiplayer.client.InputListener;
 import walnoot.rtsgame.multiplayer.client.MPMapClient;
@@ -55,9 +62,9 @@ import walnoot.rtsgame.rest.Util;
 			System.out.println(e);
 			this.component.setTitleScreen();
 		}
-		//System.out.println("trying to read.... hold on....");
+		System.out.println("trying to read.... hold on....");
 		map = new MPMapClient(listener.read(), listener, this);
-		//System.out.println("done reading from stream!");
+		System.out.println("done reading from stream!");
 		
 		listener.start();
 	}
@@ -185,7 +192,95 @@ import walnoot.rtsgame.rest.Util;
 		super.render(g);
 	}
 	
+	public void levelUp(){
+		level++;
+		switch(level){
+		case 1:
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[5][6], this.bar.screen) {
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(map, input, screen) {
+						public Entity toBuild() {
+							return new TentIStructure(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+						}
+					};
+				}
+				
+				public String getName() {
+					return "Tent I";
+				}
+			});
+			
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[7][6], this) {
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(map, input, screen) {
+						public Entity toBuild() {
+							return new SchoolI(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+						}
+					};
+					
+				}
 
+				public String getName() {
+					return "School";
+				}
+			});
+			pointer=null;
+			for(Entity e:map.getEntities()){
+				if(e instanceof SchoolI){
+					SchoolI s = ((SchoolI)e);
+					s.popup.minerI.activate();
+					s.popup.lumberJacker.activate();
+					s.popup.hunter.activate();
+				}else if(e instanceof SchoolII){
+					SchoolII s = ((SchoolII)e);
+					s.popup.minerI.activate();
+					s.popup.lumberJacker.activate();
+					s.popup.hunter.activate();
+				}
+			}
+			return;
+		case 2:
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][6], this) {
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(screen.map, input, screen) {
+						public Entity toBuild() {
+							return new StoneMine(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+						}
+					};
+				}
+				
+				public String getName() {
+					return "Quarry";
+				}
+			});
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][7], this) {
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(screen.map, input, screen) {
+						public Entity toBuild() {
+							return new TentIIStructure(map, screen,Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+						}
+					};
+					
+				}
+				public String getName() {
+					return "Tent II";
+				}
+			}, 1);
+
+			for(Entity e:map.getEntities()){
+				if(e instanceof SchoolI){
+					SchoolI s = ((SchoolI)e);
+					s.popup.minerII.activate();
+					s.popup.founder.activate();
+				}else if(e instanceof SchoolII){
+					SchoolII s = ((SchoolII)e);
+					s.popup.minerII.activate();
+					s.popup.founder.activate();
+				}
+			}
+		}
+	}
+	
 	public void setEntityPopup(EntityPopup popup){
 		this.entityPopup = popup;
 	}
@@ -237,7 +332,21 @@ import walnoot.rtsgame.rest.Util;
 			System.out.println(message);
 		}else if(Util.parseInt(Util.splitString(message).get(0)) == 2){
 			moveEntity(message);
+		}else if(Util.parseInt(Util.splitString(message).get(0)) == 4){
+			entityAdded(message);
 		}
+	}
+	
+	private void entityAdded(String entity){
+		int ID = Util.parseInt(Util.splitString(entity).get(1));
+		int uniqueNumber = Util.parseInt(Util.splitString(entity).get(2));
+		int xPos = Util.parseInt(Util.splitString(entity).get(3));
+		int yPos = Util.parseInt(Util.splitString(entity).get(4));
+		int extraInfoOne = Util.parseInt(Util.splitString(entity).get(5));
+		Entity e = Util.getEntity(map, ID, xPos, yPos, extraInfoOne);
+		e.uniqueNumber = uniqueNumber;
+		map.addEntityFromHost(e);
+	
 	}
 	
 	private void moveEntity(String entity){
@@ -255,10 +364,14 @@ import walnoot.rtsgame.rest.Util;
 			e.printStackTrace();
 		}
 	}
-	
 
 	public void moveEntity(MovingEntity movingEntity, int x, int y) {
 		String update = 2 + " " + movingEntity.uniqueNumber + " " + x + " " + y; 
+		listener.update(update);
+	}
+	
+	public void addEntity(Entity e, int x, int y){
+		String update = 3 + " " + e.ID + " " + x + " " + y + " " + e.getExtraOne();
 		listener.update(update);
 	}
 }

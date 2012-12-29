@@ -8,6 +8,7 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
+import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
 import walnoot.rtsgame.rest.Util;
@@ -42,6 +43,7 @@ public class MPHost extends Screen{
 		this.port = port;
 		
 		map =  new MPMapHost(256, this);
+		map.addEntity(new PlayerEntity(map, null, 10, 10, null));
 		
 		clientHandler = new ClientHandler(this);
 		clientHandler.start();
@@ -69,12 +71,6 @@ public class MPHost extends Screen{
 		players.addAll(toAdd);
 		toRemove.clear();
 		toAdd.clear();
-		if(input.y.isTapped()){ // test for moving
-			System.out.println("y");
-			for(Player p:players){
-				p.update("2 0 10 10 12 12");
-			}
-		}
 	}
 	
 	public void entityMoved(Entity e, int newX, int newY){
@@ -109,6 +105,30 @@ public class MPHost extends Screen{
 			for(Player p: players){
 				p.sendTextMessage(message);
 			}
+			break;
+		case 3:
+			addEntity(message);
+			break;
+		}
+	}
+
+	private void addEntity(String message) {
+		int ID = Util.parseInt(Util.splitString(message).get(1));
+		int xPos = Util.parseInt(Util.splitString(message).get(2));
+		int yPos = Util.parseInt(Util.splitString(message).get(3));
+		int extraInfoOne = Util.parseInt(Util.splitString(message).get(4));
+		map.addEntity(Util.getEntity(map, ID, xPos, yPos, extraInfoOne));
+	}
+	
+	public void entityAdded(Entity e){
+		int ID = e.ID;
+		int xPos = e.xPos;
+		int yPos = e.yPos;
+		int uniqueNumber = e.uniqueNumber;
+		int extraInfoOne = e.getExtraOne();
+		String update = 4 + " " + ID + " " + uniqueNumber + " " + xPos + " " + yPos + " " + extraInfoOne;
+		for(Player p: players){
+			p.update(update);
 		}
 	}
 

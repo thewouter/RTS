@@ -20,7 +20,6 @@ public class Player extends GameScreen {
 	public Inventory inventory;
 	public InputListener input;
 	public MPHost host;
-	private boolean hasLoaded = false;
 	
 	public Player(RTSComponent component, InputHandler input, MPHost host, BufferedReader r, PrintStream p, List<Entity> entities) {
 		super(component, input);
@@ -40,6 +39,8 @@ public class Player extends GameScreen {
 		
 		//add number of entities
 		mapInString = 2 + " " + mapInString + entities.size() + " ";
+		
+		System.out.println(entities.size());
 		
 		//add entities
 		for(Entity e: entities){
@@ -62,8 +63,6 @@ public class Player extends GameScreen {
 		inventory = new Inventory(this);
 		
 		this.input.read(); 		// wait for confirmation from the client that the map is decoded.
-		
-		hasLoaded = true;
 		
 		this.input.start();
 	}

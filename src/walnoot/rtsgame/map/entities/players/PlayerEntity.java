@@ -39,6 +39,12 @@ public class PlayerEntity extends MovingEntity {
 		name = Util.NAME_GEN.getRandomName();
 		loadAnimation(Images.player);
 		owner = tent;
+		/*final Exception e = new Exception();
+		new Thread(){
+			public void run(){
+				e.printStackTrace();
+			}
+		}.start();*/
 	}
 	
 	public void update(){

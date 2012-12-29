@@ -107,9 +107,13 @@ public class Map {
 	}
 	
 	public synchronized Entity getEntity(int uniqueNumber){
-		if(uniqueNumber > entities.size()) uniqueNumber = entities.size();
-		int high = uniqueNumber;
+		System.out.println(entities.size());
+		int high = entities.size() - 1;
 		int low = 0;
+		if(uniqueNumber == 608){
+			System.out.println(high + "  " + low);
+		}
+		
 		
 		while(true){
 			int mid = (high + low) / 2;
@@ -122,6 +126,12 @@ public class Map {
 				}
 				return null;
 			}
+			if(entities.get(high).uniqueNumber == uniqueNumber) return entities.get(high);
+			if(entities.get(low).uniqueNumber == uniqueNumber) return entities.get(low);
+			if(Util.abs(high - low)  == 1){
+				return null;
+			}
+			
 			
 			if(num > uniqueNumber){
 				high = mid;

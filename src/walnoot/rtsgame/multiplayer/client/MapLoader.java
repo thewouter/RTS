@@ -57,22 +57,27 @@ public class MapLoader extends Thread {
 				map.changeTile(x, y, t);
 			}
 		}
-		
 		int amountEntities = Util.parseInt(mapInStrings.get(counter++));
+		System.out.println("entities: " + amountEntities);
 		
 		for(int i = 0; i < amountEntities; i++){
 			String entity = mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++); 
 			Entity e = Util.getEntity(map, entity, screen);
 			map.addEntityFromHost(e);
+			
 		}
-		
 		int amountMovements = Util.parseInt(mapInStrings.get(counter++));
-		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		for (int i = 0; i < amountMovements; i++){
 			int uniqueNumber = Util.parseInt(mapInStrings.get(counter++));
+			System.out.println("uN: " + uniqueNumber);
 			((MovingEntity)map.getEntity(uniqueNumber)).moveToFromHost(new Point(Util.parseInt(mapInStrings.get(counter++)),Util.parseInt(mapInStrings.get(counter++))));
 		}
-		
+		System.out.println(6);
 		input.send("1 Received!");
 	}
 	

@@ -19,11 +19,13 @@ public class MPMapClient extends Map{
 	private BufferedImage grass;
 	private BufferedImage grass2;
 	private boolean[][] tiles = new boolean[32][32];
-	MapLoader loader;
+	private MapLoader loader;
+	private MPGameScreen screen;
 	
 	
 	public MPMapClient(String map, InputListener input, MPGameScreen screen) {
 		super(Integer.parseInt(Util.splitString(map).get(1)), Util.parseInt(Util.splitString(map).get(2)));
+		this.screen = screen;
 		
 		loader = new MapLoader(map, this, input, screen);
 		loader.start();
@@ -82,11 +84,13 @@ public class MPMapClient extends Map{
 	}
 	
 	public void addEntity(Entity u){
-		// MPMapClient may add entities.
+		screen.addEntity(u, u.xPos, u.yPos);
 	}
 	
 	public void addEntity(LinkedList<Entity> entities){
-		// MPMapClient may add entities.
+		for(Entity e:entities){
+			addEntity(e);
+		}
 	}
 	
 	public void removeEntity(Entity u){

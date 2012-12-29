@@ -9,6 +9,7 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.SnakeEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.professions.Founder;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.BaseOfOperations;
@@ -152,6 +153,60 @@ public class Util {
 		return e;
 	}
 	
+	public static Entity getEntity(Map map, int ID, int xPos, int yPos, int extraInfoOne){
+		Entity e = null;
+		if(ID >= 300){				//mines
+			switch(ID){
+			case 300:
+				e = new GoldMine(map, null, xPos, yPos, extraInfoOne);
+				break;
+			}	
+		}else if(ID >= 200){		//structures
+			switch(ID){
+			case 200:
+				e = new CampFireStructure(map, null,  xPos, yPos);
+				break;
+				
+			case 201:
+				e = new TentIStructure(map, null,  xPos, yPos);
+				break;
+				
+			case 202:
+				e = new TreeStructure(map, null,  xPos, yPos);
+				break;
+				
+			case 203:
+				e = new BaseOfOperations(map, null,  xPos, yPos);
+				break;
+				
+			}
+		}else if(ID >= 100){		//movingEntities
+			switch(ID){
+			case 100:
+				e = new SnakeEntity(map, null,  xPos, yPos);
+				break;
+				
+			case 101:
+				e = new SheepEntity(map, null,  xPos, yPos);
+				break;
+				
+			case 102:
+				e = new PlayerEntity(map, null,  xPos, yPos, null);
+				break;
+				//professions not implemented
+				
+			case 103:
+				e = new DeerEntity(map, null,  xPos, yPos);
+				break;
+				
+			}
+		}else{
+			System.out.println("no entity found!");
+		}
+		return e;
+		
+	}
+	
 	public static Entity getEntity(Map map, int ID, int xPos, int yPos, int health, int extraInfoOne, int uniqeNumber){
 		Entity e = null;
 		if(ID >= 300){				//mines
@@ -191,6 +246,7 @@ public class Util {
 				
 			case 102:
 				e = new PlayerEntity(map, null,  xPos, yPos, null);
+				((PlayerEntity)e).setProfession(new Founder((PlayerEntity)e));
 				break;
 				//professions not implemented
 				

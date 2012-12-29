@@ -20,7 +20,6 @@ public class MPMapHost extends Map implements Cloneable{
 	public MPMapHost(int mapSize, MPHost host) {
 		super(mapSize);
 		this.host = host;
-		addEntity(new PlayerEntity(this, null, 10, 10, null));
 	}
 	
 	public void update(int translationX, int translationY, int screenWidth, int screenHeight){
@@ -53,25 +52,8 @@ public class MPMapHost extends Map implements Cloneable{
 	}
 	
 	public void addEntity(Entity u){
-		if(u == null)return;
-		if(!(u instanceof Structure) || ((Structure) u ).getSize() == 1){
-			if(getEntity(u.xPos, u.yPos) instanceof MovingEntity || getEntity(u.xPos, u.yPos) == null){
-				if(getTile(u.getxPos(), u.getyPos()) == null) return;
-				if(!getTile(u.getxPos(), u.getyPos()).isSolid()){
-					toBeAdded.add(u);
-				}
-			}
-		}else{
-			Structure structure = (Structure) u;
-			for(int x = 0; x < structure.getSize(); x++){
-				for(int y = 0; y < structure.getSize(); y++){
-					if(getTile(u.xPos + x, u.yPos + y).isSolid()) return;
-					if(getEntity(u.getxPos() + x, u.getyPos() + y) != null) return;
-				}
-			}
-			toBeAdded.add(u);
-			
-		}
+		super.addEntity(u);
+		if(host != null) host.entityAdded(u);
 	}
 	
 	public void addEntity(LinkedList<Entity> entities){
@@ -79,5 +61,6 @@ public class MPMapHost extends Map implements Cloneable{
 			addEntity(e);
 		}
 	}
+	
 	
 }

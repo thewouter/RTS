@@ -24,7 +24,11 @@ public abstract class MousePointer {
 		y = input.getMouseY();
 		if(input.LMBTapped() && screen.isOnlyOnMap(x, y)){
 			Entity e = toBuild();
-			screen.map.addEntity(e);
+			if(screen == null) System.out.println("screen");
+			if(map == null) System.out.println("map");
+			if(e == null) System.out.println("entity");
+			
+			map.addEntity(e);
 			screen.inventory.gold -= e.getCosts();
 			afterBuild();
 		}

@@ -44,6 +44,9 @@
 	 starting with:
 	 	1:		message;
 	 	2: 		entity movement;
+	 	3:		entity added TO HOST;
+	 	4:		entity added TO CLIENT;
+	 	
 	
 	
 	
