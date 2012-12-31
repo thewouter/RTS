@@ -12,6 +12,7 @@ import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.structures.Structure;
+import walnoot.rtsgame.rest.Inventory;
 import walnoot.rtsgame.rest.Util;
 
 public class MPMapHost extends Map implements Cloneable{
@@ -38,9 +39,6 @@ public class MPMapHost extends Map implements Cloneable{
 		for(Entity e: toBeRemoved){
 			host.entityRemoved(getEntities().indexOf(e));
 		}
-		for(Entity e: toBeAdded){
-			host.entityAdded(e.ID, e.xPos, e.yPos);
-		}
 		getEntities().removeAll(toBeRemoved);
 		toBeRemoved.clear();
 		getEntities().addAll(toBeAdded);
@@ -53,13 +51,18 @@ public class MPMapHost extends Map implements Cloneable{
 	
 	public void addEntity(Entity u){
 		super.addEntity(u);
-		if(host != null) host.entityAdded(u);
+		if(host != null) host.entityAdded(u, (Player)u.screen);
 	}
 	
 	public void addEntity(LinkedList<Entity> entities){
 		for(Entity e:entities){
 			addEntity(e);
 		}
+	}
+	
+	public void removeEntity(Entity e){
+		super.removeEntity(e);
+		if(host != null) host.entityRemoved(e.uniqueNumber);
 	}
 	
 	

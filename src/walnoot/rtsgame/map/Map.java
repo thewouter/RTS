@@ -67,7 +67,6 @@ public class Map {
 		
 		surface = new Tile[mapSize][mapSize];
 		noiseObj = new PerlinNoise2D();
-		//this.player = screen;
 		generateMap();
 	}
 	
@@ -107,11 +106,11 @@ public class Map {
 	}
 	
 	public synchronized Entity getEntity(int uniqueNumber){
-		System.out.println(entities.size());
+		//System.out.println(entities.size());
 		int high = entities.size() - 1;
 		int low = 0;
 		if(uniqueNumber == 608){
-			System.out.println(high + "  " + low);
+			//System.out.println(high + "  " + low);
 		}
 		
 		

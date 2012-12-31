@@ -9,7 +9,12 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.SnakeEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.professions.Farmer;
 import walnoot.rtsgame.map.entities.players.professions.Founder;
+import walnoot.rtsgame.map.entities.players.professions.Hunter;
+import walnoot.rtsgame.map.entities.players.professions.LumberJacker;
+import walnoot.rtsgame.map.entities.players.professions.Miner;
+import walnoot.rtsgame.map.entities.players.professions.Profession;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.BaseOfOperations;
@@ -192,8 +197,8 @@ public class Util {
 				
 			case 102:
 				e = new PlayerEntity(map, null,  xPos, yPos, null);
+				((PlayerEntity)e).setProfession(getProfession(extraInfoOne, (PlayerEntity)e));
 				break;
-				//professions not implemented
 				
 			case 103:
 				e = new DeerEntity(map, null,  xPos, yPos);
@@ -205,6 +210,25 @@ public class Util {
 		}
 		return e;
 		
+	}
+	
+	public static Profession getProfession(int ID, PlayerEntity player){
+		switch(ID){
+		case(400):
+			return new LumberJacker(player);
+		case(401):
+			return new Miner(player, 1);
+		case(402):
+			return new Hunter(player);
+		case(403):
+			return new Founder(player);
+		case(404):
+			return new Farmer(player);
+		case(405):
+			return new Miner(player, 2);
+		default:
+			return null;
+		}
 	}
 	
 	public static Entity getEntity(Map map, int ID, int xPos, int yPos, int health, int extraInfoOne, int uniqeNumber){
@@ -246,9 +270,8 @@ public class Util {
 				
 			case 102:
 				e = new PlayerEntity(map, null,  xPos, yPos, null);
-				((PlayerEntity)e).setProfession(new Founder((PlayerEntity)e));
+				((PlayerEntity)e).setProfession(getProfession(extraInfoOne, (PlayerEntity)e));
 				break;
-				//professions not implemented
 				
 			case 103:
 				e = new DeerEntity(map, null,  xPos, yPos, health);
@@ -274,6 +297,25 @@ public class Util {
 		
 		
 		return getEntity(map, ID, xPos, yPos, health, extraInfoOne, uniqueNumber);
+	}
+	
+	public static int getProfessionID(Profession prof){
+		if (prof instanceof LumberJacker){
+			return 400;
+		}else if(prof instanceof Miner){
+			if(((Miner) prof).level == 1){
+				return 401;
+			}else if(((Miner) prof).level == 2){
+				return 405;
+			}
+		}else if(prof instanceof Hunter){
+			return 402; 
+		}else if(prof instanceof Founder){
+			return 403;
+		}else if(prof instanceof Farmer){
+			return 404;
+		}
+		return 0;
 	}
 }	
 	

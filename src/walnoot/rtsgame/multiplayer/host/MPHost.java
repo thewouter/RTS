@@ -9,8 +9,10 @@ import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.professions.Founder;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
+import walnoot.rtsgame.rest.Inventory;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.Screen;
 
@@ -22,15 +24,11 @@ public class MPHost extends Screen{
 	public int translationX, translationY;
 	
 	public MPMapHost map;
+
+	public Inventory inventory =new Inventory(this);
 	
 	public LinkedList<Player> players = new LinkedList<Player>();
 	private ClientHandler clientHandler;
-	
-	private String toSend = "" ;
-	private String entitymoves = "";
-	private String entityAdds = "";
-	private String entityDeletes = "";
-	private int adds = 0, deletes = 0, moves = 0;
 
 	private LinkedList<Player> toRemove = new LinkedList<Player>();
 	private LinkedList<Player> toAdd = new LinkedList<Player>();
@@ -43,7 +41,6 @@ public class MPHost extends Screen{
 		this.port = port;
 		
 		map =  new MPMapHost(256, this);
-		map.addEntity(new PlayerEntity(map, null, 10, 10, null));
 		
 		clientHandler = new ClientHandler(this);
 		clientHandler.start();
@@ -80,23 +77,18 @@ public class MPHost extends Screen{
 		}
 	}
 	
-	public void entityAdded(int ID, int xPos, int yPos){
-		String entityAdds = " " + ID + " " + xPos + " " + yPos;
-		this.entityAdds = this.entityAdds + entityAdds;
-		adds++;
-	}
-	
-	public void entityRemoved(int index){
-		entityDeletes = entityDeletes + " " + index;
-		deletes++;
+	public void entityRemoved(int uniqueNumber){
+		for(Player p:players){
+			p.update(5 + " " + uniqueNumber);
+		}
 	}
 
 	public void render(Graphics g) {
 		map.render(g, new Point(translationX, translationY), component.getSize(), component.getWidth(), component.getHeight());
 	}
 
-	public void messageReceived(String message) {
-		System.out.println(message);
+	public void messageReceived(String message, Player owner) {
+		//System.out.println(message);
 		switch(Util.parseInt(Util.splitString(message).get(0))){
 		case 2:
 			moveEntity(message);
@@ -107,27 +99,38 @@ public class MPHost extends Screen{
 			}
 			break;
 		case 3:
-			addEntity(message);
+			addEntity(message, owner);
+			System.out.println(message);
+			break;
+		case 5:
+			removeEntity(message);
 			break;
 		}
 	}
 
-	private void addEntity(String message) {
+	private void addEntity(String message, Player owner) {
 		int ID = Util.parseInt(Util.splitString(message).get(1));
 		int xPos = Util.parseInt(Util.splitString(message).get(2));
 		int yPos = Util.parseInt(Util.splitString(message).get(3));
 		int extraInfoOne = Util.parseInt(Util.splitString(message).get(4));
-		map.addEntity(Util.getEntity(map, ID, xPos, yPos, extraInfoOne));
+		Entity e = Util.getEntity(map, ID, xPos, yPos, extraInfoOne);
+		e.screen = owner;
+		map.addEntity(e);
+		
 	}
 	
-	public void entityAdded(Entity e){
+	public void entityAdded(Entity e, Player owner){
 		int ID = e.ID;
 		int xPos = e.xPos;
 		int yPos = e.yPos;
 		int uniqueNumber = e.uniqueNumber;
 		int extraInfoOne = e.getExtraOne();
-		String update = 4 + " " + ID + " " + uniqueNumber + " " + xPos + " " + yPos + " " + extraInfoOne;
+		String update = 4 + " " + 0 + " " + ID + " " + uniqueNumber + " " + xPos + " " + yPos + " " + extraInfoOne;
 		for(Player p: players){
+			if(owner == p){
+				p.update(4 + " " + 1 + " " + ID + " " + uniqueNumber + " " + xPos + " " + yPos + " " + extraInfoOne);
+				continue;
+			}
 			p.update(update);
 		}
 	}
@@ -137,6 +140,10 @@ public class MPHost extends Screen{
 		if(e instanceof MovingEntity){
 			((MovingEntity)e).moveTo(new Point(Util.parseInt(Util.splitString(message).get(2)),Util.parseInt(Util.splitString(message).get(3))));
 		}
+	}
+	
+	private void removeEntity(String message){
+		map.removeEntity(map.getEntity(Util.parseInt(Util.splitString(message).get(1))));
 	}
 	
 }

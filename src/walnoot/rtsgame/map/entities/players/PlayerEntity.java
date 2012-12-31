@@ -175,7 +175,7 @@ public class PlayerEntity extends MovingEntity {
 	}
 
 	public int getExtraOne() {
-		return 0;
+		return Util.getProfessionID(profession);
 	}
 
 	public boolean isMovable() {

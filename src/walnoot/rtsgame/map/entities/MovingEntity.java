@@ -141,6 +141,7 @@ public abstract class MovingEntity extends Entity {
 
 	public void moveTo(Point goal){
 		if(map instanceof MPMapClient){
+			if(screen == null) return;
 			((MPGameScreen)screen).moveEntity(this, goal.x, goal.y);
 			return;
 		}

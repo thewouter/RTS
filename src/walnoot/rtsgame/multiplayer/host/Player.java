@@ -20,9 +20,20 @@ public class Player extends GameScreen {
 	public Inventory inventory;
 	public InputListener input;
 	public MPHost host;
+	public final int ID;
+	
+	private static int PLAYERID = 0;
+	
+	private static int getNextPlayerID(){
+		PLAYERID +=1;
+		return PLAYERID;
+	}
 	
 	public Player(RTSComponent component, InputHandler input, MPHost host, BufferedReader r, PrintStream p, List<Entity> entities) {
 		super(component, input);
+		inventory = host.inventory;
+		
+		ID = getNextPlayerID();
 		
 		this.input = new InputListener(this, r, p);
 		this.host = host;
@@ -82,7 +93,7 @@ public class Player extends GameScreen {
 	}
 	
 	public void InputReceived(String message){
-		host.messageReceived(message);
+		host.messageReceived(message, this);
 	}
 	
 	public void sendTextMessage(String message){

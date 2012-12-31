@@ -46,7 +46,8 @@
 	 	2: 		entity movement;
 	 	3:		entity added TO HOST;
 	 	4:		entity added TO CLIENT;
-	 	
+	 	5:		entity removed
+	 	6:		entity damaged
 	
 	
 	

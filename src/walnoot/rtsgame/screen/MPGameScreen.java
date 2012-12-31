@@ -54,7 +54,7 @@ import walnoot.rtsgame.rest.Util;
 		this.IP = IP;
 		this.port = port;
 		try {
-			socket = new Socket(IP, this.port);
+			socket = new Socket(this.IP, this.port);
 			listener = new InputListener(this,  new BufferedReader(new InputStreamReader(socket.getInputStream())), new PrintStream(socket.getOutputStream()));
 		} catch (IOException e) {
 			System.out.println(port);
@@ -334,17 +334,21 @@ import walnoot.rtsgame.rest.Util;
 			moveEntity(message);
 		}else if(Util.parseInt(Util.splitString(message).get(0)) == 4){
 			entityAdded(message);
+		}else if(Util.parseInt(Util.splitString(message).get(0)) == 5){
+			entityRemoved(message);
 		}
 	}
 	
 	private void entityAdded(String entity){
-		int ID = Util.parseInt(Util.splitString(entity).get(1));
-		int uniqueNumber = Util.parseInt(Util.splitString(entity).get(2));
-		int xPos = Util.parseInt(Util.splitString(entity).get(3));
-		int yPos = Util.parseInt(Util.splitString(entity).get(4));
-		int extraInfoOne = Util.parseInt(Util.splitString(entity).get(5));
+		int ID = Util.parseInt(Util.splitString(entity).get(2));
+		int uniqueNumber = Util.parseInt(Util.splitString(entity).get(3));
+		int xPos = Util.parseInt(Util.splitString(entity).get(4));
+		int yPos = Util.parseInt(Util.splitString(entity).get(5));
+		int extraInfoOne = Util.parseInt(Util.splitString(entity).get(6));
 		Entity e = Util.getEntity(map, ID, xPos, yPos, extraInfoOne);
 		e.uniqueNumber = uniqueNumber;
+		if(Util.parseInt(Util.splitString(entity).get(1)) == 0) e.setOwned(false);
+		e.screen = this;
 		map.addEntityFromHost(e);
 	
 	}
@@ -373,6 +377,22 @@ import walnoot.rtsgame.rest.Util;
 	public void addEntity(Entity e, int x, int y){
 		String update = 3 + " " + e.ID + " " + x + " " + y + " " + e.getExtraOne();
 		listener.update(update);
+	}
+	
+	public void damageEntity(Entity e, int damage){
+		listener.update(6 + " " + e.uniqueNumber + " " + damage);
+	}
+	
+	private void EntityDamaged(String message){
+		map.getEntity(Util.parseInt(Util.splitString(message).get(1))).damageFromHost(Util.parseInt(Util.splitString(message).get(2)));
+	}
+	
+	public void removeEntity(Entity e){
+		listener.update(5 + " " + e.uniqueNumber);
+	}
+	
+	private void entityRemoved(String message){
+		map.removeEntityFromHost(map.getEntity(Util.parseInt(Util.splitString(message).get(1))));
 	}
 }
 

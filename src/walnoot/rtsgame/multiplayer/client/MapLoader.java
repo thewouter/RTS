@@ -7,6 +7,7 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.professions.Founder;
+import walnoot.rtsgame.map.entities.players.professions.Miner;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.MPGameScreen;
@@ -58,11 +59,12 @@ public class MapLoader extends Thread {
 			}
 		}
 		int amountEntities = Util.parseInt(mapInStrings.get(counter++));
-		System.out.println("entities: " + amountEntities);
+		//System.out.println("entities: " + amountEntities);
 		
 		for(int i = 0; i < amountEntities; i++){
 			String entity = mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++); 
-			Entity e = Util.getEntity(map, entity, screen);
+			Entity e = Util.getEntity(map, entity,screen);
+			e.screen = null;
 			map.addEntityFromHost(e);
 			
 		}
@@ -74,11 +76,15 @@ public class MapLoader extends Thread {
 		}
 		for (int i = 0; i < amountMovements; i++){
 			int uniqueNumber = Util.parseInt(mapInStrings.get(counter++));
-			System.out.println("uN: " + uniqueNumber);
+			//System.out.println("uN: " + uniqueNumber);
 			((MovingEntity)map.getEntity(uniqueNumber)).moveToFromHost(new Point(Util.parseInt(mapInStrings.get(counter++)),Util.parseInt(mapInStrings.get(counter++))));
 		}
-		System.out.println(6);
+		//System.out.println(6);
 		input.send("1 Received!");
+		
+		PlayerEntity p = new PlayerEntity(map, screen, 11, 11, null);
+		p.setProfession(new Founder(p));
+		map.addEntity(p);
 	}
 	
 	public int checkProgress() {

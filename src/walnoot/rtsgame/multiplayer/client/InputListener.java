@@ -26,7 +26,7 @@ public class InputListener extends Thread{
 					System.out.println("null");
 					break;
 				}
-				System.out.println(received);
+				//System.out.println(received);
 				owner.messageReceived(received);
 			}
 		}catch(IOException e){

@@ -7,6 +7,7 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.MPGameScreen;
 
 public abstract class Entity implements Cloneable {
 	public final Map map;
@@ -17,6 +18,7 @@ public abstract class Entity implements Cloneable {
 	public int ID;
 	public GameScreen screen;
 	public int uniqueNumber;
+	public boolean isOwnedByPlayer = true;
 	
 	public static int ENTITY_ID_COUNTER = 1;
 	
@@ -31,6 +33,9 @@ public abstract class Entity implements Cloneable {
 		Entity.ENTITY_ID_COUNTER = ENTITY_ID_COUNTER + 1;
 		
 	}
+	public void setOwned(Boolean b){
+		isOwnedByPlayer = b;
+	}
 	
 	public void setID(int ID){
 		this.ID = ID;
@@ -44,7 +49,7 @@ public abstract class Entity implements Cloneable {
 	
 	
 	public void renderSelected(Graphics g){
-		if(screen != null) g.setColor(screen.getColor());
+		if(isOwnedByPlayer) g.setColor(screen.getColor());
 		else g.setColor(Color.GREEN);
 		g.drawOval(getScreenX(), getScreenY(), Tile.getWidth(), Tile.getHeight());
 		render(g);
@@ -68,6 +73,10 @@ public abstract class Entity implements Cloneable {
 	}
 	
 	public void damage(int damage){
+		if(screen instanceof MPGameScreen){
+			((MPGameScreen) screen).damageEntity(this, damage);
+		}
+		
 		health -= damage;
 		if(health <=0) map.removeEntity(this);
 	}
@@ -108,5 +117,14 @@ public abstract class Entity implements Cloneable {
         } catch (final CloneNotSupportedException ex) {
             throw new AssertionError();
         }
+	}
+
+	public void damageFromHost(int damage) {
+		health -= damage;
+		if(health <=0) map.removeEntity(this);
+	}
+	
+	public boolean isOwnedByPlayer(){
+		return isOwnedByPlayer;
 	}
 }

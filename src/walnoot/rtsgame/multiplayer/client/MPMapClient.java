@@ -94,7 +94,7 @@ public class MPMapClient extends Map{
 	}
 	
 	public void removeEntity(Entity u){
-		// MPMapClient may remove entities.
+		screen.removeEntity(u);
 	}
 
 	public boolean isHasLoaded() {

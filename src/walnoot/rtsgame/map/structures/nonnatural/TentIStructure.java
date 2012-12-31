@@ -10,6 +10,7 @@ import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.MPGameScreen;
 
 public class TentIStructure extends BasicStructure {
 	
@@ -36,20 +37,21 @@ public class TentIStructure extends BasicStructure {
 	public void update(){
 		LinkedList<Entity> toBeAddedToTheMap = new LinkedList<Entity>();
 		if(players.size() < MAX_PLAYERS)time++;
-		if(time >= TIME_TO_SPAWN_A_PLAYER && players.size() < MAX_PLAYERS){
+		if(time >= TIME_TO_SPAWN_A_PLAYER && players.size() < MAX_PLAYERS && screen != null && !(screen instanceof MPGameScreen)){
 			toBeAddedToTheMap.add(new PlayerEntity(map, screen, xPos + 3, yPos + 3, this));
 			screen.inventory.meat --;
 			screen.inventory.gold --;
 			time = 0;
 		}
+		
 		LinkedList<PlayerEntity> toBeRemoved = new LinkedList<PlayerEntity>();
 		
 		for(PlayerEntity p : players){
 			if(!map.getEntities().contains(p) && !map.notOnMap.contains(p)){
 				toBeRemoved.add(p);
-				//System.out.println(p);
 			}
 		}
+		
 		players.removeAll(toBeRemoved);
 		map.addEntity(toBeAddedToTheMap);
 		
