@@ -127,4 +127,7 @@ public abstract class Entity implements Cloneable {
 	public boolean isOwnedByPlayer(){
 		return isOwnedByPlayer;
 	}
+	public String getHealthInString() {
+		return health + "";
+	}
 }

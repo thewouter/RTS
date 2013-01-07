@@ -9,50 +9,47 @@ import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.Soldier;
+import walnoot.rtsgame.map.entities.players.Weapon;
 import walnoot.rtsgame.map.entities.players.professions.Profession;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
+import walnoot.rtsgame.popups.screenpopup.SchoolPopup.Button;
+import walnoot.rtsgame.rest.Util;
+import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.Screen;
 
-public class SchoolPopup extends ScreenPopup{
-	BufferedImage image, faceImage = Images.buttons[4][2];
+public class BarracksPopup extends ScreenPopup {
+	static BufferedImage image, faceImage = Images.buttons[4][2];
 	int xPos, yPos;
 	BasicStructure owner;
 	InputHandler input;
 
-	public Button lumberJacker;
-	public Button hunter;
-	public Button founder;
-	public Button minerI;
-	public Button minerII;
+	public Button swordsMan;
+	public Button bow;
 	
 	LinkedList<Button> buttons = new LinkedList<Button>();
-	
-	public SchoolPopup(Screen title, BufferedImage image, BasicStructure owner, InputHandler input) {
+
+	public BarracksPopup(Screen title, BufferedImage image, BasicStructure owner, InputHandler input) {
 		super(title.getWidth() - (image.getWidth() / 2), title.getHeight() - (image.getHeight() / 2), image.getWidth(), image.getHeight(), title);
 		this.image = image;
 		this.input = input;
 		xPos = title.getWidth() / 2 - (image.getWidth() / 2);
 		yPos = title.getHeight() / 2 - (image.getHeight() / 2);
 		this.owner = owner;
-		lumberJacker = new Button(owner, xPos + 40, yPos + 20 * 0 + 10, 120, 400, Images.buttons[5][7],1);
-		hunter = new Button(owner, xPos + 40, yPos + 20 * 1 + 10, 120, 402, Images.buttons[7][7],1);
-		founder = new Button(owner, xPos + 60, yPos + 20 * 1 + 10, 120, 403, Images.buttons[6][6],1);
-		minerI = new Button(owner, xPos + 40, yPos + 20 * 2 + 10, 120, 401, Images.buttons[2][6],1);
-		minerII = new Button(owner, xPos + 60, yPos + 20 * 0 + 10, 120, 405, Images.buttons[3][6],1);
+		swordsMan = new Button(owner, xPos + 40, yPos + 20 * 0 + 10, 120, 501, Images.buttons[2][5]);
+		bow = new Button(owner, xPos + 40, yPos + 50, 120, 500, Images.buttons[3][5]);
+		
 		setButtons();
 	}
 	
 	private void setButtons(){
 		buttons.clear();
-		buttons.add(lumberJacker);
-		buttons.add(minerI);
-		buttons.add(hunter);
-		buttons.add(founder);
-		buttons.add(minerII);
+		buttons.add(swordsMan);
+		buttons.add(bow);
 	}
-
+	
 	public void render(Graphics g) {
 		g.setColor(Color.WHITE);
 		g.drawImage(image, xPos, yPos, null); // render the box.
@@ -91,10 +88,30 @@ public class SchoolPopup extends ScreenPopup{
 		}
 	}
 	
-	public void updateSchool() {
+	public void updateBarracks() {
 		for(Button b: buttons){
 			b.update();
 		}
+	}
+	
+	public boolean soldierNeeded(){
+		for(Button b: buttons){
+			if(b.amountToBuild > 0){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public Soldier getSoldier(){
+		for(Button b : buttons){
+			if(b.amountToBuild > 0){
+				Soldier soldier = new Soldier(((GameScreen)screen).map, (GameScreen)screen, owner.xPos - 1, owner.yPos - 1, null);
+				soldier.addSoldierComponent(b.getWeapon(soldier));
+				return soldier;
+			}
+		}
+		return null;
 	}
 
 	public void onLeftClick(int mouseX, int mouseY) {
@@ -113,17 +130,13 @@ public class SchoolPopup extends ScreenPopup{
 		PlayerEntity pupil = null;
 		int teller = 0;
 		private final int professionID;
-		boolean isActive = false;
-		private int knowledge;
+		boolean isActive = true;
 		
 		public final int TICKS_TO_TEACH;
 		
-		private Button(BasicStructure owner, int x, int y,int teachTime, int professionID, BufferedImage image, int knowledge){
-			if(owner instanceof SchoolI) this.ownerA = (SchoolI) owner;
-			else if (owner instanceof SchoolII) this.ownerB = (SchoolII) owner;
+		private Button(BasicStructure owner, int x, int y,int teachTime, int professionID, BufferedImage image){
 			this.x = x;
 			this.y = y;
-			this.knowledge = knowledge;
 			this.professionID = professionID;
 			button = image;
 			width = button.getWidth();
@@ -132,8 +145,9 @@ public class SchoolPopup extends ScreenPopup{
 			TICKS_TO_TEACH = teachTime;
 		}
 		
-		public void activate(){
-			isActive = true;
+		public Weapon getWeapon(Soldier owner){
+			amountToBuild -= 1;
+			return Util.getWeapon(professionID, owner);
 		}
 		
 		public void update(){
@@ -144,7 +158,6 @@ public class SchoolPopup extends ScreenPopup{
 					if(ownerA != null)ownerA.releasePupil(pupil);
 					else if (ownerB != null) {
 						ownerB.releasePupil(pupil);
-						ownerB.Knowledge += knowledge;
 					}
 					pupil = null;
 					
@@ -183,4 +196,5 @@ public class SchoolPopup extends ScreenPopup{
 			return(x >= this.x && y >= this.y && x < width  + this.x && y < height + this.y);
 		}
 	}
+
 }

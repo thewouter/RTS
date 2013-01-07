@@ -9,14 +9,16 @@ public abstract class Weapon extends SoldierComponent {
 	boolean isFighting = true;
 	public int MIN_HIT_RANGE = 0, MAX_HIT_RANGE = 1, LOAD_TIME = 0; //standard..  TODO place in constructor
 	int ticksCounter = 0;
+	public final int ID;
 
-	public Weapon(Soldier owner) {
+	public Weapon(Soldier owner, int ID) {
 		super(owner);
 		for(SoldierComponent c: owner.comp){
 			if(c instanceof Weapon){
 				owner.comp.remove(c);
 			}
 		}
+		this.ID = ID;
 	}
 
 	public void render(Graphics g) {}

@@ -14,7 +14,7 @@ import walnoot.rtsgame.screen.MPGameScreen;
 
 public class TentIStructure extends BasicStructure {
 	
-	public final static int ID = 201, TIME_TO_SPAWN_A_PLAYER = 120, MAX_PLAYERS = 8;
+	public final static int ID = 201, TIME_TO_SPAWN_A_PLAYER = 120, MAX_PLAYERS = 2;
 	private int time = 0;
 	public LinkedList<PlayerEntity> players = new LinkedList<PlayerEntity>();
 	public TentIStructure(Map map, GameScreen screen, int xPos, int yPos){

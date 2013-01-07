@@ -1,0 +1,47 @@
+package walnoot.rtsgame.map.entities.players;
+
+import java.awt.Graphics;
+import java.awt.Image;
+
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
+
+import walnoot.rtsgame.Images;
+
+public class Shield extends SoldierComponent {
+	private int protection = 0;
+	private int health = 0;
+	private Image image;
+	/**
+	 * @param owner
+	 * @param protection Number between 0 - 100, 0 is no protection , 100 is full
+	 */
+	public Shield(Soldier owner, int protection, int health) {
+		super(owner);
+		this.protection = protection;
+		this.health = health;
+		image = Images.smallButtons[0][0];
+		
+	}
+
+	public void render(Graphics g) {
+		g.drawImage(image,owner.getScreenX(), owner.getScreenY(), null);
+	}
+
+	public void update() {
+		
+	}
+	
+	public void damage(int damage){
+		health -= damage;
+		if(health <= 0){
+			owner.removeSoldierComponent(this);
+		}
+	}
+
+	public void activate() {}
+
+	public int getProtection() {
+		return protection;
+	}
+
+}

@@ -28,6 +28,7 @@ public class Map {
 	public LinkedList<Entity> toBeRemoved = new LinkedList<Entity>(), toBeAdded = new LinkedList<Entity>(), toBeRemovedFromMap = new LinkedList<Entity>();
 	public PerlinNoise2D noiseObj;
 	public int amountSheepGroups = 0;
+	private GameScreen screen;
 	int c1 = 0, c2 = 0;
 	
 	public static final int TREE_GROW_CHANGE = 15, SHEEP_SPAWN_CHANGE_IN_FOREST =2, SHEEP_SPAWN_CHANGE_ON_PLAINS = 5, RADIUS_SHEEP_GROUPS = 5, SIZE_SHEEP_GROUPS = 10, SPAWN_CHANGE_GOLD_MINE = 3;  
@@ -63,17 +64,19 @@ public class Map {
 	};
 	
 	
-	public Map(int mapSize){
+	public Map(int mapSize, GameScreen screen){
 		
 		surface = new Tile[mapSize][mapSize];
 		noiseObj = new PerlinNoise2D();
-		generateMap();
+		generateMap(screen);
+		this.screen = screen;
 	}
 	
 	public Map(int mapSize, int amountSheepGroups){
 		surface = new Tile[mapSize][mapSize];
 		noiseObj = new PerlinNoise2D();
 		this.amountSheepGroups = amountSheepGroups;
+		this.screen = screen;
 		generateEmptyMap();
 	
 	}
@@ -88,7 +91,7 @@ public class Map {
 		}
 		double fraction = ((double)amountSheepGroups/((double)SheepEntity.APROX_LIFETIME_IN_TICKS));
 		if(Util.RANDOM.nextDouble() <= fraction){
-			addSheepGroup();
+			addSheepGroup(screen);
 		}
 		
 		
@@ -142,7 +145,7 @@ public class Map {
 		}
 	}
 	
-	public void addSheepGroup(){
+	public void addSheepGroup(GameScreen screen){
 		while(true){
 			int x = Util.RANDOM.nextInt(getLength());
 			int y = Util.RANDOM.nextInt(getWidth());
@@ -153,7 +156,9 @@ public class Map {
 						int yPos = y - 2 * RADIUS_SHEEP_GROUPS + (Util.RANDOM.nextInt(RADIUS_SHEEP_GROUPS * 2)) - 2;
 						if(xPos > 0 && yPos > 0){
 							if(!getTile(xPos, yPos).isSolid()){
-								addEntity((new SheepEntity(this,null, xPos, yPos)));
+								Entity e = (new SheepEntity(this,screen, xPos, yPos));
+								e.setOwned(false);
+								addEntity(e);
 								i++;
 							}
 						}
@@ -164,14 +169,16 @@ public class Map {
 		}
 	}
 	
-	public void addSheepGroup(int x, int y){
+	public void addSheepGroup(int x, int y, GameScreen screen){
 		if(getEntity(x, y) == null){
 			for(int i = 0,control = 0; i < SIZE_SHEEP_GROUPS && control < RADIUS_SHEEP_GROUPS * RADIUS_SHEEP_GROUPS; control++){
 				int xPos = x - 2 * RADIUS_SHEEP_GROUPS + (Util.RANDOM.nextInt(RADIUS_SHEEP_GROUPS * 2)) - 2;
 				int yPos = y - 2 * RADIUS_SHEEP_GROUPS + (Util.RANDOM.nextInt(RADIUS_SHEEP_GROUPS * 2)) - 2;
 				if(xPos > 0 && yPos > 0){
 					if(!getTile(xPos, yPos).isSolid()){
-						addEntity((new SheepEntity(this,null, xPos, yPos)));
+						Entity e = (new SheepEntity(this,screen, xPos, yPos));
+						e.setOwned(false);
+						addEntity(e);
 						i++;
 					}
 				}
@@ -194,28 +201,40 @@ public class Map {
 		}
 	}
 	
-	public void generateMap(){
+	public boolean containsEntity(Entity e){
+		return entities.contains(e);
+	}
+	
+	public void generateMap(GameScreen screen){
 		for(int x = 0; x < getWidth(); x++){
 			for(int y = 0; y < getWidth(); y++){
 				float noise = noiseObj.perlinNoise(x, y, 0.3f, 32f, 4);
 				if(noise > 0) {
 					surface[x][y] = Tile.grass1;
 					if(noise > 0.6) {
-						if(Util.RANDOM.nextInt(TREE_GROW_CHANGE) == 0)addEntity(new TreeStructure(this,null, x, y));
+						if(Util.RANDOM.nextInt(TREE_GROW_CHANGE) == 0){
+							Entity e = (new TreeStructure(this,screen , x, y));
+							e.setOwned(false);
+							addEntity(e);
+						}
 						if(Util.RANDOM.nextInt(10000) < SHEEP_SPAWN_CHANGE_IN_FOREST){
 							amountSheepGroups++;
-							addSheepGroup(x,y);
+							addSheepGroup(x,y, screen);
 						}
 					}else{
 						if(Util.RANDOM.nextInt(10000) < SHEEP_SPAWN_CHANGE_ON_PLAINS && x > RADIUS_SHEEP_GROUPS + 1 && x < getLength() - RADIUS_SHEEP_GROUPS - 1 && y > RADIUS_SHEEP_GROUPS  + 1 && y < getWidth() - RADIUS_SHEEP_GROUPS - 1){
 							amountSheepGroups++;
-							addSheepGroup(x,y);
+							addSheepGroup(x,y, screen);
 						}
 					}
 					
 					if(Util.RANDOM.nextInt(10000) < SPAWN_CHANGE_GOLD_MINE){
 						int size = Util.RANDOM.nextInt(3) + 1;
-						if(x > size && y > size) addEntity(new GoldMine(this,null, x - size, y - size ,size));
+						if(x > size && y > size){
+							Entity e = new GoldMine(this,screen, x - size, y - size ,size);
+							e.setOwned(false);
+							addEntity(e);
+						}
 					}
 				}
 				else if(noise > -0.2f) surface[x][y] = Tile.sand1;

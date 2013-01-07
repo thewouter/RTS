@@ -16,6 +16,7 @@ public class Images {
 	public static BufferedImage mines = load("/res/Pictures/mines.png");
 	public static BufferedImage[][] dudes = split(load("/res/Pictures/dudes.png"),4,4);
 	public static BufferedImage school = load("/res/Pictures/school.png");
+	public static BufferedImage[][] smallButtons = split(load("/res/Pictures/8x8buttons.png"),10,10);
 	
 	public static BufferedImage load(String fileName){
 		try{

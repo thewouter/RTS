@@ -8,7 +8,11 @@ import walnoot.rtsgame.map.entities.DeerEntity;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.SnakeEntity;
+import walnoot.rtsgame.map.entities.players.Bow;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.Soldier;
+import walnoot.rtsgame.map.entities.players.Sword;
+import walnoot.rtsgame.map.entities.players.Weapon;
 import walnoot.rtsgame.map.entities.players.professions.Farmer;
 import walnoot.rtsgame.map.entities.players.professions.Founder;
 import walnoot.rtsgame.map.entities.players.professions.Hunter;
@@ -316,6 +320,17 @@ public class Util {
 			return 404;
 		}
 		return 0;
+	}
+	
+	public static Weapon getWeapon(int ID, Soldier owner){
+		switch(ID){
+		case 501:
+			return new Sword(owner, 1);
+		case 500:
+			return new Bow(owner);
+		default:
+			return null;
+		}
 	}
 }	
 	

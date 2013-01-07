@@ -14,6 +14,7 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.professions.Founder;
+import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
 import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
@@ -81,7 +82,7 @@ public abstract class GameScreen extends Screen {
 		
 		if(selectedEntities.size() == 1){
 			font.drawBoldLine(g, selectedEntities.getFirst().getName(), 20, getHeight() - 40, Color.BLACK);
-			font.drawBoldLine(g, "Health: " + selectedEntities.getFirst().getHealth(), 20, getHeight() - 30, Color.BLACK);
+			font.drawBoldLine(g, "Health: " + selectedEntities.getFirst().getHealthInString(), 20, getHeight() - 30, Color.BLACK);
 		}else if(!selectedEntities.isEmpty()){
 			font.drawBoldLine(g, "Multiple Select: " + selectedEntities.size(), 20, getHeight() - 30, Color.BLACK);
 		}
@@ -239,6 +240,8 @@ public abstract class GameScreen extends Screen {
 			}
 			return;
 		case 2:
+			inventory.meat -= 16;
+			inventory.gold -= 25;
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][6], this) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, input, screen) {
@@ -265,6 +268,21 @@ public abstract class GameScreen extends Screen {
 					return "Tent II";
 				}
 			}, 1);
+			
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[6][7], this) {
+				
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(screen.map, input, screen){
+						public Entity toBuild(){
+							return new TreeStructure(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+						}
+					};
+				}
+				
+				public String getName() {
+					return "Tree";
+				}
+			});
 
 			for(Entity e:map.getEntities()){
 				if(e instanceof SchoolI){
@@ -277,6 +295,11 @@ public abstract class GameScreen extends Screen {
 					s.popup.founder.activate();
 				}
 			}
+			break;
+		case 3:
+			inventory.gold -= 100;
+			inventory.meat -= 60;
+			inventory.wood -= 25;
 		}
 	}
 

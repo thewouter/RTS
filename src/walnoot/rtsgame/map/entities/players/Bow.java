@@ -15,9 +15,10 @@ import walnoot.rtsgame.rest.Util;
 public class Bow extends Weapon {
 	LinkedList<Arrow> arrows = new LinkedList<Arrow>();
 	private LinkedList<Arrow> toBeRemoved = new LinkedList<Arrow>();
+	private static int ID = 500;
 	
 	public Bow(Soldier owner) {
-		super(owner);
+		super(owner, ID);
 		MIN_HIT_RANGE = 5;
 		MAX_HIT_RANGE = 6;
 		LOAD_TIME = 60;

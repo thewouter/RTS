@@ -17,16 +17,19 @@ import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.players.AlertComponent;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.Shield;
 import walnoot.rtsgame.map.entities.players.Soldier;
 import walnoot.rtsgame.map.entities.players.SoldierComponent;
 import walnoot.rtsgame.map.entities.players.professions.Founder;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
+import walnoot.rtsgame.map.structures.nonnatural.Barracks;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
 import walnoot.rtsgame.map.structures.nonnatural.Farm;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
 import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
+import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.menubar.Button;
 import walnoot.rtsgame.rest.Sound;
 import walnoot.rtsgame.rest.Util;
@@ -39,7 +42,7 @@ public class SPGameScreen extends GameScreen {
 	public SPGameScreen(RTSComponent component, InputHandler input){
 		super(component, input);
 		
-		map = new Map(256);
+		map = new Map(256, this);
 		
 		inventory.gold = 500;
 		
@@ -48,7 +51,7 @@ public class SPGameScreen extends GameScreen {
 		for(int i = 4;; i++){
 			if(!map.getTile(4, i).isSolid()){
 				Soldier player = new Soldier(map,this, 4, i, null);
-				player.addSoldierComponent(new AlertComponent(player , 1));
+				player.addSoldierComponent(new Shield(player, 50, 6000000));
 				selectedEntities.add(player);
 				goodYPos = i;
 				break;
@@ -67,17 +70,7 @@ public class SPGameScreen extends GameScreen {
 		p.setProfession(new Founder(p));
 		map.addEntity(p);
 		
-		/*
-		map.addEntity(new DeerEntity(map, this,4, goodYPos+1)); //voor de test, later weghalen
-		map.addEntity(new SheepEntity(map,this, 4, goodYPos+2)); //voor de test, later weghalen
-		map.addEntity(new TentIStructure(map,this, 4, goodYPos + 3)); //voor de test, later weghalen
-		map.addEntity(new CampFireStructure(map,this, 4, goodYPos + 5)); //voor de test, later weghalen
-		map.addEntity(new TreeStructure(map,this, 4, goodYPos + 7)); //voor de test, later weghalen
-		map.addEntity(new GoldMine(map,null , 10, 10, 3));			//etc...
-		map.addEntity(new StoneMine(map, this, 4, goodYPos + 15));
-		map.addEntity(new SchoolII(map, this, 4, goodYPos + 20));
-		map.addEntity(new Farm(map, this, 12, goodYPos + 20));
-		*/
+		map.addEntity(new Barracks(map, this, 10, 20)); // voor de te... laat maar.
 		
 		
 		
@@ -143,15 +136,12 @@ public class SPGameScreen extends GameScreen {
 				}else if( entityPopup == null ){
 					selectedEntities.addAll(map.getEntities(getMapX(), getMapY()));
 				}
-				
-				
-				
-				
 			}
-			if(input.isDragging()){
+			
+			if(input.isDragging() && (popup == null || !popup.isInPopup(input.mouseX, input.mouseY))){
 				int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
 				selectedEntities.clear();
-				selectedEntities.addAll(map.getEntities(x1, y1, x2, y2, new Dimension(translationX, translationY)));
+				selectedEntities.addAll(map.getEntities(x1 - Tile.WIDTH, y1 - Tile.HEIGHT, x2, y2, new Dimension(translationX, translationY)));
 			}
 			
 			if(entityPopup != null){
@@ -224,12 +214,11 @@ public class SPGameScreen extends GameScreen {
 	}
 	
 	public boolean isReadyForLevelUp(){
-		
 		switch (level) {
 		case 1:
-			if(inventory.gold >= 1 && inventory.meat >= 1)return true;
+			if(inventory.gold >= 25 && inventory.meat >= 16)return true;
 		case 2:
-			if(inventory.gold >= 300 && inventory.meat >=  60) return true;
+			if(inventory.gold >= 100 && inventory.meat >=  60 && inventory.wood >= 25) return true;
 		}
 		
 		return false;

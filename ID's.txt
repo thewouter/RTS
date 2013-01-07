@@ -26,6 +26,7 @@
 	208 MinerIISchool
 	209 Farm
 	210 SchoolI
+	211 Barracks
 	
 300-399 mines
 	300 GoldMine
@@ -38,6 +39,9 @@
 	404 Farmer
 	405 MinerII
 	
+500-599 Weapons
+	500 Bow
+	501 Sword
 	
 	
 	MP messages:

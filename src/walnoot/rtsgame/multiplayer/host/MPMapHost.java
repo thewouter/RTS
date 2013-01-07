@@ -19,7 +19,7 @@ public class MPMapHost extends Map implements Cloneable{
 	public MPHost host;
 
 	public MPMapHost(int mapSize, MPHost host) {
-		super(mapSize);
+		super(mapSize, null);
 		this.host = host;
 	}
 	
@@ -34,7 +34,7 @@ public class MPMapHost extends Map implements Cloneable{
 			
 		double fraction = ((double)amountSheepGroups/((double)SheepEntity.APROX_LIFETIME_IN_TICKS));
 		if(Util.RANDOM.nextDouble() <= fraction){
-			addSheepGroup();
+			addSheepGroup(null);
 		}
 		for(Entity e: toBeRemoved){
 			host.entityRemoved(getEntities().indexOf(e));

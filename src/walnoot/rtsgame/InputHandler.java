@@ -152,7 +152,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 			mouseXOnClick = mouseX;
 			mouseYOnClick = mouseY;
 		}
-		isDragging = true;
+		if(LMBDown)isDragging = true;
 		
 	}
 	

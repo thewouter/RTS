@@ -26,12 +26,12 @@ public class SchoolI extends BasicStructure {
 		int level = screen.level;
 		
 		if(level <= 0) return;
-		popup.founder.activate();
 		popup.hunter.activate();
 		popup.lumberJacker.activate();
 		popup.minerI.activate();
 		if(level <= 1) return;
 		popup.minerII.activate();
+		popup.founder.activate();
 	}
 
 	protected int getHeadSpace() {
