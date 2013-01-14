@@ -9,7 +9,7 @@ import walnoot.rtsgame.screen.SPGameScreen;
 public class GoldMine extends MineStructure {
 	public static int ID = 300, HEALTH_SMALL = 100, HEALTH_MEDIUM = 200, HEALTH_LARGE = 300;
 	
-	public GoldMine(Map map, GameScreen screen, int xPos, int yPos, int size) {
+	public GoldMine  (Map map, GameScreen screen, int xPos, int yPos, int size) {
 		super(map,screen, xPos, yPos, ID, size);
 		map.removeEntity(map.getEntity(getxPos() - getSize(), getyPos() - getSize()));
 	}

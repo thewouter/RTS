@@ -1,4 +1,4 @@
-package walnoot.rtsgame.map.structures.nonnatural;
+package walnoot.rtsgame.map.structures.nonnatural.warrelated;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class Barracks extends BasicStructure {
 		super(map, screen, xPos, yPos, 5, 8, ID);
 	}
 
-	protected int getHeadSpace() {
+	public int getHeadSpace() {
 		return 2;
 	}
 

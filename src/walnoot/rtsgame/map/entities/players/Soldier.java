@@ -34,13 +34,13 @@ public class Soldier extends PlayerEntity {
 			if(c.getClass() == comp.getClass()){
 				remove = c;
 			}
-			
 		}
+		
 		if(comp instanceof Weapon){
+			weapon = (Weapon) comp;
 			for(SoldierComponent c : this.comp){
 				if(c instanceof Weapon){
 					remove = c;
-					weapon = (Weapon) comp;
 				}
 			}
 		}
@@ -53,7 +53,6 @@ public class Soldier extends PlayerEntity {
 			shieldProtection = ((Shield)comp).getProtection();
 		}
 		this.comp.remove(remove);
-		
 		this.comp.add(comp);
 	}
 	
@@ -66,30 +65,24 @@ public class Soldier extends PlayerEntity {
 	
 	public void render(Graphics g){
 		super.render(g);
-		for(SoldierComponent c:comp){c.render(g);}
+		for(SoldierComponent c:comp){
+			c.render(g);
+		}
 	}
 	
-	public void update(){
+	public synchronized void update(){
 		super.update();
 		for(SoldierComponent c:comp){c.update();}
 		if(!map.getEntities().contains(target)) target = null;
-		
-		if(target != null){ 					//fighting !! :)
-			if(!isMoving() && isMovable()){
-				for(SoldierComponent c: comp){
-					if( c instanceof Weapon){
-						((Weapon)c).setTarget(target);
-					}
-				}
-			}
-		}
 		comp.removeAll(toRemove);
 	}
 	
-	
-	
 	public void activate(Entity target){
 		this.target = target;
+		for(SoldierComponent c: comp){
+			c.activate(target);
+		}
+		follow(target);
 	}
 	
 	public String getName(){
@@ -101,22 +94,10 @@ public class Soldier extends PlayerEntity {
 		if(entityClicked != this && entityClicked instanceof MovingEntity){ // attack it!!!
 			activate(entityClicked);
 			return false;
+		}else if(entityClicked != this){
+			moveTo(entityClicked);
+			return false;
 		}
-		if(entityClicked != this) return true;
-		EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
-		popup.addOption(new Option("set bow", popup) {
-			public void onClick() {
-				((Soldier)owner.owner).addSoldierComponent(new Bow(((Soldier)owner.owner)));
-			}
-		});
-		
-		popup.addOption(new Option("set Sword", popup) {
-			
-			public void onClick() {
-				((Soldier)owner.owner).addSoldierComponent(new Sword(((Soldier)owner.owner),2));
-			}
-		});
-		screen.setEntityPopup(popup);
 		return false;
 	}
 	public String getHealthInString(){
@@ -131,6 +112,14 @@ public class Soldier extends PlayerEntity {
 			super.damage((int) Math.floor(progressToNextDamage));
 			progressToNextDamage -= (int) Math.floor(progressToNextDamage);
 		}
+	}
+
+	public synchronized ArrayList<SoldierComponent> getComponents() {
+		return comp;
+	}
+
+	public Weapon getWeapon() {
+		return weapon;
 	}
 
 }

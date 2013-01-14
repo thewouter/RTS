@@ -34,7 +34,7 @@ public class SchoolII extends BasicStructure {
 		popup.minerII.activate();
 	}
 
-	protected int getHeadSpace() {
+	public int getHeadSpace() {
 		return 2;
 	}
 	

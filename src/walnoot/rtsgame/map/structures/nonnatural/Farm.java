@@ -10,7 +10,7 @@ public class Farm extends BasicStructure{
 		super(map, screen, xPos, yPos,2, 8, ID);
 	}
 
-	protected int getHeadSpace() {
+	public int getHeadSpace() {
 		return 2;
 	}
 

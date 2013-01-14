@@ -1,5 +1,7 @@
 package walnoot.rtsgame.map.entities.players;
 
+import walnoot.rtsgame.map.entities.Entity;
+
 public class Sword extends Weapon {
 	int damage;
 	private static int ID = 501;

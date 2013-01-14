@@ -90,6 +90,8 @@ public class RTSComponent extends Canvas implements Runnable {
 		//if(Options.SOUND_ON)amplifybackground();
 		
 		//if(Options.startFullScreen) fullScreenManager.setFullScreen();
+
+		//fullScreenManager.setFullScreen();
 		
 		while(running){
 			long timePassed = System.nanoTime() - totalTime; //hoeveel tijd er verstreken is sinds de vorige update

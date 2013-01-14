@@ -103,6 +103,10 @@ public abstract class MineStructure extends Structure {
 	public void damage(int damage){
 		super.damage(damage);
 	}
+	
+	public int getHeadSpace(){
+		return 1;
+	}
 
 	public abstract void mine(int damage, Entity miner);
 }

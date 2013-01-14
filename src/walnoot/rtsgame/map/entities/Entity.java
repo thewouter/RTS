@@ -46,6 +46,7 @@ public abstract class Entity implements Cloneable {
 	public abstract int getMaxHealth();
 	public abstract String getName();
 	public abstract int getCosts();
+	public abstract int getHeadSpace();
 	
 	
 	public void renderSelected(Graphics g){
@@ -79,7 +80,10 @@ public abstract class Entity implements Cloneable {
 		
 		health -= damage;
 		if(health <=0) map.removeEntity(this);
+		onDestroying();
 	}
+	
+	public void onDestroying() {}
 	
 	public int getxPos(){
 		return xPos;
@@ -130,4 +134,6 @@ public abstract class Entity implements Cloneable {
 	public String getHealthInString() {
 		return health + "";
 	}
+	
+	
 }

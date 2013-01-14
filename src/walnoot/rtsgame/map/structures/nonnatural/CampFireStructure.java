@@ -32,7 +32,7 @@ public class CampFireStructure extends BasicStructure{
 	public String getName(){
 		return "Campfire";
 	}
-	protected int getHeadSpace(){
+	public int getHeadSpace(){
 		return 1;
 	}
 

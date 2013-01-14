@@ -394,9 +394,9 @@ public class Map {
 		toBeRemoved.add(getEntity(x, y));
 	}
 	
-	public LinkedList<Entity> getEntities(int x, int y , int radius, Entity ... exept){
+	public ArrayList<Entity> getEntities(int x, int y , int radius, Entity ... exept){
 		LinkedList<Entity> except = new LinkedList<Entity>();
-		LinkedList<Entity> result = new LinkedList<Entity>();
+		ArrayList<Entity> result = new ArrayList<Entity>();
 		for (Entity e : exept){
 			except.add(e);
 		}

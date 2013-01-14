@@ -27,6 +27,7 @@
 	209 Farm
 	210 SchoolI
 	211 Barracks
+	212 DefenseTower
 	
 300-399 mines
 	300 GoldMine

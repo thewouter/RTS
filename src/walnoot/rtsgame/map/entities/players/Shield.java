@@ -6,6 +6,7 @@ import java.awt.Image;
 import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
 import walnoot.rtsgame.Images;
+import walnoot.rtsgame.map.entities.Entity;
 
 public class Shield extends SoldierComponent {
 	private int protection = 0;
@@ -42,6 +43,9 @@ public class Shield extends SoldierComponent {
 
 	public int getProtection() {
 		return protection;
+	}
+
+	public void activate(Entity target) {
 	}
 
 }

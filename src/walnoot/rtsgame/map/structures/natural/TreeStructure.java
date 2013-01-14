@@ -33,7 +33,7 @@ public class TreeStructure extends BasicStructure{
 		return "tree";
 	}
 
-	protected int getHeadSpace() {
+	public int getHeadSpace() {
 		return 2;
 	}
 

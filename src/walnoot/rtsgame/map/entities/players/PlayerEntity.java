@@ -100,6 +100,10 @@ public class PlayerEntity extends MovingEntity {
 		}
 	}
 	
+	public int getHeadSpace(){
+		return 2;
+	}
+	
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
 		if(profession != null && profession.onRightClick(entityClicked, screen, input)) return false;
 		if(entityClicked == this){

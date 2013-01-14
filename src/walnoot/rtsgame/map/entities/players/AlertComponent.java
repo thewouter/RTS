@@ -32,4 +32,6 @@ public class AlertComponent extends SoldierComponent {
 		this.radius = radius;
 	}
 
+	public void activate(Entity target) {}
+
 }

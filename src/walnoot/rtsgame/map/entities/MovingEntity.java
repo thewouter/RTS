@@ -11,6 +11,7 @@ import com.sun.xml.internal.ws.encoding.MimeMultipartParser;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
+import walnoot.rtsgame.map.entities.players.Soldier;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.multiplayer.client.MPMapClient;
 import walnoot.rtsgame.rest.Util;
@@ -48,13 +49,13 @@ public abstract class MovingEntity extends Entity {
 	
 					if(dx > 1) dx = 1;
 					if(dx < -1) dx = -1;
-	
+					
 					if(dy > 1) dy = 1;
 					if(dy < -1) dy = -1;
 	
 					nextDirections.add(Direction.getDirection(dx, dy));
 				}else if(goal instanceof BasicStructure){
-					
+					entityGoal = goal;
 					int xGoal = goal.xPos;
 					int yGoal = goal.yPos;
 					int size = ((BasicStructure)goal).getSize();
@@ -88,7 +89,6 @@ public abstract class MovingEntity extends Entity {
 						moveToY -= 1;
 					}
 					moveTo(new Point(moveToX,moveToY));
-					entityGoal = goal;
 					goal = null;
 					
 				}
@@ -126,6 +126,7 @@ public abstract class MovingEntity extends Entity {
 	
 	public void follow(Entity e){
 		goal = e;
+		entityGoal = e;
 	}
 	
 	public void buildMenu(){}
@@ -138,6 +139,13 @@ public abstract class MovingEntity extends Entity {
 	public int getCosts(){
 		return 0;
 	}
+	
+	public void standStill(){
+		nextDirections = new LinkedList<Direction>();
+		goal = null;
+		entityGoal = null;
+		onStopMoving();
+	}
 
 	public void moveTo(Point goal){
 		if(map instanceof MPMapClient){
@@ -145,6 +153,7 @@ public abstract class MovingEntity extends Entity {
 			((MPGameScreen)screen).moveEntity(this, goal.x, goal.y);
 			return;
 		}
+		//this.entityGoal = null;
 		this.goal = null;
 		ArrayList<Entity> e = new ArrayList<Entity>();
 		e.addAll(map.getEntities());
@@ -210,6 +219,10 @@ public abstract class MovingEntity extends Entity {
 	
 	public Point getEndPoint(){
 		return entPoint;
+	}
+	
+	public int getHeadSpace(){
+		return 1; // default
 	}
 	
 	/** @return tijd die het duurt om over 1 tile te bewegen */

@@ -19,7 +19,7 @@ public class TitleScreen extends Screen {
 	private BufferedImage grass2;
 	private BufferedImage logo;
 	private float logoTransparancy = 0.2f; //hoe transparant het logo is, max. 1.0
-	private boolean[][] tiles = new boolean[32][32];
+	private boolean[][] tiles = new boolean[64][64];
 	
 	public TitleScreen(RTSComponent game, InputHandler input){
 		super(game, input);

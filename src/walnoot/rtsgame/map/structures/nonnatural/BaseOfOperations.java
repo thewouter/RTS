@@ -28,7 +28,7 @@ public class BaseOfOperations extends BasicStructure {
 		return false;
 	}
 
-	protected int getHeadSpace() {
+	public int getHeadSpace() {
 		return 2;
 	}
 

@@ -35,5 +35,5 @@ public abstract class BasicStructure extends Structure {
 		image = Images.structures.getSubimage(x, y, width, height);
 	}
 	
-	protected abstract int getHeadSpace();
+	
 }

@@ -25,7 +25,7 @@ public class StoneMine extends MineStructure {
 		image = Images.structures.getSubimage(x, y, width, height);
 	}
 
-	protected int getHeadSpace() {
+	public int getHeadSpace() {
 		return 2;
 	}
 

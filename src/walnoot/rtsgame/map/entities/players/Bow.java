@@ -39,7 +39,7 @@ public class Bow extends Weapon {
 	}
 
 	public void activate() {
-		arrows.add(new Arrow(this, owner.xPos, owner.yPos , 500.0, MAX_HIT_RANGE, Util.getDirectionInDegrees(owner, owner.target)));
+		arrows.add(new Arrow(this, owner.xPos - owner.getHeadSpace(), owner.yPos - owner.getHeadSpace() , 500.0, MAX_HIT_RANGE, Util.getDirectionInDegrees(owner, owner.target, true)));
 	}
 	
 	public void removeArrow(Arrow a){
@@ -110,9 +110,6 @@ public class Bow extends Weapon {
 		public void update(){
 			xScreen += horSpeedX / TICKS_PER_SECOND;
 			yScreen += horSpeedY / TICKS_PER_SECOND;
-			if(owner.map.getEntity(owner.screen.getMapX((int)xScreen , (int)yScreen), owner.screen.getMapY((int)xScreen, (int)yScreen)) != null){
-				hit(owner.map.getEntity(owner.screen.getMapX((int)xScreen , (int)yScreen), owner.screen.getMapY((int)xScreen, (int)yScreen)));
-			}
 			
 			if(Util.getDistance(startX, startY, Util.getMapX((int)xScreen, (int)yScreen), Util.getMapY((int)xScreen, (int)yScreen)) >= distance){
 				stop();
@@ -126,10 +123,6 @@ public class Bow extends Weapon {
 					stop();
 				}
 			}
-			
-		}
-		
-		public void hit(Entity e){
 			
 		}
 		

@@ -43,9 +43,13 @@ public class Util {
 		return getDistance(x1, y1, x2, y2);
 	}
 	
-	public static int getDirectionInDegrees(Entity a, Entity b){
+	public static int getDirectionInDegrees(Entity a, Entity b, boolean fromTop){
 		int x = b.getScreenX() - a.getScreenX();
 		int y =-( b.getScreenY() - a.getScreenY());
+		
+		if(fromTop){
+			y -= a.getHeadSpace() * Tile.getHeight();
+		}
 		
 		int reminder = 0;
 		if(x >= 0 && y <= 0){

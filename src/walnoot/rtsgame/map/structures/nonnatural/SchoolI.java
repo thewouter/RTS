@@ -34,7 +34,7 @@ public class SchoolI extends BasicStructure {
 		popup.founder.activate();
 	}
 
-	protected int getHeadSpace() {
+	public int getHeadSpace() {
 		return 2;
 	}
 	

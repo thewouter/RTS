@@ -25,7 +25,7 @@ public class TentIIIStructure extends BasicStructure {
 		this.health = health;
 	}
 	
-	protected int getHeadSpace(){
+	public int getHeadSpace(){
 		return 2;
 	}
 	

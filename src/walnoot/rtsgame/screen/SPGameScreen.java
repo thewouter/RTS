@@ -2,6 +2,7 @@ package walnoot.rtsgame.screen;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import sun.awt.geom.AreaOp.AddOp;
@@ -21,14 +22,16 @@ import walnoot.rtsgame.map.entities.players.Shield;
 import walnoot.rtsgame.map.entities.players.Soldier;
 import walnoot.rtsgame.map.entities.players.SoldierComponent;
 import walnoot.rtsgame.map.entities.players.professions.Founder;
+import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
-import walnoot.rtsgame.map.structures.nonnatural.Barracks;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
 import walnoot.rtsgame.map.structures.nonnatural.Farm;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
 import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.menubar.Button;
 import walnoot.rtsgame.rest.Sound;
@@ -51,7 +54,7 @@ public class SPGameScreen extends GameScreen {
 		for(int i = 4;; i++){
 			if(!map.getTile(4, i).isSolid()){
 				Soldier player = new Soldier(map,this, 4, i, null);
-				player.addSoldierComponent(new Shield(player, 50, 6000000));
+				player.addSoldierComponent(new Shield(player, 100, 6000000));
 				selectedEntities.add(player);
 				goodYPos = i;
 				break;
@@ -69,8 +72,10 @@ public class SPGameScreen extends GameScreen {
 		PlayerEntity p = new PlayerEntity(map, this, 10, 10, null);
 		p.setProfession(new Founder(p));
 		map.addEntity(p);
+		p.isOwnedByPlayer = false;
 		
 		map.addEntity(new Barracks(map, this, 10, 20)); // voor de te... laat maar.
+		map.addEntity(new DefenseTower(map, this, 10, 30));
 		
 		
 		
@@ -141,7 +146,18 @@ public class SPGameScreen extends GameScreen {
 			if(input.isDragging() && (popup == null || !popup.isInPopup(input.mouseX, input.mouseY))){
 				int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
 				selectedEntities.clear();
-				selectedEntities.addAll(map.getEntities(x1 - Tile.WIDTH, y1 - Tile.HEIGHT, x2, y2, new Dimension(translationX, translationY)));
+				LinkedList<Entity> inRange = (map.getEntities(x1 - Tile.WIDTH, y1 - Tile.HEIGHT, x2, y2, new Dimension(translationX, translationY)));
+				ArrayList<Entity> structures = new ArrayList<Entity>();
+				for( Entity e:inRange){
+					if(e instanceof MovingEntity){
+						selectedEntities.add(e);
+					}else if(e instanceof Structure){
+						structures.add(e);
+					}
+				}
+				if(selectedEntities.size() == 0){
+					selectedEntities.addAll(structures);
+				}
 			}
 			
 			if(entityPopup != null){
