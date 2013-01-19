@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
-import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.MPGameScreen;
 import walnoot.rtsgame.screen.Screen;

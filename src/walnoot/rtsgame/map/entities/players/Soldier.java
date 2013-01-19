@@ -70,6 +70,13 @@ public class Soldier extends PlayerEntity {
 		}
 	}
 	
+	public void renderSelected(Graphics g){
+		for(SoldierComponent c:comp){
+			c.render(g);
+		}
+		super.renderSelected(g);
+	}
+	
 	public synchronized void update(){
 		super.update();
 		for(SoldierComponent c:comp){c.update();}

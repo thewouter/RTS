@@ -44,29 +44,42 @@ public class Util {
 	}
 	
 	public static int getDirectionInDegrees(Entity a, Entity b, boolean fromTop){
-		int x = b.getScreenX() - a.getScreenX();
-		int y =-( b.getScreenY() - a.getScreenY());
-		
-		if(fromTop){
-			y -= a.getHeadSpace() * Tile.getHeight();
+		int screenXA = a.getScreenX();
+		int screenYA = a.getScreenY();
+		int screenXB = b.getScreenX();
+		int screenYB = b.getScreenY();
+		if (fromTop){
+			screenYA -= a.getHeadSpace() * Tile.getHeight();
 		}
-		
+		int x = - screenXA + screenXB;
+		int y = screenYA - screenYB;
+
+		if(x == 0 && y < 0){
+			return 180;
+		}
 		int reminder = 0;
 		if(x >= 0 && y <= 0){
 			reminder = 90;
+			int temp = y;
+			y = x;
+			x = -temp;
 		}else if(x < 0 && y <= 0){
 			reminder = 180;
+			int temp = x;
+			x = abs(y);
+			y = abs(temp);
 		}else if(x < 0 && y >= 0){
 			reminder = 270;
-		}else{
-			return (int) Math.toDegrees(Math.atan2(y, x));
+			int temp = y;
+			y = -x;
+			x = -temp;
 		}
 		
 		x = abs(x);
 		y = abs(y);
 		
 		
-		return (int) (reminder + 90 - Math.toDegrees(Math.atan2(y, x)));
+		return (int) (reminder + Math.toDegrees(Math.atan2(y , x)));
 		
 	}
 	

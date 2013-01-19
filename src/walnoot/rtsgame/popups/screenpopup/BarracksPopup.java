@@ -15,13 +15,12 @@ import walnoot.rtsgame.map.entities.players.professions.Profession;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
-import walnoot.rtsgame.popups.screenpopup.SchoolPopup.Button;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.Screen;
 
 public class BarracksPopup extends ScreenPopup {
-	static BufferedImage image, faceImage = Images.buttons[4][2];
+	private BufferedImage image, faceImage = Images.buttons[4][2];
 	int xPos, yPos;
 	BasicStructure owner;
 	InputHandler input;

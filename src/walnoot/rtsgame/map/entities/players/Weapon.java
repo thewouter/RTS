@@ -22,9 +22,9 @@ public abstract class Weapon extends SoldierComponent {
 	}
 
 	public void render(Graphics g) {}
+	public void renderSelected(Graphics g){}
 
 	public void update(){
-		if(owner.target != null)System.out.println(owner.target);
 		if(isFighting){
 			ticksCounter++;
 			if(ticksCounter >= LOAD_TIME && owner.target != null && Util.getDistance(owner.target, owner) <= MAX_HIT_RANGE + 1){

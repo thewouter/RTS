@@ -14,13 +14,13 @@ public class AlertComponent extends SoldierComponent {
 		this.radius = radius;
 	}
 	
-	public void render(Graphics g){
-		if(!owner.screen.isSelected(owner)) return;
+	public void renderSelected(Graphics g){
 		g.setColor(new Color(0,0,0,250/2));
 		g.drawOval((int) (owner.getScreenX() - radius * Tile.WIDTH + 0.5 * Tile.WIDTH ), (int)(owner.getScreenY() - radius * Tile.HEIGHT + 0.5 * Tile.HEIGHT) , radius * Tile.WIDTH * 2  , radius * Tile.HEIGHT * 2);
 		g.setColor(new Color(168,11,0,32));
 		g.fillOval((int) (owner.getScreenX() - radius * Tile.WIDTH + 0.5 * Tile.WIDTH ), (int)(owner.getScreenY() - radius * Tile.HEIGHT + 0.5 * Tile.HEIGHT) , radius * Tile.WIDTH * 2  , radius * Tile.HEIGHT * 2);
 	}
+	public void render(Graphics g){}
 	
 	public void update(){
 		

@@ -28,6 +28,8 @@
 	210 SchoolI
 	211 Barracks
 	212 DefenseTower
+	213 WoodenWall
+	214 WoodenGate
 	
 300-399 mines
 	300 GoldMine

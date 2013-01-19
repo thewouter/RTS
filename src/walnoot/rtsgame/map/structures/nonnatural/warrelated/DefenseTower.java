@@ -42,7 +42,7 @@ public class DefenseTower extends BasicStructure {
 	public int getSize() {
 		return 1;
 	}
-
+	
 	public void update() {
 		for(int x = -1; x <=1; x++){
 			for(int y = -1; y <= 1; y++){
@@ -51,6 +51,7 @@ public class DefenseTower extends BasicStructure {
 					guard = (Soldier)e;
 					map.removeEntityFromMap(guard);
 					HIT_RANGE = guard.getWeapon().MAX_HIT_RANGE;
+					loadImage(5, 0);
 				}
 			}
 		}
@@ -74,9 +75,7 @@ public class DefenseTower extends BasicStructure {
 		if(target != null){
 			counter ++;
 			if(counter >= guard.getWeapon().LOAD_TIME){
-				System.out.println();
-				toAdd = new Arrow(this, guard.xPos, guard.yPos , 500.0, HIT_RANGE, Util.getDirectionInDegrees(guard, target, true));
-				System.out.println("shooting....");
+				toAdd = new Arrow(this,xPos - getHeadSpace(), yPos - getHeadSpace() , 500.0, HIT_RANGE, Util.getDirectionInDegrees(this, target, true));
 				counter = 0;
 			}
 		}
@@ -84,6 +83,7 @@ public class DefenseTower extends BasicStructure {
 		for(Arrow a:getArrows()){
 			a.update();
 		}
+		
 		if(toAdd != null){
 			arrows.add(toAdd);
 		}
@@ -108,7 +108,7 @@ public class DefenseTower extends BasicStructure {
 		g.drawOval((int) (getScreenX() - radius * Tile.WIDTH + 0.5 * Tile.WIDTH ), (int)(getScreenY() - radius * Tile.HEIGHT + 0.5 * Tile.HEIGHT) , radius * Tile.WIDTH * 2  , radius * Tile.HEIGHT * 2);
 		g.setColor(new Color(168,11,0,32));
 		g.fillOval((int) (getScreenX() - radius * Tile.WIDTH + 0.5 * Tile.WIDTH ), (int)(getScreenY() - radius * Tile.HEIGHT + 0.5 * Tile.HEIGHT) , radius * Tile.WIDTH * 2  , radius * Tile.HEIGHT * 2);
-		super.render(g);
+		super.renderSelected(g);
 	}
 	
 	public void onDestroying() {
@@ -161,8 +161,11 @@ public class DefenseTower extends BasicStructure {
 			startX = xStart;
 			startY = yStart;
 			
-			direction %= 360;	
-			if(direction <=90 ){														// set correct hor. directions
+			direction %= 360;
+			if(direction == 180){
+				horSpeedX = 0;
+				horSpeedY = horSpeed;
+			}else if(direction <=90 ){														// set correct hor. directions
 				horSpeedX = (int) (horSpeed * Math.cos((direction * Math.PI) / 180));
 				horSpeedY = (int) (horSpeed * Math.sin((direction * Math.PI) / 180));
 				horSpeedY *=-1;
@@ -199,7 +202,7 @@ public class DefenseTower extends BasicStructure {
 			
 			if(guard.map.getEntities(Util.getMapX((int)xScreen, (int)yScreen), Util.getMapY((int)xScreen, (int)yScreen))!= null){
 				for (Entity e:guard.map.getEntities(Util.getMapX((int)xScreen, (int)yScreen), Util.getMapY((int)xScreen, (int)yScreen))){
-					if(e == guard) continue;
+					if(e == guard || e == ownerr) continue;
 					
 					e.damage(1);
 					stop();

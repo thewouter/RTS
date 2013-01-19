@@ -7,7 +7,6 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.professions.Founder;
-import walnoot.rtsgame.map.entities.players.professions.Miner;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.MPGameScreen;

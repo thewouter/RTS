@@ -3,16 +3,12 @@ package walnoot.rtsgame.multiplayer.host;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
-import walnoot.rtsgame.map.entities.players.PlayerEntity;
-import walnoot.rtsgame.map.structures.Structure;
-import walnoot.rtsgame.rest.Inventory;
 import walnoot.rtsgame.rest.Util;
 
 public class MPMapHost extends Map implements Cloneable{

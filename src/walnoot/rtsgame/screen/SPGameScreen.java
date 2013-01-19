@@ -5,33 +5,21 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import sun.awt.geom.AreaOp.AddOp;
-
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.Save;
-import walnoot.rtsgame.map.entities.DeerEntity;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
-import walnoot.rtsgame.map.entities.SheepEntity;
-import walnoot.rtsgame.map.entities.players.AlertComponent;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.Shield;
 import walnoot.rtsgame.map.entities.players.Soldier;
-import walnoot.rtsgame.map.entities.players.SoldierComponent;
 import walnoot.rtsgame.map.entities.players.professions.Founder;
 import walnoot.rtsgame.map.structures.Structure;
-import walnoot.rtsgame.map.structures.natural.GoldMine;
-import walnoot.rtsgame.map.structures.natural.TreeStructure;
-import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
-import walnoot.rtsgame.map.structures.nonnatural.Farm;
-import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
-import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
-import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenWall;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.menubar.Button;
 import walnoot.rtsgame.rest.Sound;
@@ -55,6 +43,7 @@ public class SPGameScreen extends GameScreen {
 			if(!map.getTile(4, i).isSolid()){
 				Soldier player = new Soldier(map,this, 4, i, null);
 				player.addSoldierComponent(new Shield(player, 100, 6000000));
+				player.isOwnedByPlayer = false;
 				selectedEntities.add(player);
 				goodYPos = i;
 				break;
@@ -75,7 +64,7 @@ public class SPGameScreen extends GameScreen {
 		p.isOwnedByPlayer = false;
 		
 		map.addEntity(new Barracks(map, this, 10, 20)); // voor de te... laat maar.
-		map.addEntity(new DefenseTower(map, this, 10, 30));
+		
 		
 		
 		

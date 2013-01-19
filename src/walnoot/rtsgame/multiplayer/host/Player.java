@@ -2,17 +2,13 @@ package walnoot.rtsgame.multiplayer.host;
 
 import java.io.BufferedReader;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.List;
-
-import com.sun.corba.se.spi.legacy.connection.GetEndPointInfoAgainException;
 
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.rest.Inventory;
-import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
 
 public class Player extends GameScreen {

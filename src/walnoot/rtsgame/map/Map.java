@@ -327,8 +327,8 @@ public class Map {
 		return entities;
 	}
 	
-	public synchronized LinkedList<Entity> getEntities(int x, int y){
-		LinkedList<Entity> result = new LinkedList<Entity>();
+	public synchronized ArrayList<Entity> getEntities(int x, int y){
+		ArrayList<Entity> result = new ArrayList<Entity>();
 		for(Entity e: getEntities()){
 			if(e instanceof Structure){
 				Structure structure = (Structure) e;

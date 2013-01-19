@@ -25,7 +25,7 @@ public abstract class BasicStructure extends Structure {
 		g.drawImage(image, x - (Tile.WIDTH / 2) * (getSize() - 1), y - (getHeadSpace() * Tile.HEIGHT) + (Tile.HEIGHT / 2) * (getSize() - 1), null);
 	}
 	
-	private void loadImage(int textureX, int textureY){
+	protected void loadImage(int textureX, int textureY){
 		int x = textureX * Tile.WIDTH;
 		int y = textureY * Tile.HEIGHT;
 		

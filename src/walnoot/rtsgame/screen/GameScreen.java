@@ -20,6 +20,8 @@ import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
 import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
 import walnoot.rtsgame.map.structures.nonnatural.TentIIStructure;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenGate;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenWall;
 import walnoot.rtsgame.menubar.Button;
 import walnoot.rtsgame.menubar.HomeBar;
 import walnoot.rtsgame.menubar.MenuBarPopupButton;
@@ -86,7 +88,8 @@ public abstract class GameScreen extends Screen {
 		}else if(!selectedEntities.isEmpty()){
 			font.drawBoldLine(g, "Multiple Select: " + selectedEntities.size(), 20, getHeight() - 30, Color.BLACK);
 		}
-		font.drawBoldLine(g, getMapX() + ":" + getMapY(), 20, 20, Color.BLACK);
+		//font.drawBoldLine(g, getMapX() + ":" + getMapY(), 20, 20, Color.BLACK);
+		font.drawBoldLine(g, (input.mouseX - translationX) + ":" + (input.mouseY - translationY), 20, 20, Color.BLACK);
 		
 		if(input.isDragging()){
 			int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
@@ -207,6 +210,22 @@ public abstract class GameScreen extends Screen {
 				
 				public String getName() {
 					return "Tent I";
+				}
+			});
+			
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][5], this.bar.screen) {
+				
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(map, input, screen) {
+						
+						public Entity toBuild() {
+							return new WoodenGate(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+						}
+					};
+				}
+				
+				public String getName() {
+					return "Wall";
 				}
 			});
 			

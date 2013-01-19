@@ -15,5 +15,6 @@ public abstract class SoldierComponent {
 	public abstract void render(Graphics g);
 	public abstract void update();
 	public abstract void activate();
+	public abstract void renderSelected(Graphics g);
 	public abstract void activate(Entity target);
 }

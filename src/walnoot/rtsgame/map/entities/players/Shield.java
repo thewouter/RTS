@@ -27,6 +27,10 @@ public class Shield extends SoldierComponent {
 	public void render(Graphics g) {
 		g.drawImage(image,owner.getScreenX(), owner.getScreenY(), null);
 	}
+	
+	public void renderSelected(Graphics g){
+		render(g);
+	}
 
 	public void update() {
 		
