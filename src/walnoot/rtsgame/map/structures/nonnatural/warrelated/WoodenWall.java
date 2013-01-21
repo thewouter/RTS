@@ -5,10 +5,10 @@ import java.awt.Image;
 import java.util.ArrayList;
 
 import walnoot.rtsgame.Images;
+import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.structures.BasicStructure;
-import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.screen.GameScreen;
 
@@ -17,8 +17,8 @@ public class WoodenWall extends BasicStructure {
 	private final Image[] images = new Image[4];
 	private boolean[] neightboursAreConnected = {false, false, false, false};
 	
-	public WoodenWall(Map map, GameScreen screen, int xPos, int yPos) {
-		super(map, screen, xPos, yPos, 6, 0, ID);
+	public WoodenWall(Map map, GameScreen screen, int xPos, int yPos, Direction front) {
+		super(map, screen, xPos, yPos, 6, 0, ID, front);
 		for (int i = 0, k = 0; i < 2; i++){
 			for(int j = 0; j < 2; j++, k++){
 				int x = (6 + j)* Tile.WIDTH;

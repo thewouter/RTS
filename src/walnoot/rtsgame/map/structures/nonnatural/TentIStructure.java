@@ -2,13 +2,11 @@ package walnoot.rtsgame.map.structures.nonnatural;
 
 import java.util.LinkedList;
 
-import walnoot.rtsgame.InputHandler;
+import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.structures.BasicStructure;
-import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
-import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.MPGameScreen;
 
@@ -17,12 +15,12 @@ public class TentIStructure extends BasicStructure {
 	public final static int ID = 201, TIME_TO_SPAWN_A_PLAYER = 120, MAX_PLAYERS = 2;
 	private int time = 0;
 	public LinkedList<PlayerEntity> players = new LinkedList<PlayerEntity>();
-	public TentIStructure(Map map, GameScreen screen, int xPos, int yPos){
-		super(map, screen, xPos, yPos,  0, 0,ID);
+	public TentIStructure(Map map, GameScreen screen, int xPos, int yPos, Direction front){
+		super(map, screen, xPos, yPos,  0, 0,ID, front);
 	}
 	
-	public TentIStructure(Map map, GameScreen screen ,int xPos, int yPos, int health){
-		super(map,screen,xPos,yPos, 0, 0, ID);
+	public TentIStructure(Map map, GameScreen screen ,int xPos, int yPos, int health, Direction front){
+		super(map,screen,xPos,yPos, 0, 0, ID, front);
 		this.health = health;
 	}
 	

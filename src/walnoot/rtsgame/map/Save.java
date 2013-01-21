@@ -143,16 +143,16 @@ public class Save {
 				}else if(ID >= 200){		//structures
 					switch(ID){
 					case 200:
-						map.addEntity(new CampFireStructure(map,screen,  xPos, yPos, health));
+						map.addEntity(new CampFireStructure(map,screen,  xPos, yPos, health, Direction.SOUTH_WEST));
 						break;
 					case 201:
-						map.addEntity(new TentIStructure(map,screen,  xPos, yPos, health));
+						map.addEntity(new TentIStructure(map,screen,  xPos, yPos, health, Direction.SOUTH_WEST));
 						break;
 					case 202:
-						map.addEntity(new TreeStructure(map,screen,  xPos, yPos, health));
+						map.addEntity(new TreeStructure(map,screen,  xPos, yPos, health, Direction.SOUTH_WEST));
 						break;
 					case 203:
-						map.addEntity(new BaseOfOperations(map,screen,  xPos, yPos, health));
+						map.addEntity(new BaseOfOperations(map,screen,  xPos, yPos, health, Direction.SOUTH_WEST));
 						break;
 					}
 				}else if(ID >= 100){		//movingEntities
@@ -215,16 +215,16 @@ public class Save {
 				}else if(ID >= 200){		//structures
 					switch(ID){
 					case 200:
-						map.addEntity(new CampFireStructure(map,null,  xPos, yPos, health));
+						map.addEntity(new CampFireStructure(map,null,  xPos, yPos, health, Direction.SOUTH_WEST));
 						break;
 					case 201:
-						map.addEntity(new TentIStructure(map,null,  xPos, yPos, health));
+						map.addEntity(new TentIStructure(map,null,  xPos, yPos, health, Direction.SOUTH_WEST));
 						break;
 					case 202:
-						map.addEntity(new TreeStructure(map, null, xPos, yPos, health));
+						map.addEntity(new TreeStructure(map, null, xPos, yPos, health, Direction.SOUTH_WEST));
 						break;
 					case 203:
-						map.addEntity(new BaseOfOperations(map,null,  xPos, yPos, health));
+						map.addEntity(new BaseOfOperations(map,null,  xPos, yPos, health, Direction.SOUTH_WEST));
 						break;
 					}
 				}else if(ID >= 100){		//movingEntities
@@ -283,13 +283,13 @@ public class Save {
 				if(ID >= 200){
 					switch(ID){
 					case 200:
-						map.addEntity(new CampFireStructure(map, null, xPos, yPos, health));
+						map.addEntity(new CampFireStructure(map, null, xPos, yPos, health, Direction.SOUTH_WEST));
 						break;
 					case 201:
-						map.addEntity(new TentIStructure(map,null,  xPos, yPos, health));
+						map.addEntity(new TentIStructure(map,null,  xPos, yPos, health, Direction.SOUTH_WEST));
 						break;
 					case 202:
-						map.addEntity(new TreeStructure(map,null,  xPos, yPos, health));
+						map.addEntity(new TreeStructure(map,null,  xPos, yPos, health, Direction.SOUTH_WEST));
 						break;
 					}
 				}else if(ID >= 100){

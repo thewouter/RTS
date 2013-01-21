@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
+import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.Save;
 import walnoot.rtsgame.map.entities.Entity;
@@ -63,7 +64,7 @@ public class SPGameScreen extends GameScreen {
 		map.addEntity(p);
 		p.isOwnedByPlayer = false;
 		
-		map.addEntity(new Barracks(map, this, 10, 20)); // voor de te... laat maar.
+		map.addEntity(new Barracks(map, this, 10, 20, Direction.SOUTH_WEST)); // voor de te... laat maar.
 		
 		
 		

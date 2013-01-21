@@ -1,13 +1,14 @@
 package walnoot.rtsgame.map.structures.nonnatural;
 
+import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.screen.GameScreen;
 
 public class Farm extends BasicStructure{
 	public static int ID = 209;
-	public Farm(Map map, GameScreen screen, int xPos, int yPos) {
-		super(map, screen, xPos, yPos,2, 8, ID);
+	public Farm(Map map, GameScreen screen, int xPos, int yPos, Direction front) {
+		super(map, screen, xPos, yPos,2, 8, ID, front);
 	}
 
 	public int getHeadSpace() {

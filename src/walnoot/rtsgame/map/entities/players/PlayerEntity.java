@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import walnoot.rtsgame.Animation;
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
+import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.ItemEntity;
@@ -111,12 +112,12 @@ public class PlayerEntity extends MovingEntity {
 			
 			Option option2 = new Option("Add campfire", popup){
 				public void onClick(){
-					map.addEntity(new CampFireStructure(map,this.owner.screen, xPos, yPos - 1));
+					map.addEntity(new CampFireStructure(map,this.owner.screen, xPos, yPos - 1, Direction.SOUTH_WEST));
 				}
 			};
 			Option option1 = new Option("Add tent",popup) {
 				public void onClick() {
-					map.addEntity(new TentIStructure(map, this.owner.screen, xPos, yPos-2));
+					map.addEntity(new TentIStructure(map, this.owner.screen, xPos, yPos-2, Direction.SOUTH_WEST));
 				}
 			};
 			Option dig = new Option("dig", popup){

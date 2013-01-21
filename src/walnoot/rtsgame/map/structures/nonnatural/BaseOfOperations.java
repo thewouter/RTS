@@ -1,6 +1,7 @@
 package walnoot.rtsgame.map.structures.nonnatural;
 
 import walnoot.rtsgame.InputHandler;
+import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.structures.BasicStructure;
@@ -10,12 +11,12 @@ public class BaseOfOperations extends BasicStructure {
 	
 	public static int ID = 203;
 	
-	public BaseOfOperations(Map map, GameScreen screen, int xPos, int yPos) {
-		super(map,screen, xPos, yPos, 0, 4, ID);
+	public BaseOfOperations(Map map, GameScreen screen, int xPos, int yPos, Direction front) {
+		super(map,screen, xPos, yPos, 0, 4, ID, front);
 		
 	}
-	public BaseOfOperations(Map map, GameScreen screen,int xPos, int yPos, int health) {
-		super(map, screen, xPos, yPos, 0, 4, ID);
+	public BaseOfOperations(Map map, GameScreen screen,int xPos, int yPos, int health, Direction front) {
+		super(map, screen, xPos, yPos, 0, 4, ID, front);
 		this.health = health;
 		
 	}

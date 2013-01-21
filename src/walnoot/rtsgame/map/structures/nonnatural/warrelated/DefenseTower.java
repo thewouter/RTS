@@ -3,9 +3,9 @@ package walnoot.rtsgame.map.structures.nonnatural.warrelated;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import walnoot.rtsgame.RTSComponent;
+import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
@@ -26,12 +26,12 @@ public class DefenseTower extends BasicStructure {
 	Entity target = null;
 	private int counter = 0; // (:
 
-	public DefenseTower(Map map, GameScreen screen, int xPos, int yPos) {
-		super(map, screen, xPos, yPos, 4, 0, ID);
+	public DefenseTower(Map map, GameScreen screen, int xPos, int yPos, Direction front) {
+		super(map, screen, xPos, yPos, 4, 0, ID, front);
 	}
 	
-	public DefenseTower(Map map, GameScreen screen, int xPos, int yPos, int health) {
-		super(map, screen, xPos, yPos, 4, 0, ID);
+	public DefenseTower(Map map, GameScreen screen, int xPos, int yPos, int health, Direction front) {
+		super(map, screen, xPos, yPos, 4, 0, ID, front);
 		this.health = health;
 	}
 

@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
+import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
@@ -203,7 +204,7 @@ public abstract class GameScreen extends Screen {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
 						public Entity toBuild() {
-							return new TentIStructure(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+							return new TentIStructure(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
 						}
 					};
 				}
@@ -213,13 +214,28 @@ public abstract class GameScreen extends Screen {
 				}
 			});
 			
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[5][5], this.bar.screen) {
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(map, input, screen) {
+						
+						public Entity toBuild() {
+							return new WoodenGate(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
+						}
+					};
+				}
+				
+				public String getName() {
+					return "Gate";
+				}
+			});
+			
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][5], this.bar.screen) {
 				
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
 						
 						public Entity toBuild() {
-							return new WoodenGate(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+							return new WoodenWall(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
 						}
 					};
 				}
@@ -233,7 +249,7 @@ public abstract class GameScreen extends Screen {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
 						public Entity toBuild() {
-							return new SchoolI(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+							return new SchoolI(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
 						}
 					};
 					
@@ -278,7 +294,7 @@ public abstract class GameScreen extends Screen {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, input, screen) {
 						public Entity toBuild() {
-							return new TentIIStructure(map, screen,Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+							return new TentIIStructure(map, screen,Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
 						}
 					};
 					
@@ -293,7 +309,7 @@ public abstract class GameScreen extends Screen {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, input, screen){
 						public Entity toBuild(){
-							return new TreeStructure(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+							return new TreeStructure(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
 						}
 					};
 				}

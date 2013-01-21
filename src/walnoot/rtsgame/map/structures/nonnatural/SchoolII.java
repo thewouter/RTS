@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
+import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
@@ -21,8 +22,8 @@ public class SchoolII extends BasicStructure {
 	public SchoolPopup popup = new SchoolPopup(screen, image, this, screen.input);
 	public int Knowledge = 0;
 	
-	public SchoolII(Map map, GameScreen screen, int xPos, int yPos) {
-		super(map, screen, xPos, yPos, 0, 12, ID);
+	public SchoolII(Map map, GameScreen screen, int xPos, int yPos, Direction front) {
+		super(map, screen, xPos, yPos, 0, 12, ID, front);
 		int level = screen.level;
 		
 		if(level <= 0) return;

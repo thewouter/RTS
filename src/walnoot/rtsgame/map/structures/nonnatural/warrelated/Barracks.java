@@ -6,13 +6,13 @@ import java.util.LinkedList;
 
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
+import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.Soldier;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.popups.screenpopup.BarracksPopup;
-import walnoot.rtsgame.popups.screenpopup.SchoolPopup;
 import walnoot.rtsgame.screen.GameScreen;
 
 public class Barracks extends BasicStructure {
@@ -27,8 +27,8 @@ public class Barracks extends BasicStructure {
 	 * barracks can teach and house soldiers max. 5.
 	 */
 
-	public Barracks(Map map, GameScreen screen, int xPos, int yPos) {
-		super(map, screen, xPos, yPos, 5, 8, ID);
+	public Barracks(Map map, GameScreen screen, int xPos, int yPos, Direction front) {
+		super(map, screen, xPos, yPos, 5, 8, ID, front);
 	}
 
 	public int getHeadSpace() {

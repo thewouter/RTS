@@ -1,6 +1,7 @@
 package walnoot.rtsgame.map.entities.players.professions;
 
 import walnoot.rtsgame.InputHandler;
+import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.structures.nonnatural.BaseOfOperations;
@@ -27,7 +28,7 @@ public class Founder extends Profession {
 			public void onClick() {
 				owner.screen.pointer = new MousePointer(owner.owner.map, owner.owner.screen.input, owner.screen) {
 					public Entity toBuild() {
-						return new BaseOfOperations(map, screen, screen.getMapX(), screen.getMapY());
+						return new BaseOfOperations(map, screen, screen.getMapX(), screen.getMapY(), Direction.SOUTH_EAST);
 					}
 					public void afterBuild(){
 						//map.removeEntity(owner.owner);

@@ -213,7 +213,7 @@ public class Map {
 					surface[x][y] = Tile.grass1;
 					if(noise > 0.6) {
 						if(Util.RANDOM.nextInt(TREE_GROW_CHANGE) == 0){
-							Entity e = (new TreeStructure(this,screen , x, y));
+							Entity e = (new TreeStructure(this,screen , x, y, Direction.SOUTH_WEST));
 							e.setOwned(false);
 							addEntity(e);
 						}

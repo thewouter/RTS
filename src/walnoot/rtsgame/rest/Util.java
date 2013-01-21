@@ -3,6 +3,7 @@ package walnoot.rtsgame.rest;
 import java.util.ArrayList;
 import java.util.Random;
 
+import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.DeerEntity;
 import walnoot.rtsgame.map.entities.Entity;
@@ -190,19 +191,19 @@ public class Util {
 		}else if(ID >= 200){		//structures
 			switch(ID){
 			case 200:
-				e = new CampFireStructure(map, null,  xPos, yPos);
+				e = new CampFireStructure(map, null,  xPos, yPos, Direction.SOUTH_WEST);
 				break;
 				
 			case 201:
-				e = new TentIStructure(map, null,  xPos, yPos);
+				e = new TentIStructure(map, null,  xPos, yPos, Direction.SOUTH_WEST);
 				break;
 				
 			case 202:
-				e = new TreeStructure(map, null,  xPos, yPos);
+				e = new TreeStructure(map, null,  xPos, yPos, Direction.SOUTH_WEST);
 				break;
 				
 			case 203:
-				e = new BaseOfOperations(map, null,  xPos, yPos);
+				e = new BaseOfOperations(map, null,  xPos, yPos, Direction.SOUTH_WEST);
 				break;
 				
 			}
@@ -263,19 +264,19 @@ public class Util {
 		}else if(ID >= 200){		//structures
 			switch(ID){
 			case 200:
-				e = new CampFireStructure(map, null,  xPos, yPos, health);
+				e = new CampFireStructure(map, null,  xPos, yPos, health, Direction.SOUTH_WEST);
 				break;
 				
 			case 201:
-				e = new TentIStructure(map, null,  xPos, yPos, health);
+				e = new TentIStructure(map, null,  xPos, yPos, health, Direction.SOUTH_WEST);
 				break;
 				
 			case 202:
-				e = new TreeStructure(map, null,  xPos, yPos, health);
+				e = new TreeStructure(map, null,  xPos, yPos, health, Direction.SOUTH_WEST);
 				break;
 				
 			case 203:
-				e = new BaseOfOperations(map, null,  xPos, yPos, health);
+				e = new BaseOfOperations(map, null,  xPos, yPos, health, Direction.SOUTH_WEST);
 				break;
 				
 			}
