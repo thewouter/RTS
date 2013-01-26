@@ -26,21 +26,22 @@ public class Founder extends Profession {
 		EntityOptionsPopup popup = new EntityOptionsPopup(owner, screen);
 		popup.addOption(new Option("Start a new settlement", popup) {
 			public void onClick() {
-				owner.screen.pointer = new MousePointer(owner.owner.map, owner.owner.screen.input, owner.screen) {
-					public Entity toBuild() {
-						return new BaseOfOperations(map, screen, screen.getMapX(), screen.getMapY(), Direction.SOUTH_EAST);
+				owner.screen.bar.setMenuBarPopup(owner.screen.bar.buildmenu);
+				owner.screen.bar.showPopup();
+				owner.screen.setMousePointer(new MousePointer(owner.owner.map, owner.owner.screen.input, owner.screen) {
+					public Entity toBuild(Direction face) {
+						return new BaseOfOperations(map, screen, screen.getMapX(), screen.getMapY(), face);
 					}
 					public void afterBuild(){
-						//map.removeEntity(owner.owner);
+						map.removeEntity(owner.owner);
 						new Sound("/res/Sounds/Buildbaseofoperations.mp3").play();
 						if(screen.level < 1) screen.levelUp();
 					}
-				};
+				});
+				owner.screen.entityPopup = null;
 			}
 		});
 		screen.setEntityPopup(popup);
-		
-		
 		return true;
 	}
 

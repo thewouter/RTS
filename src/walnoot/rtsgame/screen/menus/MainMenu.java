@@ -24,6 +24,20 @@ public class MainMenu extends MenuScreen {
 	public MainMenu(RTSComponent component, TitleScreen title, InputHandler input){
 		super(component, input);
 		this.title = title;
+		
+		ScreenPopup popup = new ScreenPopup(10, 10, 100, 100, this);
+		TextInput userNameInput = new TextInput(popup,input);
+		userNameInput.setText("Username");
+		popup.addPart(userNameInput);
+		popup.addPart(new ScreenPopupButton("OK", popup, input) {
+			
+			public void onLeftClick() {
+				String username = owner.getTextInput(1).getOutput();
+				if(!owner.screen.component.isMember(username)) owner.screen.component.stop();
+				else setPopup(null);
+			}
+		});
+		setPopup(popup);
 	}
 	
 	public void render(Graphics g){

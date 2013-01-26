@@ -9,9 +9,33 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
 
 import walnoot.rtsgame.multiplayer.host.MPHost;
+import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
+import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
+import walnoot.rtsgame.popups.screenpopup.ScreenPopupTextField;
+import walnoot.rtsgame.popups.screenpopup.TextInput;
 import walnoot.rtsgame.rest.Options;
 import walnoot.rtsgame.rest.Sound;
 import walnoot.rtsgame.screen.SPGameScreen;
@@ -50,6 +74,8 @@ public class RTSComponent extends Canvas implements Runnable {
 		//if(!new File(Options.fileName).exists()) Options.writeOptions();
 		
 		//Options.loadOptions();
+		
+		loadBackgroundMusic();
 		
 		
 	}
@@ -92,6 +118,8 @@ public class RTSComponent extends Canvas implements Runnable {
 		//if(Options.startFullScreen) fullScreenManager.setFullScreen();
 
 		//fullScreenManager.setFullScreen();
+		
+		
 		
 		while(running){
 			long timePassed = System.nanoTime() - totalTime; //hoeveel tijd er verstreken is sinds de vorige update
@@ -176,7 +204,6 @@ public class RTSComponent extends Canvas implements Runnable {
 	
 	public void stop(){
 		running = false;
-		
 		//Options.window_width = container.getSize().width;
 		//Options.window_height = container.getSize().height;
 		//Options.startFullScreen = fullScreenManager.isFullScreen();
@@ -204,5 +231,55 @@ public class RTSComponent extends Canvas implements Runnable {
 				Thread.sleep(500L);
 			}catch(InterruptedException e){}
 		}
+	}
+	
+	private void loadBackgroundMusic(){
+		final ArrayList<String> fileNames = new ArrayList<String>();
+		
+		Path startDir = Paths.get("src/res/Sounds/Background music");
+		String pattern = "*.mp3";
+		FileSystem fs = FileSystems.getDefault();
+		
+		final PathMatcher matcher = fs.getPathMatcher("glob:" + pattern);
+		
+		FileVisitor<Path> matcherVisitor = new SimpleFileVisitor<Path>() {
+		    @Override
+		    public FileVisitResult visitFile(Path file, BasicFileAttributes attribs) {
+		        Path name = file.getFileName();
+		        if (matcher.matches(name)) {
+		            fileNames.add(file.toString());
+		        }
+		        return FileVisitResult.CONTINUE;
+		    }
+		};
+		try {
+			Files.walkFileTree(startDir, matcherVisitor);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		backgroundSound = new Sound(fileNames);
+		
+	}
+	
+	public boolean isMember(String name){
+		try {
+			URL source = new URL("http://www.tribe.net84.net/users.nothin"); //super secret database of registered users!
+			InputStreamReader input = new InputStreamReader(source.openStream());
+			BufferedReader in = new BufferedReader(input);
+			String inputLine;
+				while((inputLine = in.readLine())!= null){
+					if(name.equals(inputLine)) return true;
+					System.out.println(inputLine);
+				}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 }

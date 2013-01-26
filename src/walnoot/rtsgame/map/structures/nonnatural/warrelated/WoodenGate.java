@@ -46,7 +46,7 @@ public class WoodenGate extends BasicStructure {
 		y -= yPos;
 		
 		if(!toPass.isOwnedByPlayer || x > getSize() || y > getSize() || x < 0 || y < 0) return false;
-		if(front == Direction.SOUTH_EAST)return x == 1;
-		return y == 1;
+		if(front == Direction.SOUTH_EAST)return y == 1;
+		return x == 1;
 	}
 }

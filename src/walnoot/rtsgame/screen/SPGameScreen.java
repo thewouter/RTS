@@ -40,16 +40,7 @@ public class SPGameScreen extends GameScreen {
 		
 		int goodYPos;
 		
-		for(int i = 4;; i++){
-			if(!map.getTile(4, i).isSolid()){
-				Soldier player = new Soldier(map,this, 4, i, null);
-				player.addSoldierComponent(new Shield(player, 100, 6000000));
-				player.isOwnedByPlayer = false;
-				selectedEntities.add(player);
-				goodYPos = i;
-				break;
-			}
-		}
+		
 		
 		levelUpButton = new Button(Images.buttons[2][1], statusBar) {
 			public void onLeftClick() {
@@ -58,22 +49,12 @@ public class SPGameScreen extends GameScreen {
 		};
 		
 		//targetEntity = selectedEntities.getFirst();
-		map.addEntity(selectedEntities.getFirst());
 		PlayerEntity p = new PlayerEntity(map, this, 10, 10, null);
 		p.setProfession(new Founder(p));
 		map.addEntity(p);
-		p.isOwnedByPlayer = false;
-		
-		map.addEntity(new Barracks(map, this, 10, 20, Direction.SOUTH_WEST)); // voor de te... laat maar.
-		
-		
-		
 		
 		//translationX = -selectedEntities.getFirst().getScreenX();
 		//translationY = -selectedEntities.getFirst().getScreenY();
-		
-		
-		
 	}
 
 	public void save(){
@@ -99,9 +80,16 @@ public class SPGameScreen extends GameScreen {
 			if(input.down.isPressed()) translationY -= 5;
 			if(input.left.isPressed()) translationX += 5;
 			if(input.right.isPressed()) translationX -= 5;
+			
+			if(pointer != null){
+				pointer.update(); 
+				if(bar.showPopup == false){
+					pointer = null;
+				}
+			}
 	
 			map.update((int) Math.floor(translationX), (int) Math.floor(translationY), getWidth(), getHeight());
-
+			
 			bar.update(getWidth(), getHeight());
 			
 			statusBar.update(getWidth(), getHeight());
@@ -155,13 +143,6 @@ public class SPGameScreen extends GameScreen {
 				if(!selectedEntities.contains(entityPopup.getOwner())) entityPopup = null;
 			}
 			
-			if(pointer != null){
-				pointer.update(); 
-				if(bar.showPopup == false){
-					pointer = null;
-				}
-			}
-			
 			if(input.RMBTapped()){
 				
 				Entity rightClicked = map.getEntity(getMapX(), getMapY()); //the Entity that is right clicked, if any
@@ -207,7 +188,7 @@ public class SPGameScreen extends GameScreen {
 			popup.update(input.getMouseX(), input.getMouseY());
 		}
 		if(input.LMBTapped() || input.RMBTapped()) {
-			new Sound("/res/Sounds/klick.mp3").play();
+			new Sound("src/res/Sounds/klick.mp3").play();
 		}
 	}
 	

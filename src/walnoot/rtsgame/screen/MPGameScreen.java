@@ -200,8 +200,8 @@ import walnoot.rtsgame.rest.Util;
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[5][6], this.bar.screen) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
-						public Entity toBuild() {
-							return new TentIStructure(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
+						public Entity toBuild(Direction face) {
+							return new TentIStructure(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
 						}
 					};
 				}
@@ -214,8 +214,8 @@ import walnoot.rtsgame.rest.Util;
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[7][6], this) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
-						public Entity toBuild() {
-							return new SchoolI(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
+						public Entity toBuild(Direction face) {
+							return new SchoolI(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY),face);
 						}
 					};
 					
@@ -244,7 +244,7 @@ import walnoot.rtsgame.rest.Util;
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][6], this) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, input, screen) {
-						public Entity toBuild() {
+						public Entity toBuild(Direction face) {
 							return new StoneMine(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
 						}
 					};
@@ -257,8 +257,8 @@ import walnoot.rtsgame.rest.Util;
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][7], this) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, input, screen) {
-						public Entity toBuild() {
-							return new TentIIStructure(map, screen,Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
+						public Entity toBuild(Direction face) {
+							return new TentIIStructure(map, screen,Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
 						}
 					};
 					

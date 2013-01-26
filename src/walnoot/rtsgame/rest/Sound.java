@@ -1,14 +1,24 @@
 package walnoot.rtsgame.rest;
 
+import java.util.ArrayList;
+
 
 public class Sound {
        private MP3 mp3;
        
-        public Sound(String file){
-                mp3 = new MP3(file);
+        public Sound(String...file){
+        	ArrayList<String> files = new ArrayList<String>();
+        	for(String s:file){
+        		files.add(s);
+        	}
+        	mp3 = new MP3(files);
         }
        
-        public void play(){
+        public Sound(ArrayList<String> files) {
+        	mp3 = new MP3(files);
+		}
+
+		public void play(){
         	mp3.play();
         	
         }

@@ -12,9 +12,6 @@ import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
-import walnoot.rtsgame.map.entities.MovingEntity;
-import walnoot.rtsgame.map.entities.players.PlayerEntity;
-import walnoot.rtsgame.map.entities.players.professions.Founder;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
@@ -35,28 +32,18 @@ import walnoot.rtsgame.rest.MousePointer;
 import walnoot.rtsgame.rest.Util;
 
 public abstract class GameScreen extends Screen {
-	
 	public Map map;
-
 	public int translationX, translationY;
 	public EntityPopup entityPopup = null;
-	
 	public LinkedList<Entity> selectedEntities = new LinkedList<Entity>();
 	public Entity targetEntity; //the Entity the camera will go to
-	
 	public HomeBar bar;
 	public StatusBar statusBar;
-	
-	public MousePointer pointer;
-	
+	protected MousePointer pointer;
 	public boolean pause = false;
-	
 	public int level = 0;
-	
 	private Color gameColor = Color.CYAN;
-	
 	public Inventory inventory = new Inventory(this);
-	
 	public Button levelUpButton;
 
 	public GameScreen(RTSComponent component, InputHandler input) {
@@ -74,8 +61,6 @@ public abstract class GameScreen extends Screen {
 	}
 	
 	public void render(Graphics g){
-		
-		
 		Point translation = new Point((int) translationX, (int) translationY);
 		if(map != null) map.render(g, translation, new Dimension(getWidth(), getHeight()), getWidth(), getHeight());
 		bar.render(g, getWidth(), getHeight());
@@ -130,8 +115,6 @@ public abstract class GameScreen extends Screen {
 	public abstract void load();
 	
 	public abstract void load(String nameFile);
-	
-	public abstract void update();
 	
 	public void setEntityPopup(EntityPopup popup){
 		this.entityPopup = popup;
@@ -203,8 +186,8 @@ public abstract class GameScreen extends Screen {
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[5][6], this.bar.screen) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
-						public Entity toBuild() {
-							return new TentIStructure(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
+						public Entity toBuild(Direction face) {
+							return new TentIStructure(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
 						}
 					};
 				}
@@ -218,24 +201,22 @@ public abstract class GameScreen extends Screen {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
 						
-						public Entity toBuild() {
-							return new WoodenGate(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
+						public Entity toBuild(Direction face) {
+							return new WoodenGate(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
 						}
 					};
 				}
-				
 				public String getName() {
 					return "Gate";
 				}
 			});
-			
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][5], this.bar.screen) {
 				
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
 						
-						public Entity toBuild() {
-							return new WoodenWall(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
+						public Entity toBuild(Direction face) {
+							return new WoodenWall(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
 						}
 					};
 				}
@@ -248,8 +229,8 @@ public abstract class GameScreen extends Screen {
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[7][6], this) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
-						public Entity toBuild() {
-							return new SchoolI(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
+						public Entity toBuild(Direction face) {
+							return new SchoolI(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
 						}
 					};
 					
@@ -280,7 +261,7 @@ public abstract class GameScreen extends Screen {
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][6], this) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, input, screen) {
-						public Entity toBuild() {
+						public Entity toBuild(Direction face) {
 							return new StoneMine(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
 						}
 					};
@@ -293,8 +274,8 @@ public abstract class GameScreen extends Screen {
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][7], this) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, input, screen) {
-						public Entity toBuild() {
-							return new TentIIStructure(map, screen,Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
+						public Entity toBuild(Direction face) {
+							return new TentIIStructure(map, screen,Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
 						}
 					};
 					
@@ -308,8 +289,8 @@ public abstract class GameScreen extends Screen {
 				
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, input, screen){
-						public Entity toBuild(){
-							return new TreeStructure(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
+						public Entity toBuild(Direction face){
+							return new TreeStructure(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
 						}
 					};
 				}
@@ -338,5 +319,8 @@ public abstract class GameScreen extends Screen {
 		}
 	}
 
-	
+	public void setMousePointer(MousePointer p){
+		System.out.println(p);
+		pointer = p;
+	}
 }
