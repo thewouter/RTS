@@ -1,5 +1,7 @@
 package walnoot.rtsgame.map.structures.nonnatural;
 
+import java.util.HashMap;
+
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.structures.BasicStructure;
@@ -30,8 +32,12 @@ public class Farm extends BasicStructure{
 		return "Farm";
 	}
 
-	public int getCosts() {
-		return 0;
+	public HashMap<String, Integer> getCosts() {
+		HashMap<String, Integer> costs = new HashMap<String, Integer>();
+		costs.put("gold", 5);
+		costs.put("wood", 15);
+		costs.put("stone", 3);
+		return costs;
 	}
 
 	public int getExtraOne() {

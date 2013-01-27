@@ -25,9 +25,9 @@ public class MainMenu extends MenuScreen {
 		super(component, input);
 		this.title = title;
 		
-		ScreenPopup popup = new ScreenPopup(10, 10, 100, 100, this);
+		ScreenPopup popup = new ScreenPopup((getWidth()-100)/2, (getHeight() - 100)/2, 100, 100, this);
 		TextInput userNameInput = new TextInput(popup,input);
-		userNameInput.setText("Username");
+		userNameInput.setText("wouter");
 		popup.addPart(userNameInput);
 		popup.addPart(new ScreenPopupButton("OK", popup, input) {
 			

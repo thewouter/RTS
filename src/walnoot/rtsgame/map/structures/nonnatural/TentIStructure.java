@@ -1,5 +1,6 @@
 package walnoot.rtsgame.map.structures.nonnatural;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import walnoot.rtsgame.map.Direction;
@@ -74,7 +75,9 @@ public class TentIStructure extends BasicStructure {
 		return 0;
 	}
 	
-	public int getCosts(){
-		return 60;
+	public HashMap<String, Integer> getCosts(){
+		HashMap<String, Integer> costs = new HashMap<String, Integer>();
+		costs.put("gold", 5);
+		return costs;
 	}
 }

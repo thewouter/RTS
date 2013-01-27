@@ -5,31 +5,28 @@
 	
 	16	Sand
 
-100-199		MovingEntities
-	100	SnakeEntity
-	101	SheepEntity
-	102	PlayerEntity
-	103	DeerEntity
-	104 HunterEntity
-	105 MinerEntity
-	106 LumberJacker
+100-199		MovingEntities	Cost/Tick	gold	wood	meat		Vegetables		stone
+	100	SnakeEntity						0		0		0			0				0
+	101	SheepEntity						0		0		0			0				0
+	102	PlayerEntity					0		0		1/500		1/500			0
+	103	DeerEntity						0		0		0			0				0
+	104 HunterEntity					1/500	0		1/500		1/500			0
+	105 MinerEntity						1/400	1/300	1/400		1/600			0
+	106 LumberJacker					1/500	0		1/400		1/600			0
+	107 Soldier							1/300	0		1/300		0				0
 	
-200-299		Structures
-	200	CampFireStructure
-	201	TentStructure
-	202 TreeStructure
-	203	BaseOfOperations
-	204 LumberJacker
-	205 HuntSchool
-	206 StoneMine
-	207 MinerISchool
-	208 MinerIISchool
-	209 Farm
-	210 SchoolI
-	211 Barracks
-	212 DefenseTower
-	213 WoodenWall
-	214 WoodenGate
+200-299		Structures			costs:	gold	wood	meat		vegetables		stone
+	200	CampFireStructure				0		0		0				0			0
+	201	TentStructure					5		0		0				0			0
+	202 TreeStructure					1		0		0				0			0
+	203	BaseOfOperations				100		30		0				0			50
+	206 StoneMine						5		12		0				0			0
+	209 Farm							5		15		0				0			3
+	210 SchoolI							10		10		0				0			0
+	211 Barracks						5		20		1/300 Ticks		1/300 Tics	0
+	212 DefenseTower					20		2		0				0			25
+	213 WoodenWall						1		1		0				0			0
+	214 WoodenGate						5		20		0				0			0
 	
 300-399 mines
 	300 GoldMine
@@ -59,4 +56,14 @@
 	
 	
 	ctrl - shift - o imports;
+	
+	Start Conditions:
+
+Normal:
+	500 Gold
+	70 	Wood
+	10 	Meat
+	10	Vegetables
+	50 	Stone
+	
 	

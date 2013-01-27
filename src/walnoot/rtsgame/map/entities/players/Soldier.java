@@ -19,13 +19,16 @@ public class Soldier extends PlayerEntity {
 	public int shieldProtection;
 	ArrayList<SoldierComponent> toRemove = new ArrayList<SoldierComponent>();
 	private double progressToNextDamage = 0.0;
+	private static int ID = 107;
 
 	public Soldier(Map map, GameScreen screen, int xPos, int yPos, Structure tent) {
 		super(map, screen, xPos, yPos, tent);
+		super.ID = ID;
 	}
 
 	public Soldier(Map map, GameScreen screen, int xPos, int yPos, Structure tent, int health) {
 		super(map, screen, xPos, yPos, tent, health);
+		super.ID = ID;
 	}
 	
 	public void addSoldierComponent(SoldierComponent comp){

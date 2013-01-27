@@ -1,5 +1,7 @@
 package walnoot.rtsgame.map.structures.nonnatural;
 
+import java.util.HashMap;
+
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.structures.BasicStructure;
@@ -41,7 +43,7 @@ public class CampFireStructure extends BasicStructure{
 		return 0;
 	}
 	
-	public int getCosts(){
-		return 20;
+	public HashMap<String, Integer> getCosts(){
+		return new HashMap<String, Integer>();
 	}
 }

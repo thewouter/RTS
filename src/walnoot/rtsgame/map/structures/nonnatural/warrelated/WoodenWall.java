@@ -3,6 +3,7 @@ package walnoot.rtsgame.map.structures.nonnatural.warrelated;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.map.Direction;
@@ -92,8 +93,12 @@ public class WoodenWall extends BasicStructure {
 		return "Wall";
 	}
 
-	public int getCosts() {
-		return 300;
+	public HashMap<String, Integer> getCosts() {
+		HashMap<String, Integer> costs = new HashMap<String, Integer>();
+		costs.put("gold", 1);
+		costs.put("wood", 1);
+		
+		return costs;
 	}
 
 	public int getExtraOne() {

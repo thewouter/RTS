@@ -1,5 +1,7 @@
 package walnoot.rtsgame.map.structures.nonnatural.warrelated;
 
+import java.util.HashMap;
+
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
@@ -29,8 +31,11 @@ public class WoodenGate extends BasicStructure {
 		return "Wooden gate";
 	}
 
-	public int getCosts() {
-		return 25;
+	public HashMap<String, Integer> getCosts() {
+		HashMap<String, Integer> costs = new HashMap<String, Integer>();
+		costs.put("gold", 5);
+		costs.put("wood", 20);
+		return costs;
 	}
 
 	public int getHeadSpace() {

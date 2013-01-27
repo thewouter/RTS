@@ -2,6 +2,7 @@ package walnoot.rtsgame.map.structures.natural;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.map.Map;
@@ -80,8 +81,8 @@ public abstract class MineStructure extends Structure {
 		return size;
 	}
 	
-	public int getCosts(){
-		return 0;
+	public HashMap<String, Integer> getCosts(){
+		return new HashMap<String, Integer>();
 	}
 	
 	public void setSize(int size){

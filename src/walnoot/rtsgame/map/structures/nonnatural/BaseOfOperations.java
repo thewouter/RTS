@@ -1,5 +1,7 @@
 package walnoot.rtsgame.map.structures.nonnatural;
 
+import java.util.HashMap;
+
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
@@ -51,8 +53,12 @@ public class BaseOfOperations extends BasicStructure {
 
 	public int getExtraOne() {return 0;	}
 	
-	public int getCosts(){
-		return 50;
+	public HashMap<String, Integer> getCosts(){
+		HashMap<String, Integer> costs = new HashMap<String, Integer>();
+		costs.put("gold", 100);
+		costs.put("stone", 30);
+		costs.put("stone", 50);
+		return costs;
 	}
 
 }

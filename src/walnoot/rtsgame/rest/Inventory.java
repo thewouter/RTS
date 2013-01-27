@@ -8,16 +8,14 @@ import walnoot.rtsgame.screen.GameScreen;
 
 
 /**
- * this is a inventory for the GameScreen object
- * 
+ * this is a inventory for the GameScreen || MPHost object
  * @author wouter
- *
  */
 public class Inventory {
 	private GameScreen owner;
 	
-	public int gold = 10000;
-	public int meat = 10000;
+	public int gold = 0;
+	public int meat = 0;
 	public int wood = 0;
 	public int stone = 0;
 	public int vegetables = 0;
@@ -31,7 +29,7 @@ public class Inventory {
 	}
 
 	public void showInventory() {
-		ScreenPopup popup = new ScreenPopup((owner.getWidth()-84)/2, (owner.getHeight() - 20)/2, 130, 20, owner);
+		ScreenPopup popup = new ScreenPopup((owner.getWidth()-200)/2, (owner.getHeight() - 20)/2, 200, 20, owner);
 		popup.addPart(new ScreenPopupTextField(new String("Gold: " + gold + "  stone: " + stone)));
 		popup.addPart(new ScreenPopupTextField(new String("Meat: " + meat + " vegetables: " + vegetables)));
 		popup.addPart(new ScreenPopupTextField(new String("Wood: " + wood)));

@@ -2,6 +2,11 @@ package walnoot.rtsgame.rest;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Direction;
@@ -32,8 +37,26 @@ public abstract class MousePointer {
 		if(input.LMBTapped() && screen.isOnlyOnMap(x, y)){
 			Entity e = toBuild(face);
 			
+			HashMap<String, Integer> costs;
+			costs= e.getCosts();
+			Set s = costs.entrySet();
+			Iterator it = s.iterator();
+			ArrayList<String> keysDone = new ArrayList<>();
+			while(it.hasNext()){
+				Entry en = (Entry)it.next();
+				String material = (String)en.getKey();
+				int cost = (int) en.getValue();
+				if(!handleCosts(material, cost)){ // not enough materials detected!
+					for(String key :keysDone){
+						handleCosts(key, -cost);
+					}
+					return;
+				}else{
+					keysDone.add(material);
+				}
+			}
 			map.addEntity(e);
-			screen.inventory.gold -= e.getCosts();
+			
 			afterBuild();
 		}
 		
@@ -42,6 +65,46 @@ public abstract class MousePointer {
 		}
 		if(input.dot.isTapped()){
 			face = Direction.SOUTH_WEST;
+		}
+	}
+	
+	private boolean handleCosts(String material, int amount){
+		switch(material){
+		case "gold":
+			if(screen.inventory.gold >= amount){
+				screen.inventory.gold -= amount;
+				return true;
+			}
+			return false;
+		case "wood":
+			if(screen.inventory.wood >= amount){
+				screen.inventory.wood -= amount;
+				return true;
+			}
+			return false;
+		case "meat":
+			if(screen.inventory.meat >= amount){
+				screen.inventory.meat -= amount;
+				return true;
+			}
+			return false;
+		case "vegatables":
+			if(screen.inventory.vegetables >= amount){
+				screen.inventory.vegetables -= amount;
+				return true;
+			}
+			return false;
+		case "stone":
+			if(screen.inventory.stone >= amount){
+				screen.inventory.stone -= amount;
+				return true;
+			}
+			return false;
+		default:
+			System.out.println("unknown material: " + material);
+			return false;
+			
+			
 		}
 	}
 	

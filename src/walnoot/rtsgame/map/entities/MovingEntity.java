@@ -2,6 +2,7 @@ package walnoot.rtsgame.map.entities;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.omg.CORBA.UserException;
@@ -136,8 +137,8 @@ public abstract class MovingEntity extends Entity {
 		else return null;
 	}
 	
-	public int getCosts(){
-		return 0;
+	public HashMap<String, Integer> getCosts(){
+		return new HashMap<String, Integer>();
 	}
 	
 	public void standStill(){

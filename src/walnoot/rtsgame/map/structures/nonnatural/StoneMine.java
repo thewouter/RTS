@@ -1,6 +1,7 @@
 package walnoot.rtsgame.map.structures.nonnatural;
 
 import java.awt.Graphics;
+import java.util.HashMap;
 
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.map.Map;
@@ -45,8 +46,11 @@ public class StoneMine extends MineStructure {
 		return "StoneMine";
 	}
 
-	public int getCosts() {
-		return 25;
+	public HashMap<String, Integer> getCosts() {
+		HashMap<String, Integer> costs = new HashMap<String, Integer>();
+		costs.put("gold", 5);
+		costs.put("wood", 12);
+		return costs;
 	}
 
 	public void update() {

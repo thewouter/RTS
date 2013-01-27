@@ -3,6 +3,7 @@ package walnoot.rtsgame.map.structures.nonnatural.warrelated;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Direction;
@@ -123,8 +124,12 @@ public class DefenseTower extends BasicStructure {
 		return "Primary defense Tower";
 	}
 
-	public int getCosts() {
-		return 300;
+	public HashMap<String, Integer> getCosts() {
+		HashMap<String, Integer> costs = new HashMap<String, Integer>();
+		costs.put("gold", 20);
+		costs.put("wood", 5);
+		costs.put("stone", 25);
+		return costs;
 	}
 
 	public int getExtraOne() {

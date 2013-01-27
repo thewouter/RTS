@@ -29,7 +29,7 @@ public class PlayerEntity extends MovingEntity {
 	private ArrayList<ItemEntity> inventory = new ArrayList<ItemEntity>();
 	private int lastSelectedOption = -1;
 	InputHandler input;
-	private final static int ID = 102;
+	protected static int ID = 102;
 	private Animation animation;
 	private Animation backwardAnimation;
 	public final Structure owner;

@@ -2,6 +2,7 @@ package walnoot.rtsgame.map.entities;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.HashMap;
 
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
@@ -45,7 +46,7 @@ public abstract class Entity implements Cloneable {
 	public abstract void render(Graphics g);
 	public abstract int getMaxHealth();
 	public abstract String getName();
-	public abstract int getCosts();
+	public abstract HashMap<String, Integer> getCosts();
 	public abstract int getHeadSpace();
 	
 	

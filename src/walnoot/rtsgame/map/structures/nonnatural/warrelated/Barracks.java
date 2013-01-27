@@ -2,6 +2,7 @@ package walnoot.rtsgame.map.structures.nonnatural.warrelated;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import walnoot.rtsgame.Images;
@@ -75,8 +76,11 @@ public class Barracks extends BasicStructure {
 		return "Barracks";
 	}
 
-	public int getCosts() {
-		return 0;
+	public HashMap<String, Integer> getCosts() {
+		HashMap<String, Integer> costs = new HashMap<String, Integer>();
+		costs.put("gold", 5);
+		costs.put("wood", 20);
+		return costs;
 	}
 
 	public int getExtraOne() {

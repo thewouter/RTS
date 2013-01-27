@@ -1,6 +1,7 @@
 package walnoot.rtsgame.map.structures.natural;
 
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
@@ -46,8 +47,10 @@ public class TreeStructure extends BasicStructure{
 		return 0;
 	}
 	
-	public int getCosts(){
-		return 0;
+	public HashMap<String, Integer> getCosts(){
+		HashMap<String, Integer> costs = new HashMap<String, Integer>();
+		costs.put("gold", 1);
+		return costs;
 	}
 
 }

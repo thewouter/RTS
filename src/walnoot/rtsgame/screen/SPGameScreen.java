@@ -37,6 +37,10 @@ public class SPGameScreen extends GameScreen {
 		map = new Map(256, this);
 		
 		inventory.gold = 500;
+		inventory.wood = 70;
+		inventory.stone = 50;
+		inventory.vegetables = 10;
+		inventory.meat = 10;
 		
 		int goodYPos;
 		
@@ -124,7 +128,7 @@ public class SPGameScreen extends GameScreen {
 			if(input.isDragging() && (popup == null || !popup.isInPopup(input.mouseX, input.mouseY))){
 				int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
 				selectedEntities.clear();
-				LinkedList<Entity> inRange = (map.getEntities(x1 - Tile.WIDTH, y1 - Tile.HEIGHT, x2, y2, new Dimension(translationX, translationY)));
+				LinkedList<Entity> inRange = (map.getEntities(x1, y1 , x2, y2, new Dimension(translationX, translationY)));
 				ArrayList<Entity> structures = new ArrayList<Entity>();
 				for( Entity e:inRange){
 					if(e instanceof MovingEntity){

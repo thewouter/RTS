@@ -2,6 +2,7 @@ package walnoot.rtsgame.map.structures.nonnatural;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
@@ -69,8 +70,11 @@ public class SchoolI extends BasicStructure {
 		return "Elementary school";
 	}
 
-	public int getCosts() {
-		return 125;
+	public HashMap<String, Integer> getCosts() {
+		HashMap<String, Integer> costs = new HashMap<String, Integer>();
+		costs.put("gold",10);
+		costs.put("wood", 10);
+		return costs;
 	}
 
 	public int getExtraOne() {
