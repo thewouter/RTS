@@ -1,6 +1,7 @@
 package walnoot.rtsgame.rest;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +37,10 @@ public abstract class MousePointer {
 		y = input.getMouseY();
 		if(input.LMBTapped() && screen.isOnlyOnMap(x, y)){
 			Entity e = toBuild(face);
-			
+			if(e == null) {
+				afterBuild();
+				return;
+			}
 			HashMap<String, Integer> costs;
 			costs= e.getCosts();
 			Set s = costs.entrySet();
@@ -50,6 +54,7 @@ public abstract class MousePointer {
 					for(String key :keysDone){
 						handleCosts(key, -cost);
 					}
+					new Sound("src/res/Sounds/airhorn.mp3").play();
 					return;
 				}else{
 					keysDone.add(material);
@@ -119,6 +124,9 @@ public abstract class MousePointer {
 			
 			if(face == Direction.SOUTH_WEST) g.drawImage(((BasicStructure)entity).getImage(), x, y, null);
 			else g.drawImage(((BasicStructure)entity).getImage(), x + width, y, x, y + height, 0, 0, width, height, null);
+		}else{
+			g.setColor(Color.RED);
+			g.fillRect(x, y, 5, 5);
 		}
 	}
 	

@@ -56,7 +56,7 @@ public class BaseOfOperations extends BasicStructure {
 	public HashMap<String, Integer> getCosts(){
 		HashMap<String, Integer> costs = new HashMap<String, Integer>();
 		costs.put("gold", 100);
-		costs.put("stone", 30);
+		costs.put("wood", 30);
 		costs.put("stone", 50);
 		return costs;
 	}

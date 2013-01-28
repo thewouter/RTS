@@ -29,7 +29,7 @@ public class Inventory {
 	}
 
 	public void showInventory() {
-		ScreenPopup popup = new ScreenPopup((owner.getWidth()-200)/2, (owner.getHeight() - 20)/2, 200, 20, owner);
+		ScreenPopup popup = new ScreenPopup((owner.getWidth()-200)/2, (owner.getHeight() - 20)/2, 200, 20, owner, false);
 		popup.addPart(new ScreenPopupTextField(new String("Gold: " + gold + "  stone: " + stone)));
 		popup.addPart(new ScreenPopupTextField(new String("Meat: " + meat + " vegetables: " + vegetables)));
 		popup.addPart(new ScreenPopupTextField(new String("Wood: " + wood)));

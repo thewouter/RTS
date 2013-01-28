@@ -68,7 +68,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 	
 	private boolean LMBDown = false, LMBWasDown = false;
 	private boolean RMBDown = false, RMBWasDown = false;
-	private boolean isDragging = false;
+	private boolean isDragging = false, wasDragging = false;
 	public int mouseX, mouseY, mouseWheelChange, mouseXOnClick, mouseYOnClick;
 	private char charTyped;
 	
@@ -80,6 +80,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 		LMBWasDown = LMBDown;
 		RMBWasDown = RMBDown;
 		mouseWheelChange = 0;
+		wasDragging = isDragging;
 		
 		for(Key key: keylist){
 			key.update();
@@ -101,7 +102,7 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 	}
 	
 	public boolean LMBTapped(){
-		return LMBDown && !LMBWasDown;
+		return !LMBDown && LMBWasDown;
 	}
 	
 	public boolean RMBDown(){
@@ -109,11 +110,15 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 	}
 	
 	public boolean RMBTapped(){
-		return RMBDown && !RMBWasDown;
+		return !RMBDown && RMBWasDown;
 	}
 	
 	public boolean isDragging(){
 		return isDragging;
+	}
+	
+	public boolean wasDragging(){
+		return wasDragging;
 	}
 	
 	public int getMouseX(){		//coordinats in mapcoordinats!

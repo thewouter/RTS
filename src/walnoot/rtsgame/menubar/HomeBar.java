@@ -36,7 +36,7 @@ public class HomeBar extends MenuBar{
 					popup.addButton(new MenuBarPopupButton(Images.buttons[2][0],bar.screen) {
 
 						public void onLeftClick() {
-							ScreenPopup options = new ScreenPopup(bar.screen.getWidth() / 2 - 50, bar.screen.getHeight() / 2 - 50, 85, 1, bar.screen);
+							ScreenPopup options = new ScreenPopup(bar.screen.getWidth() / 2 - 50, bar.screen.getHeight() / 2 - 50, 85, 1, bar.screen, false);
 							options.addPart(new ScreenPopupTextField("set music"));
 							options.addPart(new ScreenPopupButton("on", options, bar.input) {
 								public void onLeftClick() {
@@ -70,7 +70,7 @@ public class HomeBar extends MenuBar{
 					MenuBarPopup popup = new MenuBarPopup(xPosOnScreen + UITLOOP + (buttons.indexOf(this) + 1)*WIDTH_BUTTON, yPosOnScreen + UITLOOP, buttons.indexOf(this), false);
 					popup.addButton(new MenuBarPopupButton(Images.buttons[1][0],bar.screen) {
 						public void onLeftClick() {
-							ScreenPopup popup = new ScreenPopup((bar.screen.getWidth() - 100)/2, (bar.screen.getHeight() - 100)/2, 100, 100, bar.screen);
+							ScreenPopup popup = new ScreenPopup((bar.screen.getWidth() - 100)/2, (bar.screen.getHeight() - 100)/2, 100, 100, bar.screen, false);
 							popup.addPart(new TextInput(popup, bar.input));
 							popup.addPart(new ScreenPopupButton("load", popup, bar.input){
 								public void onLeftClick() {
@@ -95,7 +95,7 @@ public class HomeBar extends MenuBar{
 					
 					popup.addButton(new MenuBarPopupButton(Images.buttons[2][0],bar.screen) {
 						public void onLeftClick() {
-							ScreenPopup popup = new ScreenPopup((screen.getWidth() - 100)/2, (screen.getHeight() - 100)/2, 100, 100, screen);
+							ScreenPopup popup = new ScreenPopup((screen.getWidth() - 100)/2, (screen.getHeight() - 100)/2, 100, 100, screen, false);
 							popup.addPart(new TextInput(popup, bar.input));
 							popup.addPart(new ScreenPopupButton("Save", popup, bar.input){
 								public void onLeftClick() {

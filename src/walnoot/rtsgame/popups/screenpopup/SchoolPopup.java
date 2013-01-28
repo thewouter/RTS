@@ -30,7 +30,7 @@ public class SchoolPopup extends ScreenPopup{
 	LinkedList<Button> buttons = new LinkedList<Button>();
 	
 	public SchoolPopup(Screen title, BufferedImage image, BasicStructure owner, InputHandler input) {
-		super(title.getWidth() - (image.getWidth() / 2), title.getHeight() - (image.getHeight() / 2), image.getWidth(), image.getHeight(), title);
+		super(title.getWidth() - (image.getWidth() / 2), title.getHeight() - (image.getHeight() / 2), image.getWidth(), image.getHeight(), title, false);
 		this.image = image;
 		this.input = input;
 		xPos = title.getWidth() / 2 - (image.getWidth() / 2);

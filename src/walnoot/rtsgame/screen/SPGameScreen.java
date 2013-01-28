@@ -23,6 +23,8 @@ import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenWall;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.menubar.Button;
+import walnoot.rtsgame.menubar.MenuBarPopupButton;
+import walnoot.rtsgame.rest.MousePointer;
 import walnoot.rtsgame.rest.Sound;
 import walnoot.rtsgame.rest.Util;
 
@@ -59,6 +61,26 @@ public class SPGameScreen extends GameScreen {
 		
 		//translationX = -selectedEntities.getFirst().getScreenX();
 		//translationY = -selectedEntities.getFirst().getScreenY();
+		
+		bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[0][7], this) {
+			
+			public void onLeftClick() {
+				pointer = new MousePointer(map, this.screen.input, this.screen) {
+					public Entity toBuild(Direction face) {
+						return null;
+					}
+					public void afterBuild(){
+						for(Entity e:selectedEntities){
+							map.removeEntity(e);
+						}
+					}
+				};
+			}
+			
+			public String getName() {
+				return "remove";
+			}
+		});
 	}
 
 	public void save(){
@@ -125,7 +147,7 @@ public class SPGameScreen extends GameScreen {
 				}
 			}
 			
-			if(input.isDragging() && (popup == null || !popup.isInPopup(input.mouseX, input.mouseY))){
+			if(input.wasDragging() && (popup == null || !popup.isInPopup(input.mouseX, input.mouseY))){
 				int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
 				selectedEntities.clear();
 				LinkedList<Entity> inRange = (map.getEntities(x1, y1 , x2, y2, new Dimension(translationX, translationY)));

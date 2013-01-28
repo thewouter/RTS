@@ -25,7 +25,7 @@ public class MainMenu extends MenuScreen {
 		super(component, input);
 		this.title = title;
 		
-		ScreenPopup popup = new ScreenPopup((getWidth()-100)/2, (getHeight() - 100)/2, 100, 100, this);
+		ScreenPopup popup = new ScreenPopup((getWidth()-100)/2, (getHeight() - 100)/2, 100, 100, this, true);
 		TextInput userNameInput = new TextInput(popup,input);
 		userNameInput.setText("wouter");
 		popup.addPart(userNameInput);
@@ -58,7 +58,6 @@ public class MainMenu extends MenuScreen {
 	
 	public void update(){
 		super.update();
-		
 		if(buttonTransparancy < 1.0f){
 			buttonTransparancy += (float) RTSComponent.MS_PER_TICK / 1000;
 		}
@@ -72,7 +71,7 @@ public class MainMenu extends MenuScreen {
 		else if(menuButton.equals(exitGame)) component.stop();
 		else if(menuButton.equals(newSPGame)) component.setGameScreen(true);
 		else if(menuButton.equals(newMPGame)){
-			ScreenPopup popup = new ScreenPopup((component.getWidth() / 4 )- 50, (component.getHeight() / 4) - 50, 100, 100, title);
+			ScreenPopup popup = new ScreenPopup((component.getWidth() / 4 )- 50, (component.getHeight() / 4) - 50, 100, 100, title, false);
 			TextInput IP = new TextInput(popup, input);
 			IP.setText("localhost");
 			popup.addPart(IP);

@@ -38,10 +38,13 @@ public abstract class Screen {
 	}
 	
 	public void update(){
-		if(popup!= null) popup.update(input.getMouseX(), input.getMouseY());
 		if(input.escape.isTapped()) {
 			if(popup == null)component.setTitleScreen();
-			else setPopup(null);
+			else if(!popup.isForced()) setPopup(null);
+		}
+		if(popup!= null) {
+			popup.update(input.getMouseX(), input.getMouseY());
+			input.update();
 		}
 	}
 	

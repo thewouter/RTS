@@ -304,7 +304,7 @@ import walnoot.rtsgame.rest.Util;
 
 	public void pause(){
 		pause = true;
-		popup = new ScreenPopup((getWidth()-84)/2, (getHeight() - 20)/2, 84, 20, this);
+		popup = new ScreenPopup((getWidth()-84)/2, (getHeight() - 20)/2, 84, 20, this, false);
 		popup.addPart(new ScreenPopupButton("play", popup, input) {
 			public void onLeftClick() {
 				dePause();

@@ -11,15 +11,20 @@ public class ScreenPopup extends Popup{
 	private static int EMPTY_SPACE = 10;
 	LinkedList<ScreenPopupPart> parts = new LinkedList<ScreenPopupPart>();
 	public Screen screen;
+	private boolean forced;
 	
-	public ScreenPopup(int xPos, int yPos, int width, int height, Screen title){
+	public ScreenPopup(int xPos, int yPos, int width, int height, Screen title, boolean forced){
 		this.xPos = xPos;
 		this.yPos = yPos;
 		this.width = width;
 		this.height = height;
 		this.screen = title;
+		this.forced = forced;
 	}
 	
+	public boolean isForced(){
+		return forced;
+	}
 
 	public void render(Graphics g) {
 		drawBox(g,width, height, xPos, yPos);
