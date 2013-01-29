@@ -71,6 +71,6 @@ public class GoldMine extends MineStructure {
 	
 	public void mine(int i, Entity miner){
 		damage(i);
-		miner.screen.inventory.gold++;
+		miner.screen.inventory.addGold(1);
 	}
 }

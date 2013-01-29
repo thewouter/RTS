@@ -76,32 +76,32 @@ public abstract class MousePointer {
 	private boolean handleCosts(String material, int amount){
 		switch(material){
 		case "gold":
-			if(screen.inventory.gold >= amount){
-				screen.inventory.gold -= amount;
+			if(screen.inventory.getGold() >= amount){
+				screen.inventory.addGold(- amount);
 				return true;
 			}
 			return false;
 		case "wood":
-			if(screen.inventory.wood >= amount){
-				screen.inventory.wood -= amount;
+			if(screen.inventory.getWood() >= amount){
+				screen.inventory.addWood(- amount);
 				return true;
 			}
 			return false;
 		case "meat":
-			if(screen.inventory.meat >= amount){
-				screen.inventory.meat -= amount;
+			if(screen.inventory.getMeat() >= amount){
+				screen.inventory.addMeat(- amount);
 				return true;
 			}
 			return false;
 		case "vegatables":
-			if(screen.inventory.vegetables >= amount){
-				screen.inventory.vegetables -= amount;
+			if(screen.inventory.getVegetables() >= amount){
+				screen.inventory.addVegetables(- amount);
 				return true;
 			}
 			return false;
 		case "stone":
-			if(screen.inventory.stone >= amount){
-				screen.inventory.stone -= amount;
+			if(screen.inventory.getStone() >= amount){
+				screen.inventory.addStone(- amount);
 				return true;
 			}
 			return false;

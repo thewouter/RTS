@@ -61,7 +61,7 @@ public class StoneMine extends MineStructure {
 		counter ++;
 		if(counter > MINES_PER_DAMAGE){
 			counter = 0;
-			miner.screen.inventory.stone++;
+			miner.screen.inventory.addStone(1);
 		}
 	}
 	

@@ -17,6 +17,7 @@ import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.Shield;
 import walnoot.rtsgame.map.entities.players.Soldier;
 import walnoot.rtsgame.map.entities.players.professions.Founder;
+import walnoot.rtsgame.map.entities.players.professions.Miner;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
@@ -38,11 +39,11 @@ public class SPGameScreen extends GameScreen {
 		
 		map = new Map(256, this);
 		
-		inventory.gold = 500;
-		inventory.wood = 70;
-		inventory.stone = 50;
-		inventory.vegetables = 10;
-		inventory.meat = 10;
+		inventory.addGold(500);
+		inventory.addWood(70);
+		inventory.addStone(50);
+		inventory.addVegetables(10);
+		inventory.addMeat(10);
 		
 		int goodYPos;
 		
@@ -54,16 +55,17 @@ public class SPGameScreen extends GameScreen {
 			}
 		};
 		
-		//targetEntity = selectedEntities.getFirst();
-		PlayerEntity p = new PlayerEntity(map, this, 10, 10, null);
-		p.setProfession(new Founder(p));
-		map.addEntity(p);
-		
-		//translationX = -selectedEntities.getFirst().getScreenX();
-		//translationY = -selectedEntities.getFirst().getScreenY();
+		for(int y = 10; y < map.getLength(); y++){
+			if(!map.getTile(10, y).isSolid()){
+				PlayerEntity p = new PlayerEntity(map, this, 10, y, null);
+				p.setProfession(new Founder(p));
+				map.addEntity(p);
+				selectedEntities.add(p);
+				break;
+			}
+		}
 		
 		bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[0][7], this) {
-			
 			public void onLeftClick() {
 				pointer = new MousePointer(map, this.screen.input, this.screen) {
 					public Entity toBuild(Direction face) {
@@ -229,13 +231,10 @@ public class SPGameScreen extends GameScreen {
 	public boolean isReadyForLevelUp(){
 		switch (level) {
 		case 1:
-			if(inventory.gold >= 25 && inventory.meat >= 16)return true;
+			if(inventory.getGold() >= 25 && inventory.getMeat() >= 16)return true;
 		case 2:
-			if(inventory.gold >= 100 && inventory.meat >=  60 && inventory.wood >= 25) return true;
+			if(inventory.getGold() >= 100 && inventory.getMeat() >=  60 && inventory.getWood() >= 25) return true;
 		}
-		
 		return false;
 	}
-	
-	
 }

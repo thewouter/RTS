@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
+import walnoot.rtsgame.map.entities.players.professions.Miner;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.MineStructure;
@@ -426,15 +427,15 @@ public class Map {
 		return closest;
 	}
 	
-	public Entity getClosestMine(int x, int y, ArrayList<Entity> notIncluded){
+	public Entity getClosestMine(int x, int y, ArrayList<Entity> notIncluded, Miner miner){
 		int closestDistance = 999;
 		int xe, ye;
 		Entity closest = null;
 		for(Entity e: getEntities()){
 			xe = e.getxPos();
 			ye = e.getyPos();
-			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y && (e instanceof MineStructure || e instanceof StoneMine)&& !notIncluded.contains(e)){
-				//System.out.println(e);
+			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y && (e instanceof MineStructure || e instanceof StoneMine)&& !notIncluded.contains(e) && miner.canIMineIt(e)){
+				System.out.println(e);
 				closest = e;
 				closestDistance = Util.getDistance(x, y, xe, ye);
 			}

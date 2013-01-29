@@ -30,9 +30,9 @@ public class SchoolI extends BasicStructure {
 		if(level <= 0) return;
 		popup.hunter.activate();
 		popup.lumberJacker.activate();
-		popup.minerI.activate();
+		//popup.minerI.activate();
 		if(level <= 1) return;
-		popup.minerII.activate();
+		popup.minerI.activate();
 		popup.founder.activate();
 	}
 

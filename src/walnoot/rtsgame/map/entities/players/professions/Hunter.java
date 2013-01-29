@@ -35,7 +35,7 @@ public class Hunter extends Profession {
 				teller = 0;
 				if(Util.getDistance(owner.xPos, owner.yPos, closestMovingEntity.xPos, closestMovingEntity.yPos) <= 1){
 					closestMovingEntity.damage(1);
-					owner.screen.inventory.meat+=1;
+					owner.screen.inventory.addMeat(1);
 					if(!owner.map.getEntities().contains(closestMovingEntity)){	// it's dead.
 						huntNearestAnimal();
 					}

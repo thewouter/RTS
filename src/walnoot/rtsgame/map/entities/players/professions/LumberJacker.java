@@ -27,7 +27,7 @@ public class LumberJacker extends Profession {
 			if(isChopping){ 
 				if(Util.getDistance(owner.xPos, owner.yPos, closestTree.xPos, closestTree.yPos)  <= 1){
 					closestTree.damage(1);
-					owner.screen.inventory.wood++;
+					owner.screen.inventory.addWood(1);
 				}
 			}
 		}

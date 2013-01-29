@@ -273,11 +273,11 @@ public class RTSComponent extends Canvas implements Runnable {
 					System.out.println(inputLine);
 				}
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			return true;
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			return true;
 		} catch (IOException e) {
-			e.printStackTrace();
+			return true;
 		}
 		
 		return false;

@@ -38,8 +38,8 @@ public class TentIStructure extends BasicStructure {
 		if(players.size() < MAX_PLAYERS)time++;
 		if(time >= TIME_TO_SPAWN_A_PLAYER && players.size() < MAX_PLAYERS && screen != null && !(screen instanceof MPGameScreen)){
 			toBeAddedToTheMap.add(new PlayerEntity(map, screen, xPos + 3, yPos + 3, this));
-			screen.inventory.meat --;
-			screen.inventory.gold --;
+			screen.inventory.addMeat(-1);
+			screen.inventory.addGold(-1);
 			time = 0;
 		}
 		

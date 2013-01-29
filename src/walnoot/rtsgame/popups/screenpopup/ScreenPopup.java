@@ -7,7 +7,9 @@ import walnoot.rtsgame.popups.Popup;
 import walnoot.rtsgame.screen.Screen;
 
 public class ScreenPopup extends Popup{
-	int xPos,yPos, width, height;
+	protected int xPos,yPos;
+	protected int width;
+	protected int height;
 	private static int EMPTY_SPACE = 10;
 	LinkedList<ScreenPopupPart> parts = new LinkedList<ScreenPopupPart>();
 	public Screen screen;

@@ -28,7 +28,7 @@ public class Farmer extends Profession {
 			teller = 0;
 			if(isMining){ 
 				if(owner.map.getEntity(owner.getxPos() - 1, owner.getyPos() - 1) == closestFarm){
-					owner.screen.inventory.vegetables++;
+					owner.screen.inventory.addVegetables(1);
 				}
 			}
 		}

@@ -196,36 +196,6 @@ public abstract class GameScreen extends Screen {
 					return "Tent I";
 				}
 			});
-			
-			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[5][5], this.bar.screen) {
-				public void onLeftClick() {
-					screen.pointer = new MousePointer(map, input, screen) {
-						
-						public Entity toBuild(Direction face) {
-							return new WoodenGate(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
-						}
-					};
-				}
-				public String getName() {
-					return "Gate";
-				}
-			});
-			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][5], this.bar.screen) {
-				
-				public void onLeftClick() {
-					screen.pointer = new MousePointer(map, input, screen) {
-						
-						public Entity toBuild(Direction face) {
-							return new WoodenWall(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
-						}
-					};
-				}
-				
-				public String getName() {
-					return "Wall";
-				}
-			});
-			
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[7][6], this) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
@@ -244,20 +214,19 @@ public abstract class GameScreen extends Screen {
 			for(Entity e:map.getEntities()){
 				if(e instanceof SchoolI){
 					SchoolI s = ((SchoolI)e);
-					s.popup.minerI.activate();
 					s.popup.lumberJacker.activate();
 					s.popup.hunter.activate();
 				}else if(e instanceof SchoolII){
 					SchoolII s = ((SchoolII)e);
-					s.popup.minerI.activate();
 					s.popup.lumberJacker.activate();
 					s.popup.hunter.activate();
 				}
 			}
 			return;
 		case 2:
-			inventory.meat -= 16;
-			inventory.gold -= 25;
+			inventory.addMeat(- 10);
+			inventory.addWood( - 50);
+			inventory.addGold( - 25);
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][6], this) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, input, screen) {
@@ -266,7 +235,6 @@ public abstract class GameScreen extends Screen {
 						}
 					};
 				}
-				
 				public String getName() {
 					return "Quarry";
 				}
@@ -303,19 +271,21 @@ public abstract class GameScreen extends Screen {
 			for(Entity e:map.getEntities()){
 				if(e instanceof SchoolI){
 					SchoolI s = ((SchoolI)e);
-					s.popup.minerII.activate();
+					s.popup.minerI.activate();
+					//s.popup.minerII.activate();
 					s.popup.founder.activate();
 				}else if(e instanceof SchoolII){
 					SchoolII s = ((SchoolII)e);
-					s.popup.minerII.activate();
+					s.popup.minerI.activate();
+					//s.popup.minerII.activate();
 					s.popup.founder.activate();
 				}
 			}
 			break;
 		case 3:
-			inventory.gold -= 100;
-			inventory.meat -= 60;
-			inventory.wood -= 25;
+			inventory.addGold(- 100);
+			inventory.addMeat(- 60);
+			inventory.addWood(- 25);
 		}
 	}
 

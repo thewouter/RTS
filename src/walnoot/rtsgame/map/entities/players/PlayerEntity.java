@@ -3,6 +3,7 @@ package walnoot.rtsgame.map.entities.players;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import walnoot.rtsgame.Animation;
 import walnoot.rtsgame.Images;
@@ -75,6 +76,13 @@ public class PlayerEntity extends MovingEntity {
 			backwardAnimation.addScene(image[i][0]);
 		}
 		
+	}
+	
+	public void setNextDirections(LinkedList<Direction> toSet){
+		super.setNextDirections(toSet);
+		if(profession != null){
+			profession.walkingCalculated();
+		}
 	}
 	
 	public void render(Graphics g){/*

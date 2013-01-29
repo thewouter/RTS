@@ -51,6 +51,8 @@ public abstract class Profession {
 
 	public abstract String getName();
 	
+	public void walkingCalculated(){}
+	
 	public void setOwner(PlayerEntity owner){
 		this.owner = owner;
 	}

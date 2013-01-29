@@ -13,12 +13,12 @@ import walnoot.rtsgame.screen.GameScreen;
  */
 public class Inventory {
 	private GameScreen owner;
-	
-	public int gold = 0;
-	public int meat = 0;
-	public int wood = 0;
-	public int stone = 0;
-	public int vegetables = 0;
+	private InventoryPopup popup;
+	private int gold = 0;
+	private int meat = 0;
+	private int wood = 0;
+	private int stone = 0;
+	private int vegetables = 0;
 	
 	public Inventory(GameScreen owner){
 		this.owner = owner;
@@ -29,16 +29,49 @@ public class Inventory {
 	}
 
 	public void showInventory() {
-		ScreenPopup popup = new ScreenPopup((owner.getWidth()-200)/2, (owner.getHeight() - 20)/2, 200, 20, owner, false);
-		popup.addPart(new ScreenPopupTextField(new String("Gold: " + gold + "  stone: " + stone)));
-		popup.addPart(new ScreenPopupTextField(new String("Meat: " + meat + " vegetables: " + vegetables)));
-		popup.addPart(new ScreenPopupTextField(new String("Wood: " + wood)));
-		popup.addPart(new ScreenPopupButton("ok",popup,owner.input) {
-			public void onLeftClick() {
-				owner.screen.setPopup(null);
-			}
-		});
+		popup = new InventoryPopup(owner, this);
 		owner.setPopup(popup);
+	}
+
+	public int getGold() {
+		return gold;
+	}
+
+	public void addGold(int gold) {
+		this.gold += gold;
+		
+	}
+
+	public int getMeat() {
+		return meat;
+	}
+
+	public void addMeat(int meat) {
+		this.meat += meat;
+	}
+
+	public int getWood() {
+		return wood;
+	}
+
+	public void addWood(int wood) {
+		this.wood += wood;
+	}
+
+	public int getStone() {
+		return stone;
+	}
+
+	public void addStone(int stone) {
+		this.stone += stone;
+	}
+
+	public int getVegetables() {
+		return vegetables;
+	}
+
+	public void addVegetables(int vegetables) {
+		this.vegetables += vegetables;
 	}
 
 }

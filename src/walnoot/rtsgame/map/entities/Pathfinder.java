@@ -62,6 +62,7 @@ public class Pathfinder extends Thread {
 		while(!openlist.isEmpty() && finalNode == null){
 			getNodeLowestF(openlist).checkNeighbours(currentMap, openlist, closedlist);
 			if(System.nanoTime() - startTimeNano > 1000000000){
+				//System.out.println("took too long to calculate..");
 				return null;
 			}
 		}
@@ -183,8 +184,8 @@ public class Pathfinder extends Thread {
 				Point newPosition = dir.nextPoint(posX, posY);
 				if(newPosition.x < 0 || newPosition.y < 0 || newPosition.x >= currentMap.length || newPosition.y >= currentMap[0].length) {
 				}else{
-					if(!currentMap[newPosition.x][newPosition.y].isSolid() && (map.getEntity(newPosition.x, newPosition.y, copyOfEntities) == null || 
-							map.getEntity(newPosition.x, newPosition.y, copyOfEntities).isWalkable(newPosition.x, newPosition.y, requester))){
+					Entity e = map.getEntity(newPosition.x, newPosition.y, copyOfEntities);
+					if(!currentMap[newPosition.x][newPosition.y].isSolid() && (e == null || e.isWalkable(newPosition.x, newPosition.y, requester))){
 						
 						Node newNode = new Node(this, newPosition.x, newPosition.y);
 						
