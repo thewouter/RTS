@@ -8,8 +8,9 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.Pathfinder;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
+import walnoot.rtsgame.map.structures.natural.IronMine;
 import walnoot.rtsgame.map.structures.natural.MineStructure;
-import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
+import walnoot.rtsgame.map.structures.natural.StoneMine;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.rest.Util;
@@ -51,6 +52,8 @@ public class Miner extends Profession {
 		closestMine = (MineStructure) owner.map.getClosestMine(owner.getxPos(), owner.getyPos(), notValid, this);
 		if(closestMine != null){
 			owner.moveTo(new Point(closestMine.xPos + closestMine.getSize(), closestMine.yPos + closestMine.getSize()));
+		}else{
+			isMining = false;
 		}
 	}
 	
@@ -87,6 +90,8 @@ public class Miner extends Profession {
 			if(o instanceof StoneMine)return true;
 			if(level <= 1) return false;
 			if(o instanceof GoldMine) return true;
+			if(level <= 2) return false;
+			if(o instanceof IronMine) return true;
 			
 		}
 		return false;

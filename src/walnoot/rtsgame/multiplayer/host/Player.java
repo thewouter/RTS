@@ -34,38 +34,7 @@ public class Player extends GameScreen {
 		this.input = new InputListener(this, r, p);
 		this.host = host;
 		
-		//add size map
-		String mapInString = host.map.getLength() + " " + host.map.amountSheepGroups + " ";
-		
-		//add map
-		for(int x = 0 ;x < host.map.getLength(); x++){
-			for(int y = 0; y < host.map.getWidth(); y++){
-				mapInString = mapInString + host.map.surface[x][y].getID() + " ";
-			}
-		}
-		
-		//add number of entities
-		mapInString = 2 + " " + mapInString + entities.size() + " ";
-		
-		System.out.println(entities.size());
-		
-		//add entities
-		for(Entity e: entities){
-			mapInString = mapInString + e.ID + " " + e.xPos + " " + e.yPos + " " + e.getHealth() + " " + e.getExtraOne() + " " + e.uniqueNumber + " ";
-		}
-		
-		//add movement entities
-		String movements = "";
-		int numberOfMovements = 0;
-		for(Entity e:entities){
-			if(e instanceof MovingEntity && ((MovingEntity)e).isMoving()){
-				numberOfMovements++;
-				movements = movements + " " + e.uniqueNumber + " " + ((MovingEntity)e).getEndPoint().x + " " + ((MovingEntity)e).getEndPoint().y;
-			}
-		}
-		mapInString = mapInString + numberOfMovements + movements;
-		
-		this.input.send(mapInString);
+		this.input.send(host.map.getData());
 		
 		inventory = new Inventory(this);
 		

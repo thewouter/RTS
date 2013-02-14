@@ -22,7 +22,7 @@ public abstract class MineStructure extends Structure {
 		if(size < 1) size = 1;
 		if(size > 3) size = 3;
 		this.size = size;
-		textureX = (ID - 300) * 4;
+		textureX = (ID - 300) * 3;
 		if(size == 1){
 			textureY = 0;
 		}else if(size == 2){
@@ -40,7 +40,7 @@ public abstract class MineStructure extends Structure {
 		if(size < 1) size = 1;
 		if(size > 3) size = 3;
 		this.size = size;
-		textureX = (ID - 300) * 4;
+		textureX = (ID - 300) * 3;
 		if(size == 1){
 			textureY = 0;
 		}else if(size == 2){

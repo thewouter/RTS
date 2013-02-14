@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
-import walnoot.rtsgame.map.entities.players.professions.Founder;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.MPGameScreen;
@@ -30,8 +29,9 @@ public class MapLoader extends Thread {
 	public void run(){
 		ArrayList<String> mapInStrings =Util.splitString(mapInString);
 		length = mapInStrings.size();
-		int mapSize = Util.parseInt(mapInStrings.get(1));
-		counter = 3;
+		int mapSize = Util.parseInt(mapInStrings.get(0));
+		System.out.println(mapSize);
+		counter = 2;
 		for(int x = 0 ; x < mapSize ; x++){
 			for(int y = 0; y < mapSize; y++, counter++){
 				String s = mapInStrings.get(counter);
@@ -58,12 +58,12 @@ public class MapLoader extends Thread {
 			}
 		}
 		int amountEntities = Util.parseInt(mapInStrings.get(counter++));
-		//System.out.println("entities: " + amountEntities);
-		
+		System.out.println(amountEntities);
 		for(int i = 0; i < amountEntities; i++){
 			String entity = mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++); 
 			Entity e = Util.getEntity(map, entity,screen);
-			e.screen = null;
+			e.screen = screen;
+			e.isOwnedByPlayer = false;
 			map.addEntityFromHost(e);
 			
 		}
@@ -75,15 +75,9 @@ public class MapLoader extends Thread {
 		}
 		for (int i = 0; i < amountMovements; i++){
 			int uniqueNumber = Util.parseInt(mapInStrings.get(counter++));
-			//System.out.println("uN: " + uniqueNumber);
 			((MovingEntity)map.getEntity(uniqueNumber)).moveToFromHost(new Point(Util.parseInt(mapInStrings.get(counter++)),Util.parseInt(mapInStrings.get(counter++))));
 		}
-		//System.out.println(6);
 		input.send("1 Received!");
-		
-		PlayerEntity p = new PlayerEntity(map, screen, 11, 11, null);
-		p.setProfession(new Founder(p));
-		map.addEntity(p);
 	}
 	
 	public int checkProgress() {

@@ -19,9 +19,12 @@ import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Save;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
+import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.professions.Profession;
+import walnoot.rtsgame.map.structures.Structure;
+import walnoot.rtsgame.map.structures.natural.StoneMine;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
-import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
 import walnoot.rtsgame.map.structures.nonnatural.TentIIStructure;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.menubar.HomeBar;
@@ -90,6 +93,13 @@ import walnoot.rtsgame.rest.Util;
 			if(input.down.isPressed()) translationY -= 5;
 			if(input.left.isPressed()) translationX += 5;
 			if(input.right.isPressed()) translationX -= 5;
+			
+			if(pointer != null){
+				pointer.update(); 
+				if(bar.showPopup == false){
+					pointer = null;
+				}
+			}
 	
 			map.update((int) Math.floor(translationX), (int) Math.floor(translationY), getWidth(), getHeight());
 
@@ -122,26 +132,27 @@ import walnoot.rtsgame.rest.Util;
 				}else if( entityPopup == null ){
 					selectedEntities.addAll(map.getEntities(getMapX(), getMapY()));
 				}
-				
-				
-				
-				
-			}
-			if(input.isDragging()){
-				int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
-				selectedEntities.clear();
-				selectedEntities.addAll(map.getEntities(x1, y1, x2, y2, new Dimension(translationX, translationY)));
 			}
 			
 			if(entityPopup != null){
 				entityPopup.update(input.getMouseX(), input.getMouseY());
 				if(!selectedEntities.contains(entityPopup.getOwner())) entityPopup = null;
 			}
-			
-			if(pointer != null){
-				pointer.update(); 
-				if(bar.showPopup == false){
-					pointer = null;
+
+			if(input.wasDragging() && (popup == null || !popup.isInPopup(input.mouseX, input.mouseY))){
+				int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
+				selectedEntities.clear();
+				LinkedList<Entity> inRange = (map.getEntities(x1, y1 , x2, y2, new Dimension(translationX, translationY)));
+				ArrayList<Entity> structures = new ArrayList<Entity>();
+				for( Entity e:inRange){
+					if(e instanceof MovingEntity){
+						selectedEntities.add(e);
+					}else if(e instanceof Structure){
+						structures.add(e);
+					}
+				}
+				if(selectedEntities.size() == 0){
+					selectedEntities.addAll(structures);
 				}
 			}
 			
@@ -183,7 +194,7 @@ import walnoot.rtsgame.rest.Util;
 			popup.update(input.getMouseX(), input.getMouseY());
 		}
 		if(input.LMBTapped() || input.RMBTapped()) {
-			new Sound("/res/Sounds/klick.mp3").play();
+			new Sound("src/res/Sounds/klick.mp3").play();
 		}
 	}
 	
@@ -329,14 +340,39 @@ import walnoot.rtsgame.rest.Util;
 	}
 	
 	public void messageReceived(String message){
-		if(Util.parseInt(Util.splitString(message).get(0)) == 1){
+		int messageID = Util.parseInt(Util.splitString(message).get(0));
+		switch(messageID){
+		case 1:
 			System.out.println(message);
-		}else if(Util.parseInt(Util.splitString(message).get(0)) == 2){
+			break;
+		case 2:
 			moveEntity(message);
-		}else if(Util.parseInt(Util.splitString(message).get(0)) == 4){
+			break;
+		case 4:
 			entityAdded(message);
-		}else if(Util.parseInt(Util.splitString(message).get(0)) == 5){
+			System.out.println("entity added: " + message);
+			break;
+		case 5:
 			entityRemoved(message);
+			break;
+		case 6:
+			EntityDamaged(message);
+			break;
+		case 7:
+			professionAdded(message);
+			break;
+		default:
+			new Exception("invalid message: " + messageID).printStackTrace();
+		}
+	}
+	
+	private void professionAdded(String update){
+		int uniqueNumber = Util.parseInt(Util.splitString(update).get(1));
+		int professionID = Util.parseInt(Util.splitString(update).get(2));
+		if(professionID != 0){
+			((PlayerEntity)map.getEntity(uniqueNumber)).setProfessionFromHost(Util.getProfession(professionID, (PlayerEntity) map.getEntity(uniqueNumber)));
+		}else{
+			System.out.println("professionID not valid: " + update);
 		}
 	}
 	
@@ -345,9 +381,9 @@ import walnoot.rtsgame.rest.Util;
 		int uniqueNumber = Util.parseInt(Util.splitString(entity).get(3));
 		int xPos = Util.parseInt(Util.splitString(entity).get(4));
 		int yPos = Util.parseInt(Util.splitString(entity).get(5));
-		int extraInfoOne = Util.parseInt(Util.splitString(entity).get(6));
-		Entity e = Util.getEntity(map, ID, xPos, yPos, extraInfoOne);
-		e.uniqueNumber = uniqueNumber;
+		int health = Util.parseInt(Util.splitString(entity).get(6));
+		int extraInfoOne = Util.parseInt(Util.splitString(entity).get(7));
+		Entity e = Util.getEntity(map, ID, xPos, yPos,health, extraInfoOne, uniqueNumber);
 		if(Util.parseInt(Util.splitString(entity).get(1)) == 0) e.setOwned(false);
 		e.screen = this;
 		map.addEntityFromHost(e);
@@ -376,7 +412,9 @@ import walnoot.rtsgame.rest.Util;
 	}
 	
 	public void addEntity(Entity e, int x, int y){
-		String update = 3 + " " + e.ID + " " + x + " " + y + " " + e.getExtraOne();
+		String update = 3 + " " + e.ID + " " + x + " " + y + " " + e.getHealth()+ " " + e.getExtraOne();
+		if(e.isOwnedByPlayer()) update = update + " " + 1;
+		else  update = update + " " + 0;
 		listener.update(update);
 	}
 	
@@ -394,6 +432,10 @@ import walnoot.rtsgame.rest.Util;
 	
 	private void entityRemoved(String message){
 		map.removeEntityFromHost(map.getEntity(Util.parseInt(Util.splitString(message).get(1))));
+	}
+	
+	public void setProfession(PlayerEntity p, Profession prof){
+		listener.update( 7 + " " + p.uniqueNumber + " " + Util.getProfessionID(prof));
 	}
 }
 

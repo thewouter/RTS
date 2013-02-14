@@ -7,6 +7,8 @@ import java.util.HashMap;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tiles.Tile;
+import walnoot.rtsgame.multiplayer.host.MPMapHost;
+import walnoot.rtsgame.multiplayer.host.Player;
 import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.MPGameScreen;
 
@@ -20,6 +22,7 @@ public abstract class Entity implements Cloneable {
 	public GameScreen screen;
 	public int uniqueNumber;
 	public boolean isOwnedByPlayer = true;
+	public Player owner = null;
 	
 	public static int ENTITY_ID_COUNTER = 1;
 	
@@ -56,8 +59,10 @@ public abstract class Entity implements Cloneable {
 		g.drawOval(getScreenX(), getScreenY(), Tile.getWidth(), Tile.getHeight());
 		render(g);
 	}
+	
+	
 	/**
-	 * @return extra additional information for save
+	 * @return extra information for save
 	 */
 	public abstract int getExtraOne();
 	
@@ -77,6 +82,10 @@ public abstract class Entity implements Cloneable {
 	public void damage(int damage){
 		if(screen instanceof MPGameScreen){
 			((MPGameScreen) screen).damageEntity(this, damage);
+			return;
+		}
+		if(map instanceof MPMapHost){
+			((MPMapHost)map).host.entityDamaged(this, damage);
 		}
 		
 		health -= damage;
@@ -141,5 +150,12 @@ public abstract class Entity implements Cloneable {
 		return false;
 	}
 	
+	public void setHealth(int health){
+		this.health = health;
+	}
 	
+	public String getData(){
+		String data = this.ID + " " + this.xPos + " " + this.yPos + " " + this.getHealth() + " " + this.getExtraOne() + " " + this.uniqueNumber + " ";
+		return data;
+	}
 }

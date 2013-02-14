@@ -2,6 +2,7 @@ package walnoot.rtsgame.map.entities.players;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.lang.invoke.MethodHandleProxies;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -13,17 +14,21 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.ItemEntity;
 import walnoot.rtsgame.map.entities.MovingEntity;
+import walnoot.rtsgame.map.entities.players.professions.LumberJacker;
 import walnoot.rtsgame.map.entities.players.professions.Profession;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.map.tiles.Tile;
+import walnoot.rtsgame.multiplayer.host.MPHost;
+import walnoot.rtsgame.multiplayer.host.MPMapHost;
 import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.rest.Sound;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.MPGameScreen;
 
 public class PlayerEntity extends MovingEntity {
 	public String name;
@@ -33,14 +38,14 @@ public class PlayerEntity extends MovingEntity {
 	protected static int ID = 102;
 	private Animation animation;
 	private Animation backwardAnimation;
-	public final Structure owner;
+	public final Structure ownerTent;
 	public Profession profession;
 	
 	public PlayerEntity(Map map, GameScreen screen, int xPos, int yPos, Structure tent){
 		super(map,screen, xPos, yPos, ID);
 		name = Util.NAME_GEN.getRandomName();
 		loadAnimation(Images.player);
-		owner = tent;
+		ownerTent = tent;
 		/*final Exception e = new Exception();
 		new Thread(){
 			public void run(){
@@ -62,7 +67,7 @@ public class PlayerEntity extends MovingEntity {
 		super(map,screen,xPos,yPos, ID);
 		this.health = health;
 		name = Util.NAME_GEN.getRandomName();
-		owner = tent;
+		ownerTent = tent;
 	}
 	
 	private void loadAnimation(BufferedImage[][] image){
@@ -85,14 +90,7 @@ public class PlayerEntity extends MovingEntity {
 		}
 	}
 	
-	public void render(Graphics g){/*
-		g.setColor(Color.BLUE);
-		g.fillRect(getScreenX() + 14, getScreenY() + 6, 4, 4);
-		
-		g.setColor(Color.WHITE);
-		Screen.font.drawBoldLine(g, xPos + ":" + yPos, getScreenX(), getScreenY() - 8, Color.BLACK);
-		*/
-
+	public void render(Graphics g){
 		if(isMoving() && nextDirections.getFirst().getyOffset() - nextDirections.getFirst().getxOffset() <= 0)g.drawImage(animation.getImage(), getScreenX() + (Tile.WIDTH - animation.getImage().getWidth(null)) / 2, getScreenY() - (animation.getImage().getHeight(null) - Tile.HEIGHT / 2), null);
 		else if(isMoving())g.drawImage(backwardAnimation.getImage(), getScreenX() + (Tile.WIDTH - animation.getImage().getWidth(null)) / 2, getScreenY() - (animation.getImage().getHeight(null) - Tile.HEIGHT / 2), null);
 		else g.drawImage(animation.getImage(0), getScreenX() + (Tile.WIDTH - animation.getImage().getWidth(null)) / 2, getScreenY() - (animation.getImage().getHeight(null) - Tile.HEIGHT / 2), null);
@@ -118,12 +116,12 @@ public class PlayerEntity extends MovingEntity {
 		if(entityClicked == this){
 			EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
 			
-			Option option2 = new Option("Add campfire", popup){
+			Option option2 = new Option("lumber", popup){
 				public void onClick(){
-					map.addEntity(new CampFireStructure(map,this.owner.screen, xPos, yPos - 1, Direction.SOUTH_WEST));
+					((PlayerEntity)owner.owner).setProfession(new LumberJacker((PlayerEntity) owner.owner));
 				}
 			};
-			Option option1 = new Option("Add tent",popup) {
+			Option option1 = new Option("add tent",popup) {
 				public void onClick() {
 					map.addEntity(new TentIStructure(map, this.owner.screen, xPos, yPos-2, Direction.SOUTH_WEST));
 				}
@@ -162,7 +160,6 @@ public class PlayerEntity extends MovingEntity {
 		}else if(entityClicked instanceof BasicStructure){
 			moveTo(entityClicked);
 		}
-		//else System.out.println(entityClicked);
 		return false;
 	}
 	
@@ -196,6 +193,16 @@ public class PlayerEntity extends MovingEntity {
 	}
 	
 	public void setProfession(Profession p){
+		if(screen instanceof MPGameScreen){ // it's the client.
+			((MPGameScreen)screen).setProfession(this, p);
+			return;
+		}else if(map instanceof MPMapHost){ // it's the host
+			((MPMapHost)map).addProfession(this, p);
+		}
+		profession = p;
+	}
+	
+	public void setProfessionFromHost(Profession p){
 		profession = p;
 	}
 

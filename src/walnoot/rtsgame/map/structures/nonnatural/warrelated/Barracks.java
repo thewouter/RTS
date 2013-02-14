@@ -18,18 +18,18 @@ import walnoot.rtsgame.screen.GameScreen;
 
 public class Barracks extends BasicStructure {
 	private BufferedImage image = Images.school;
-	public static int ID = 211;
+	public static int ID = 211, MAX_SOLDIER = 5;
 	public boolean isSelected = false;
 	public ArrayList<Soldier> soldiers = new ArrayList<Soldier>();
 	public BarracksPopup popup = new BarracksPopup(screen, image, this, screen.input);
 	private int time = 0;
 	
 	/**
-	 * barracks can teach and house soldiers max. 5.
+	 * barracks can teach and house soldiers.
 	 */
 
 	public Barracks(Map map, GameScreen screen, int xPos, int yPos, Direction front) {
-		super(map, screen, xPos, yPos, 5, 8, ID, front);
+		super(map, screen, xPos, yPos, 5, 9, ID, front);
 	}
 
 	public int getHeadSpace() {
@@ -54,7 +54,7 @@ public class Barracks extends BasicStructure {
 		}
 		soldiers.removeAll(toRemove);
 		
-		if(soldiers.size() < 5 && popup.soldierNeeded()){
+		if(soldiers.size() < MAX_SOLDIER && popup.soldierNeeded()){
 			time ++;
 			if(time > 180){
 				time = 0;

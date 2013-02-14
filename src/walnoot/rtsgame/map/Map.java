@@ -14,10 +14,11 @@ import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.players.professions.Miner;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
+import walnoot.rtsgame.map.structures.natural.IronMine;
 import walnoot.rtsgame.map.structures.natural.MineStructure;
+import walnoot.rtsgame.map.structures.natural.StoneMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.Farm;
-import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
@@ -32,7 +33,9 @@ public class Map {
 	private GameScreen screen;
 	int c1 = 0, c2 = 0;
 	
-	public static final int TREE_GROW_CHANGE = 15, SHEEP_SPAWN_CHANGE_IN_FOREST =2, SHEEP_SPAWN_CHANGE_ON_PLAINS = 5, RADIUS_SHEEP_GROUPS = 5, SIZE_SHEEP_GROUPS = 10, SPAWN_CHANGE_GOLD_MINE = 3;  
+	public static final int TREE_GROW_CHANGE = 15, SHEEP_SPAWN_CHANGE_IN_FOREST =2, 
+			SHEEP_SPAWN_CHANGE_ON_PLAINS = 5, RADIUS_SHEEP_GROUPS = 5, SIZE_SHEEP_GROUPS = 10, 
+					SPAWN_CHANGE_GOLD_MINE = 3, SPAWN_CHANGE_IRON_MINE = 3;  
 	/*
 	 *Sheep_spawn_change out of 10,000 change to spawn a sheep group existing of SIZE_SHEEP_GROUPS_IN_SHEEPS sheeps in a radius of RADIUS_SHEEP_GROUPS
 	 *size_sheep_groups_in_sheeps has a chance of 20% deviation
@@ -94,28 +97,12 @@ public class Map {
 		if(Util.RANDOM.nextDouble() <= fraction){
 			addSheepGroup(screen);
 		}
-		
-		
-		entities.removeAll(toBeRemoved);
-		entities.removeAll(toBeRemovedFromMap);
-		notOnMap.addAll(toBeRemovedFromMap);
-		toBeRemovedFromMap.clear();
-		notOnMap.removeAll(toBeRemoved);
-		toBeRemoved.clear();
-		if(toBeAdded.size() > 0){
-			entities.addAll(toBeAdded);
-			Collections.sort(entities, entitySorter);
-		}
-		toBeAdded.clear();
+		handleEntityMutations();
 	}
 	
 	public synchronized Entity getEntity(int uniqueNumber){
-		//System.out.println(entities.size());
 		int high = entities.size() - 1;
 		int low = 0;
-		if(uniqueNumber == 608){
-			//System.out.println(high + "  " + low);
-		}
 		
 		
 		while(true){
@@ -228,11 +215,21 @@ public class Map {
 							addSheepGroup(x,y, screen);
 						}
 					}
-					
+					handleEntityMutations();
+
 					if(Util.RANDOM.nextInt(10000) < SPAWN_CHANGE_GOLD_MINE){
 						int size = Util.RANDOM.nextInt(3) + 1;
 						if(x > size && y > size){
 							Entity e = new GoldMine(this,screen, x - size, y - size ,size);
+							e.setOwned(false);
+							addEntity(e);
+						}
+					}
+					handleEntityMutations();
+					if(Util.RANDOM.nextInt(10000) < SPAWN_CHANGE_IRON_MINE){
+						int size = Util.RANDOM.nextInt(3) + 1;
+						if(x > size && y > size){
+							Entity e = new IronMine(this,screen, x - size, y - size ,size);
 							e.setOwned(false);
 							addEntity(e);
 						}
@@ -286,6 +283,20 @@ public class Map {
 			}
 		}
 		return false;
+	}
+	
+	public void handleEntityMutations(){
+		entities.removeAll(toBeRemoved);
+		entities.removeAll(toBeRemovedFromMap);
+		notOnMap.addAll(toBeRemovedFromMap);
+		toBeRemovedFromMap.clear();
+		notOnMap.removeAll(toBeRemoved);
+		toBeRemoved.clear();
+		if(toBeAdded.size() > 0){
+			entities.addAll(toBeAdded);
+			Collections.sort(entities, entitySorter);
+		}
+		toBeAdded.clear();
 	}
 	
 	public synchronized Entity getEntity(int x, int y){
@@ -435,7 +446,6 @@ public class Map {
 			xe = e.getxPos();
 			ye = e.getyPos();
 			if(Util.getDistance(x, y, xe, ye) < closestDistance && xe !=x && ye != y && (e instanceof MineStructure || e instanceof StoneMine)&& !notIncluded.contains(e) && miner.canIMineIt(e)){
-				System.out.println(e);
 				closest = e;
 				closestDistance = Util.getDistance(x, y, xe, ye);
 			}
@@ -572,5 +582,33 @@ public class Map {
 			}
 		}
 		return closest;
+	}
+	
+	public synchronized String getData(){
+		String data = getLength() + " " + amountSheepGroups;
+	
+		for(int x = 0 ;x < getLength(); x++){
+			for(int y = 0; y < getWidth(); y++){
+				data = data + " " + surface[x][y].getID();
+			}
+		}
+		String entityData = "";
+		for(Entity e: getEntities()){
+			entityData = entityData + " " + e.getData();
+		}
+		
+		data = data + " " + getEntities().size() + entityData;
+		
+		String movements = "";
+		int numberOfMovements = 0;
+		for(Entity e:entities){
+			if(e instanceof MovingEntity && ((MovingEntity)e).isMoving()){
+				numberOfMovements++;
+				movements = movements + " " + e.uniqueNumber + " " + ((MovingEntity)e).getEndPoint().x + " " + ((MovingEntity)e).getEndPoint().y;
+			}
+		}
+		data = data + " " + numberOfMovements + movements;
+		
+		return data;
 	}
 }

@@ -44,6 +44,7 @@ public class Hunter extends Profession {
 		}
 	}
 	
+	
 	public void huntNearestAnimal(){
 		isHunting = true;
 		LinkedList<MovingEntity> notIncluded = new LinkedList<MovingEntity>();

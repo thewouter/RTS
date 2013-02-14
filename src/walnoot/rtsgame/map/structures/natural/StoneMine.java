@@ -1,4 +1,4 @@
-package walnoot.rtsgame.map.structures.nonnatural;
+package walnoot.rtsgame.map.structures.natural;
 
 import java.awt.Graphics;
 import java.util.HashMap;
@@ -6,7 +6,6 @@ import java.util.HashMap;
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
-import walnoot.rtsgame.map.structures.natural.MineStructure;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.screen.GameScreen;
 

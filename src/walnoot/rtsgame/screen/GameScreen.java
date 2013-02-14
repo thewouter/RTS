@@ -12,14 +12,12 @@ import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
+import walnoot.rtsgame.map.structures.natural.StoneMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
-import walnoot.rtsgame.map.structures.nonnatural.StoneMine;
 import walnoot.rtsgame.map.structures.nonnatural.TentIIStructure;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
-import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenGate;
-import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenWall;
 import walnoot.rtsgame.menubar.Button;
 import walnoot.rtsgame.menubar.HomeBar;
 import walnoot.rtsgame.menubar.MenuBarPopupButton;
@@ -57,6 +55,13 @@ public abstract class GameScreen extends Screen {
 				levelUp();
 			}
 		};
+
+		inventory.addGold(500);
+		inventory.addWood(70);
+		inventory.addStone(50);
+		inventory.addVegetables(10);
+		inventory.addMeat(10);
+		inventory.addIronOre(20);
 		
 	}
 	

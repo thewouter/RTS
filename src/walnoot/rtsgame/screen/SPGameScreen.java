@@ -19,6 +19,8 @@ import walnoot.rtsgame.map.entities.players.Soldier;
 import walnoot.rtsgame.map.entities.players.professions.Founder;
 import walnoot.rtsgame.map.entities.players.professions.Miner;
 import walnoot.rtsgame.map.structures.Structure;
+import walnoot.rtsgame.map.structures.natural.IronMine;
+import walnoot.rtsgame.map.structures.nonnatural.IronSmelter;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenWall;
@@ -39,15 +41,6 @@ public class SPGameScreen extends GameScreen {
 		
 		map = new Map(256, this);
 		
-		inventory.addGold(500);
-		inventory.addWood(70);
-		inventory.addStone(50);
-		inventory.addVegetables(10);
-		inventory.addMeat(10);
-		
-		int goodYPos;
-		
-		
 		
 		levelUpButton = new Button(Images.buttons[2][1], statusBar) {
 			public void onLeftClick() {
@@ -61,6 +54,7 @@ public class SPGameScreen extends GameScreen {
 				p.setProfession(new Founder(p));
 				map.addEntity(p);
 				selectedEntities.add(p);
+				map.addEntity(new IronSmelter(map, this, 10, y + 10, Direction.WEST));
 				break;
 			}
 		}

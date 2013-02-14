@@ -39,8 +39,8 @@ public class SchoolPopup extends ScreenPopup{
 		lumberJacker = new Button(owner, xPos + 40, yPos + 20 * 0 + 10, 120, 400, Images.buttons[5][7],1);
 		hunter = new Button(owner, xPos + 40, yPos + 20 * 1 + 10, 120, 402, Images.buttons[7][7],1);
 		founder = new Button(owner, xPos + 60, yPos + 20 * 1 + 10, 120, 403, Images.buttons[6][6],1);
-		minerI = new Button(owner, xPos + 40, yPos + 20 * 2 + 10, 120, 401, Images.buttons[2][6],1);
-		minerII = new Button(owner, xPos + 60, yPos + 20 * 0 + 10, 120, 405, Images.buttons[3][6],1);
+		minerI = new Button(owner, xPos + 60, yPos + 20 * 0 + 10, 120, 401, Images.buttons[2][6],1);
+		minerII = new Button(owner, xPos + 80, yPos + 20 * 0 + 10, 120, 405, Images.buttons[3][6],1);
 		setButtons();
 	}
 	
@@ -141,7 +141,9 @@ public class SchoolPopup extends ScreenPopup{
 				teller++;
 				if(teller > TICKS_TO_TEACH){ // Time to teach!
 					Profession.setProfession(professionID, pupil);
-					if(ownerA != null)ownerA.releasePupil(pupil);
+					if(ownerA != null){
+						ownerA.releasePupil(pupil);
+					}
 					else if (ownerB != null) {
 						ownerB.releasePupil(pupil);
 						ownerB.Knowledge += knowledge;

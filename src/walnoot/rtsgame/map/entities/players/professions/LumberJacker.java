@@ -38,9 +38,11 @@ public class LumberJacker extends Profession {
 	}
 	
 	public void moveToNearestTree(){
+		System.out.println("move to nearest tree");
 		isChopping = true;
 		closestTree = (TreeStructure) owner.map.getClosestTree(owner.getxPos(), owner.getyPos());
 		owner.follow(closestTree);
+		System.out.println("moved to nearest tree");
 	}
 
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input) {

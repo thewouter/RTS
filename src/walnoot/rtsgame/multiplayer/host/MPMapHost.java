@@ -9,6 +9,8 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
+import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.professions.Profession;
 import walnoot.rtsgame.rest.Util;
 
 public class MPMapHost extends Map implements Cloneable{
@@ -45,9 +47,9 @@ public class MPMapHost extends Map implements Cloneable{
 		render(g, new Point(0,0), new Dimension(1000, 1000), 1000, 1000);
 	}
 	
-	public void addEntity(Entity u){
-		super.addEntity(u);
-		if(host != null) host.entityAdded(u, (Player)u.screen);
+	public void addEntity(Entity e){
+		super.addEntity(e);
+		if(host != null) host.entityAdded(e, e.owner);
 	}
 	
 	public void addEntity(LinkedList<Entity> entities){
@@ -59,6 +61,10 @@ public class MPMapHost extends Map implements Cloneable{
 	public void removeEntity(Entity e){
 		super.removeEntity(e);
 		if(host != null) host.entityRemoved(e.uniqueNumber);
+	}
+	
+	public void addProfession(PlayerEntity p, Profession prof){
+		host.addProfession(p, prof);
 	}
 	
 	

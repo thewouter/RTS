@@ -28,7 +28,7 @@ public class TreeStructure extends BasicStructure{
 	}
 	
 	public int getMaxHealth() {
-		return 5;
+		return 2;
 	}
 	
 	public String getName() {

@@ -8,6 +8,8 @@ import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
+import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.professions.Profession;
 import walnoot.rtsgame.rest.Inventory;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.Screen;
@@ -63,6 +65,11 @@ public class MPHost extends Screen{
 		players.removeAll(toRemove);
 		players.addAll(toAdd);
 		toRemove.clear();
+		for(Player p: toAdd){
+			PlayerEntity player = new PlayerEntity(map, p, 11, 11, null);
+			player.owner = p;
+			map.addEntity(player);
+		}
 		toAdd.clear();
 	}
 	
@@ -96,11 +103,15 @@ public class MPHost extends Screen{
 			break;
 		case 3:
 			addEntity(message, owner);
-			System.out.println(message);
 			break;
 		case 5:
 			removeEntity(message);
 			break;
+		case 6:
+			damageEntity(message);
+			break;
+		case 7:
+			professionSet(message);
 		}
 	}
 
@@ -108,11 +119,19 @@ public class MPHost extends Screen{
 		int ID = Util.parseInt(Util.splitString(message).get(1));
 		int xPos = Util.parseInt(Util.splitString(message).get(2));
 		int yPos = Util.parseInt(Util.splitString(message).get(3));
-		int extraInfoOne = Util.parseInt(Util.splitString(message).get(4));
+		int health = Util.parseInt(Util.splitString(message).get(4));
+		int extraInfoOne = Util.parseInt(Util.splitString(message).get(5));
+		int isOwnedByPlayer = Util.parseInt(Util.splitString(message).get(6));
 		Entity e = Util.getEntity(map, ID, xPos, yPos, extraInfoOne);
+		if(isOwnedByPlayer == 1) e.owner = owner;
 		e.screen = owner;
+		e.setHealth(health);
 		map.addEntity(e);
 		
+	}
+	
+	private void damageEntity(String message){
+		map.getEntity(Util.parseInt(Util.splitString(message).get(1))).damage(Util.parseInt(Util.splitString(message).get(2)));
 	}
 	
 	public void entityAdded(Entity e, Player owner){
@@ -120,13 +139,24 @@ public class MPHost extends Screen{
 		int xPos = e.xPos;
 		int yPos = e.yPos;
 		int uniqueNumber = e.uniqueNumber;
+		int health = e.getHealth();
 		int extraInfoOne = e.getExtraOne();
-		String update = 4 + " " + 0 + " " + ID + " " + uniqueNumber + " " + xPos + " " + yPos + " " + extraInfoOne;
+		String update = 4 + " " + 0 + " " + ID + " " + uniqueNumber + " " + xPos + " " + yPos + " " + health + " " + extraInfoOne;
+		System.out.println("added " + e + " to evrybodey");
 		for(Player p: players){
-			if(owner == p){
-				p.update(4 + " " + 1 + " " + ID + " " + uniqueNumber + " " + xPos + " " + yPos + " " + extraInfoOne);
+			System.out.println(e + " added to " + p.ID);
+			if(e.owner == p){
+				p.update(4 + " " + 1 + " " + ID + " " + uniqueNumber + " " + xPos + " " + yPos + " " + health + " " + extraInfoOne);
 				continue;
 			}
+			p.update(update);
+		}
+	}
+	
+	public void entityDamaged(Entity e, int damage){
+		int uniqueNumber = e.uniqueNumber;
+		String update = 6 + " " + uniqueNumber + " " + damage;
+		for(Player p: players){
 			p.update(update);
 		}
 	}
@@ -140,6 +170,19 @@ public class MPHost extends Screen{
 	
 	private void removeEntity(String message){
 		map.removeEntity(map.getEntity(Util.parseInt(Util.splitString(message).get(1))));
+	}
+
+	public void addProfession(PlayerEntity p, Profession prof) {
+		String update = 7 + " " + p.uniqueNumber + " " + Util.getProfessionID(prof);
+		for(Player pl: players){
+			pl.update(update);
+		}
+	}
+	
+	private void professionSet(String message){
+		int uniqueNumber = Util.parseInt(Util.splitString(message).get(1));
+		int ProfessionID = Util.parseInt(Util.splitString(message).get(2));
+		Profession.setProfession(ProfessionID, (PlayerEntity)map.getEntity(uniqueNumber));
 	}
 	
 }

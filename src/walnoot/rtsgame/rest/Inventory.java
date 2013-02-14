@@ -19,6 +19,8 @@ public class Inventory {
 	private int wood = 0;
 	private int stone = 0;
 	private int vegetables = 0;
+	private int ironOre = 0;
+	private int iron = 0;
 	
 	public Inventory(GameScreen owner){
 		this.owner = owner;
@@ -72,6 +74,22 @@ public class Inventory {
 
 	public void addVegetables(int vegetables) {
 		this.vegetables += vegetables;
+	}
+
+	public int getIronOre() {
+		return ironOre;
+	}
+
+	public void addIronOre(int ironOre) {
+		this.ironOre += ironOre;
+	}
+
+	public int getIron() {
+		return iron;
+	}
+
+	public void addIron(int iron) {
+		this.iron += iron;
 	}
 
 }

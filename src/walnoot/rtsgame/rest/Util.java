@@ -21,6 +21,7 @@ import walnoot.rtsgame.map.entities.players.professions.LumberJacker;
 import walnoot.rtsgame.map.entities.players.professions.Miner;
 import walnoot.rtsgame.map.entities.players.professions.Profession;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
+import walnoot.rtsgame.map.structures.natural.IronMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.BaseOfOperations;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
@@ -119,8 +120,9 @@ public class Util {
 					s = s + inChars[ii];
 				}
 				s.trim();
-				result.add(s);
 				lastSpace = i;
+				if(s == "") continue;
+				result.add(s);
 			}
 		}
 		String s = "";
@@ -128,6 +130,7 @@ public class Util {
 			s = s + inChars[i];
 		}
 		s.trim();
+		
 		result.add(s);
 		return result;
 	}
@@ -187,6 +190,8 @@ public class Util {
 			case 300:
 				e = new GoldMine(map, null, xPos, yPos, extraInfoOne);
 				break;
+			case 301:
+				e = new IronMine(map, null, xPos, yPos, extraInfoOne);
 			}	
 		}else if(ID >= 200){		//structures
 			switch(ID){
@@ -219,7 +224,7 @@ public class Util {
 				
 			case 102:
 				e = new PlayerEntity(map, null,  xPos, yPos, null);
-				((PlayerEntity)e).setProfession(getProfession(extraInfoOne, (PlayerEntity)e));
+				((PlayerEntity)e).setProfessionFromHost(getProfession(extraInfoOne, (PlayerEntity)e));
 				break;
 				
 			case 103:
@@ -248,6 +253,8 @@ public class Util {
 			return new Farmer(player);
 		case(405):
 			return new Miner(player, 2);
+		case(406):
+			return new Miner(player, 3);
 		default:
 			return null;
 		}
@@ -255,53 +262,39 @@ public class Util {
 	
 	public static Entity getEntity(Map map, int ID, int xPos, int yPos, int health, int extraInfoOne, int uniqeNumber){
 		Entity e = null;
-		if(ID >= 300){				//mines
-			switch(ID){
-			case 300:
-				e = new GoldMine(map, null, xPos, yPos, extraInfoOne, health);
-				break;
-			}	
-		}else if(ID >= 200){		//structures
-			switch(ID){
-			case 200:
-				e = new CampFireStructure(map, null,  xPos, yPos, health, Direction.SOUTH_WEST);
-				break;
-				
-			case 201:
-				e = new TentIStructure(map, null,  xPos, yPos, health, Direction.SOUTH_WEST);
-				break;
-				
-			case 202:
-				e = new TreeStructure(map, null,  xPos, yPos, health, Direction.SOUTH_WEST);
-				break;
-				
-			case 203:
-				e = new BaseOfOperations(map, null,  xPos, yPos, health, Direction.SOUTH_WEST);
-				break;
-				
-			}
-		}else if(ID >= 100){		//movingEntities
-			switch(ID){
-			case 100:
-				e = new SnakeEntity(map, null,  xPos, yPos, health);
-				break;
-				
-			case 101:
-				e = new SheepEntity(map, null,  xPos, yPos, health);
-				break;
-				
-			case 102:
-				e = new PlayerEntity(map, null,  xPos, yPos, null);
-				((PlayerEntity)e).setProfession(getProfession(extraInfoOne, (PlayerEntity)e));
-				break;
-				
-			case 103:
-				e = new DeerEntity(map, null,  xPos, yPos, health);
-				break;
-				
-			}
-		}else{
-			System.out.println("no entity found!");
+		switch(ID){
+		case 300:
+			e = new GoldMine(map, null, xPos, yPos, extraInfoOne, health);
+			break;
+		case 301:
+			e = new IronMine(map, null, xPos, yPos, extraInfoOne, health);
+		case 200:
+			e = new CampFireStructure(map, null,  xPos, yPos, health, Direction.SOUTH_WEST);
+			break;
+		case 201:
+			e = new TentIStructure(map, null,  xPos, yPos, health, Direction.SOUTH_WEST);
+			break;
+		case 202:
+			e = new TreeStructure(map, null,  xPos, yPos, health, Direction.SOUTH_WEST);
+			break;
+		case 203:
+			e = new BaseOfOperations(map, null,  xPos, yPos, health, Direction.SOUTH_WEST);
+			break;
+		case 100:
+			e = new SnakeEntity(map, null,  xPos, yPos, health);
+			break;
+		case 101:
+			e = new SheepEntity(map, null,  xPos, yPos, health);
+			break;
+		case 102:
+			e = new PlayerEntity(map, null,  xPos, yPos, null);
+			((PlayerEntity)e).setProfessionFromHost(getProfession(extraInfoOne, (PlayerEntity)e));
+			break;
+		case 103:
+			e = new DeerEntity(map, null,  xPos, yPos, health);
+			break;
+		default:
+			System.out.println("Entity not Found: " + ID);
 		}
 		e.uniqueNumber = uniqeNumber;
 		return e;

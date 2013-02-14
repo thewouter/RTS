@@ -2,7 +2,6 @@
 	0 	Grass2
 	1 	Grass1
 	2 	Water
-	
 	16	Sand
 
 100-199		MovingEntities	Cost/Tick	gold	wood	meat		Vegetables		stone
@@ -27,9 +26,11 @@
 	212 DefenseTower					20		2		0				0			25
 	213 WoodenWall						1		1		0				0			0
 	214 WoodenGate						5		20		0				0			0
+	213 IronSmelter						15		2		0				0			10
 	
 300-399 mines
 	300 GoldMine
+	301 IronMine
 	
 400-499 Professions
 	400 LumberJacker
@@ -38,6 +39,7 @@
 	403 Founder
 	404 Farmer
 	405 MinerII
+	406 MinerIII
 	
 500-599 Weapons
 	500 Bow
@@ -46,24 +48,25 @@
 	
 	MP messages:
 	 starting with:
-	 	1:		message;
-	 	2: 		entity movement;
-	 	3:		entity added TO HOST;
-	 	4:		entity added TO CLIENT;
+	 	1:		message
+	 	2: 		entity movement
+	 	3:		entity added TO HOST
+	 	4:		entity added TO CLIENT
 	 	5:		entity removed
 	 	6:		entity damaged
+	 	7:		Profession added
 	
 	
 	
 	ctrl - shift - o imports;
 	
-	Start Conditions:
+Start Conditions:
 
-Normal:
-	500 Gold
-	70 	Wood
-	10 	Meat
-	10	Vegetables
-	50 	Stone
-	
+	Normal:
+		500 Gold
+		70 	Wood
+		10 	Meat
+		10	Vegetables
+		50 	Stone
+		
 	

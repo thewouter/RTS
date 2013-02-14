@@ -177,7 +177,9 @@ public class RTSComponent extends Canvas implements Runnable {
 	}
 	
 	public void setTitleScreen(){
-		if(titleScreen == null) titleScreen = new TitleScreen(this, input);
+		if(titleScreen == null) {
+			titleScreen = new TitleScreen(this, input);
+		}
 		setScreen(titleScreen);
 		backgroundSound.stop();
 	}
