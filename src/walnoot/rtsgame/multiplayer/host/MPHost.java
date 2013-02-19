@@ -9,6 +9,9 @@ import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.professions.Hunter;
+import walnoot.rtsgame.map.entities.players.professions.LumberJacker;
+import walnoot.rtsgame.map.entities.players.professions.Miner;
 import walnoot.rtsgame.map.entities.players.professions.Profession;
 import walnoot.rtsgame.rest.Inventory;
 import walnoot.rtsgame.rest.Util;
@@ -91,7 +94,6 @@ public class MPHost extends Screen{
 	}
 
 	public void messageReceived(String message, Player owner) {
-		//System.out.println(message);
 		switch(Util.parseInt(Util.splitString(message).get(0))){
 		case 2:
 			moveEntity(message);
@@ -112,6 +114,68 @@ public class MPHost extends Screen{
 			break;
 		case 7:
 			professionSet(message);
+			break;
+		case 8:
+			professionMethod(message);
+			break;
+		}
+	}
+	
+	private void professionMethod(String message){
+		int uniqueNumber = Util.parseInt(Util.splitString(message).get(1));
+		int method = Util.parseInt(Util.splitString(message).get(2));
+		Entity e = map.getEntity(uniqueNumber);
+		if(e instanceof PlayerEntity){
+			PlayerEntity player = (PlayerEntity)e;
+			Profession profession = player.getProfession();
+			if(profession == null){
+				System.out.println("profession = null!");
+				return;
+			}
+			switch(method){
+			case 1:
+				if(profession instanceof Hunter){
+					((Hunter)profession).setIsHunting(true);
+				}else{
+					System.out.println("profession isn't Hunter");
+				}
+				break;
+			case 2:
+				if(profession instanceof Hunter){
+					((Hunter)profession).setIsHunting(false);
+				}else{
+					System.out.println("profession isn't Hunter");
+				}
+				break;
+			case 3:
+				if(profession instanceof Miner){
+					((Miner)profession).setIsMining(true);
+				}else{
+					System.out.println("profession isn't Miner");
+				}
+				break;
+			case 4:
+				if(profession instanceof Miner){
+					((Miner)profession).setIsMining(false);
+				}else{
+					System.out.println("profession isn't Miner");
+				}
+				break;
+			case 5:
+				if(profession instanceof LumberJacker){
+					((LumberJacker)profession).setIsChopping(true);
+				}else{
+					System.out.println("profession isn't LumerJacker");
+				}
+				break;
+			case 6:
+				if(profession instanceof LumberJacker){
+					((LumberJacker)profession).setIsChopping(false);
+				}else{
+					System.out.println("profession isn't LumberJacker");
+				}
+				break;
+			}
 		}
 	}
 
@@ -142,9 +206,7 @@ public class MPHost extends Screen{
 		int health = e.getHealth();
 		int extraInfoOne = e.getExtraOne();
 		String update = 4 + " " + 0 + " " + ID + " " + uniqueNumber + " " + xPos + " " + yPos + " " + health + " " + extraInfoOne;
-		System.out.println("added " + e + " to evrybodey");
 		for(Player p: players){
-			System.out.println(e + " added to " + p.ID);
 			if(e.owner == p){
 				p.update(4 + " " + 1 + " " + ID + " " + uniqueNumber + " " + xPos + " " + yPos + " " + health + " " + extraInfoOne);
 				continue;

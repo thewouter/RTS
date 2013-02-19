@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import walnoot.rtsgame.Animation;
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
+import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.multiplayer.client.MPMapClient;
@@ -86,9 +87,11 @@ public class SheepEntity extends MovingEntity {
 	public void setSelectedOption(int indexSelected){}
 	
 	public void render(Graphics g){
+		screen.font.drawLine(g, uniqueNumber + "", getScreenX(), getScreenY());
 		g.setColor(Color.BLACK);
 		if(isMoving()) g.drawImage(currentAnimation.getImage(), getScreenX(), getScreenY() - Tile.getHeight() / 2, null);
 		else g.drawImage(Images.sheep[Images.sheep.length-1][0], getScreenX(), getScreenY() - Tile.getHeight() / 2, null);
+		screen.font.drawLine(g, uniqueNumber + "", getScreenX(), getScreenY());
 	}
 	
 	public int getMaxHealth(){

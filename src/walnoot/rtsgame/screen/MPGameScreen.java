@@ -350,7 +350,6 @@ import walnoot.rtsgame.rest.Util;
 			break;
 		case 4:
 			entityAdded(message);
-			System.out.println("entity added: " + message);
 			break;
 		case 5:
 			entityRemoved(message);
@@ -436,6 +435,30 @@ import walnoot.rtsgame.rest.Util;
 	
 	public void setProfession(PlayerEntity p, Profession prof){
 		listener.update( 7 + " " + p.uniqueNumber + " " + Util.getProfessionID(prof));
+	}
+
+	public void startChopping(Entity owner) {
+		listener.update(8 + " " + owner.uniqueNumber + " " + 5);
+	}
+
+	public void stopChopping(Entity owner) {
+		listener.update(8 + " " + owner.uniqueNumber + " " + 6);
+	}
+
+	public void startMining(Entity owner) {
+		listener.update(8 + " " + owner.uniqueNumber + " " + 3);
+	}
+
+	public void stopMining(Entity owner) {
+		listener.update(8 + " " + owner.uniqueNumber + " " + 4);
+	}
+
+	public void startHunting(Entity owner) {
+		listener.update(8 + " " + owner.uniqueNumber + " " + 1);
+	}
+
+	public void stopHunting(Entity owner) {
+		listener.update(8 + " " + owner.uniqueNumber + " " + 2);
 	}
 }
 

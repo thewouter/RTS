@@ -39,7 +39,7 @@ public class PlayerEntity extends MovingEntity {
 	private Animation animation;
 	private Animation backwardAnimation;
 	public final Structure ownerTent;
-	public Profession profession;
+	private Profession profession;
 	
 	public PlayerEntity(Map map, GameScreen screen, int xPos, int yPos, Structure tent){
 		super(map,screen, xPos, yPos, ID);
@@ -205,5 +205,8 @@ public class PlayerEntity extends MovingEntity {
 	public void setProfessionFromHost(Profession p){
 		profession = p;
 	}
-
+	
+	public Profession getProfession(){
+		return profession;
+	}
 }

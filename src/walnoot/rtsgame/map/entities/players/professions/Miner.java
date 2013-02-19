@@ -15,6 +15,7 @@ import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.MPGameScreen;
 
 public class Miner extends Profession {
 
@@ -67,6 +68,10 @@ public class Miner extends Profession {
 		if(isMining){
 			popup.addOption(new Option("stop mining", popup) {
 				public void onClick() {
+					if(owner.screen instanceof MPGameScreen){
+						((MPGameScreen)owner.owner.screen).startMining(owner.owner);
+						return;
+					}
 					isMining = false;
 					owner.screen.setEntityPopup(null);
 					closestMine = null;
@@ -75,6 +80,10 @@ public class Miner extends Profession {
 		}else{
 			popup.addOption(new Option("start mining", popup) {
 				public void onClick() {
+					if(owner.screen instanceof MPGameScreen){
+						((MPGameScreen)owner.owner.screen).stopMining(owner.owner);
+						return;
+					}
 					isMining =  true;
 					owner.screen.setEntityPopup(null);
 				}
@@ -107,6 +116,15 @@ public class Miner extends Profession {
 		default:
 			return "the Miner";
 		}
+	}
+	
+	public boolean getIsHunting(){
+		return isMining;
+	}
+	
+	public void setIsMining(boolean isMining){
+		this.isMining = isMining;
+		if(!isMining) closestMine = null;
 	}
 
 }

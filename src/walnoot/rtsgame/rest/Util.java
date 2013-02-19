@@ -135,9 +135,9 @@ public class Util {
 		return result;
 	}
 	
-	public static int parseInt( final String s ){
+	public static int parseInt(final String s){
 	    if (s == null )
-	        throw new NumberFormatException( "Null string" );
+	        throw new NumberFormatException("Null string");
 	    else if (s == ""){
 	    	System.out.println("string is '' (empty) ");
 	    	new Exception().printStackTrace();

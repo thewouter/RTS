@@ -55,6 +55,13 @@
 	 	5:		entity removed
 	 	6:		entity damaged
 	 	7:		Profession added
+	 	8:		Method Profession		8 - Un - 
+	 											 1 : start Hunting
+	 											 2 : stop Hunting
+	 											 3 : start Mining
+	 											 4 : stop Mining
+	 											 5 : start Chopping
+	 											 6 : stop Chopping
 	
 	
 	

@@ -8,6 +8,7 @@ import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.MPGameScreen;
 
 public class LumberJacker extends Profession {
 
@@ -21,19 +22,20 @@ public class LumberJacker extends Profession {
 	}
 
 	public void update() {
-		if(isChopping)teller++;
-		if(teller >= TIME_TO_CHOP_ONE_DAMAGE){
-			teller = 0;
-			if(isChopping){ 
-				if(Util.getDistance(owner.xPos, owner.yPos, closestTree.xPos, closestTree.yPos)  <= 1){
-					closestTree.damage(1);
-					owner.screen.inventory.addWood(1);
+		if(isChopping){
+			teller++;
+			if(teller >= TIME_TO_CHOP_ONE_DAMAGE){
+				teller = 0;
+				if(isChopping){ 
+					if(Util.getDistance(owner.xPos, owner.yPos, closestTree.xPos, closestTree.yPos)  <= 1){
+						closestTree.damage(1);
+						owner.screen.inventory.addWood(1);
+					}
 				}
 			}
-		}
-		if(isChopping && !owner.isMoving() && (closestTree  == null || !owner.map.getEntities().contains(closestTree))){
-			moveToNearestTree();
-			
+			if(!owner.isMoving() && (closestTree  == null || !owner.map.getEntities().contains(closestTree))){
+				moveToNearestTree();
+			}
 		}
 	}
 	
@@ -41,7 +43,7 @@ public class LumberJacker extends Profession {
 		System.out.println("move to nearest tree");
 		isChopping = true;
 		closestTree = (TreeStructure) owner.map.getClosestTree(owner.getxPos(), owner.getyPos());
-		owner.follow(closestTree);
+		owner.moveTo(closestTree);
 		System.out.println("moved to nearest tree");
 	}
 
@@ -51,6 +53,10 @@ public class LumberJacker extends Profession {
 		if(!isChopping){
 			popup.addOption(new Option("start chopping", popup) {
 				public void onClick() {
+					if(owner.screen instanceof MPGameScreen){
+						((MPGameScreen)owner.owner.screen).startChopping(owner.owner);
+						return;
+					}
 					isChopping = true;
 					this.owner.screen.setEntityPopup(null);
 				}
@@ -58,6 +64,10 @@ public class LumberJacker extends Profession {
 		}else{
 			popup.addOption(new Option("stop chopping", popup) {
 				public void onClick() {
+					if(owner.screen instanceof MPGameScreen){
+						((MPGameScreen)owner.owner.screen).stopChopping(owner.owner);
+						return;
+					}
 					isChopping = false;
 					this.owner.screen.setEntityPopup(null);
 				}
@@ -69,6 +79,14 @@ public class LumberJacker extends Profession {
 
 	public String getName() {
 		return "the LumberJacker";
+	}
+	
+	public boolean getIsChopping(){
+		return isChopping;
+	}
+	
+	public void setIsChopping(boolean isChopping){
+		this.isChopping = isChopping;
 	}
 
 }

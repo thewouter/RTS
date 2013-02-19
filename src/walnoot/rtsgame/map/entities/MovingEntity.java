@@ -122,7 +122,6 @@ public abstract class MovingEntity extends Entity {
 	}
 	
 	protected void onStopMoving(){
-	
 	}
 	
 	public void follow(Entity e){

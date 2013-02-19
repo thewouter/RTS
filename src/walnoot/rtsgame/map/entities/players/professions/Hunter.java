@@ -10,6 +10,7 @@ import walnoot.rtsgame.popups.entitypopup.EntityOptionsPopup;
 import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.MPGameScreen;
 
 public class Hunter extends Profession {
 
@@ -64,6 +65,10 @@ public class Hunter extends Profession {
 		if(isHunting){
 			popup.addOption(new Option("stop hunting", popup) {
 				public void onClick() {
+					if(owner.screen instanceof MPGameScreen){
+						((MPGameScreen)owner.owner.screen).startHunting(owner.owner);
+						return;
+					}
 					isHunting = false;
 					owner.screen.setEntityPopup(null);
 					closestMovingEntity = null;
@@ -72,6 +77,10 @@ public class Hunter extends Profession {
 		}else{
 			popup.addOption(new Option("start hunting", popup) {
 				public void onClick() {
+					if(owner.screen instanceof MPGameScreen){
+						((MPGameScreen)owner.owner.screen).stopHunting(owner.owner);
+						return;
+					}
 					isHunting =  true;
 					owner.screen.setEntityPopup(null);
 				}
@@ -84,6 +93,15 @@ public class Hunter extends Profession {
 	
 	public String getName() {
 		return "the Hunter";
+	}
+	
+	public boolean getIsHunting(){
+		return isHunting;
+	}
+	
+	public void setIsHunting(boolean isHunting){
+		this.isHunting = isHunting;
+		if(!isHunting) closestMovingEntity = null;
 	}
 
 }
