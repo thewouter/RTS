@@ -37,5 +37,14 @@ public class ClientHandler extends Thread{
 			System.out.println(e);
 		}
 	}
+
+	public void quit() {
+		running = false;
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 }

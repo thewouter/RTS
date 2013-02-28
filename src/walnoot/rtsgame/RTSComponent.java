@@ -10,6 +10,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -158,12 +159,15 @@ public class RTSComponent extends Canvas implements Runnable {
 	}
 	
 	public void setScreen(Screen s){
-		screen = s;
 		if(s instanceof SPGameScreen && backgroundSoundOn){
 			backgroundSound.play();
 		}else{
 			backgroundSound.stop();
 		}
+		if(screen instanceof MPHost){
+			screen.quit();
+		}
+		screen = s;
 	}
 	
 	public void setGameScreen(boolean newScreen){
@@ -238,7 +242,12 @@ public class RTSComponent extends Canvas implements Runnable {
 	private void loadBackgroundMusic(){
 		final ArrayList<String> fileNames = new ArrayList<String>();
 		
-		Path startDir = Paths.get("src/res/Sounds/Background music");
+		File theDir = new File("music");
+		if(!theDir.exists()){
+			System.out.println("creating directory: music");
+			theDir.mkdir();
+		}
+		Path startDir = Paths.get("music");
 		String pattern = "*.mp3";
 		FileSystem fs = FileSystems.getDefault();
 		
@@ -270,10 +279,10 @@ public class RTSComponent extends Canvas implements Runnable {
 			InputStreamReader input = new InputStreamReader(source.openStream());
 			BufferedReader in = new BufferedReader(input);
 			String inputLine;
-				while((inputLine = in.readLine())!= null){
-					if(name.equals(inputLine)) return true;
-					System.out.println(inputLine);
-				}
+			while((inputLine = in.readLine())!= null){
+				if(name.equals(inputLine)) return true;
+				System.out.println(inputLine);
+			}
 		} catch (FileNotFoundException e) {
 			return true;
 		} catch (MalformedURLException e) {
@@ -281,7 +290,6 @@ public class RTSComponent extends Canvas implements Runnable {
 		} catch (IOException e) {
 			return true;
 		}
-		
 		return false;
 	}
 }

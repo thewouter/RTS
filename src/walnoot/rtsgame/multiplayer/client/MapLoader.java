@@ -30,7 +30,7 @@ public class MapLoader extends Thread {
 		ArrayList<String> mapInStrings =Util.splitString(mapInString);
 		length = mapInStrings.size();
 		int mapSize = Util.parseInt(mapInStrings.get(0));
-		System.out.println(mapSize);
+		//System.out.println(mapSize);
 		counter = 2;
 		for(int x = 0 ; x < mapSize ; x++){
 			for(int y = 0; y < mapSize; y++, counter++){
@@ -58,7 +58,7 @@ public class MapLoader extends Thread {
 			}
 		}
 		int amountEntities = Util.parseInt(mapInStrings.get(counter++));
-		System.out.println(amountEntities);
+		//System.out.println(amountEntities);
 		for(int i = 0; i < amountEntities; i++){
 			String entity = mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++); 
 			Entity e = Util.getEntity(map, entity,screen);
@@ -73,11 +73,15 @@ public class MapLoader extends Thread {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		//System.out.println(amountMovements + " \n");
+		
 		for (int i = 0; i < amountMovements; i++){
 			int uniqueNumber = Util.parseInt(mapInStrings.get(counter++));
 			((MovingEntity)map.getEntity(uniqueNumber)).moveToFromHost(new Point(Util.parseInt(mapInStrings.get(counter++)),Util.parseInt(mapInStrings.get(counter++))));
+			//System.out.println(uniqueNumber);
 		}
 		input.send("1 Received!");
+		screen.setIsLoaded(true);
 	}
 	
 	public int checkProgress() {

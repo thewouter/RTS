@@ -57,7 +57,6 @@ public class InputListener extends Thread{
 	
 	public String read(){
 		try {
-			System.out.println("test");
 			return r.readLine();
 		} catch (IOException e) {
 			

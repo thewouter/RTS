@@ -1,5 +1,7 @@
 package walnoot.rtsgame.map.entities.players.professions;
 
+import javax.swing.plaf.metal.MetalComboBoxUI.MetalPropertyChangeListener;
+
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.entities.Entity;
@@ -10,6 +12,7 @@ import walnoot.rtsgame.popups.entitypopup.Option;
 import walnoot.rtsgame.rest.MousePointer;
 import walnoot.rtsgame.rest.Sound;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.MPGameScreen;
 
 public class Founder extends Profession {
 	public static int ID = 403;

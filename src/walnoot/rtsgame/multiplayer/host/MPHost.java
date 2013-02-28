@@ -9,6 +9,7 @@ import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.professions.Founder;
 import walnoot.rtsgame.map.entities.players.professions.Hunter;
 import walnoot.rtsgame.map.entities.players.professions.LumberJacker;
 import walnoot.rtsgame.map.entities.players.professions.Miner;
@@ -71,6 +72,7 @@ public class MPHost extends Screen{
 		for(Player p: toAdd){
 			PlayerEntity player = new PlayerEntity(map, p, 11, 11, null);
 			player.owner = p;
+			player.setProfession(new Founder(player));
 			map.addEntity(player);
 		}
 		toAdd.clear();
@@ -247,5 +249,11 @@ public class MPHost extends Screen{
 		Profession.setProfession(ProfessionID, (PlayerEntity)map.getEntity(uniqueNumber));
 	}
 	
+	public void quit(){
+		for(Player p: players){
+			p.quit();
+		}
+		clientHandler.quit();
+	}
 }
 

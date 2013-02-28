@@ -70,4 +70,6 @@ public abstract class Screen {
 	public void setPopup(ScreenPopup popup){
 		this.popup = popup;
 	}
+	
+	public void quit(){}
 }

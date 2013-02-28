@@ -196,7 +196,7 @@ public class PlayerEntity extends MovingEntity {
 		if(screen instanceof MPGameScreen){ // it's the client.
 			((MPGameScreen)screen).setProfession(this, p);
 			return;
-		}else if(map instanceof MPMapHost){ // it's the host
+		}else if(map instanceof MPMapHost && map.containsEntity(this)){ // it's the host
 			((MPMapHost)map).addProfession(this, p);
 		}
 		profession = p;

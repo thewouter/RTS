@@ -17,6 +17,7 @@ public class Player extends GameScreen {
 	public InputListener input;
 	public MPHost host;
 	public final int ID;
+	private boolean isLoaded = false;
 	
 	private static int PLAYERID = 0;
 	
@@ -38,9 +39,10 @@ public class Player extends GameScreen {
 		
 		inventory = new Inventory(this);
 		
-		this.input.read(); 		// wait for confirmation from the client that the map is decoded.
+		this.input.read(); 		// wait for confirmation from the client that the map has been decoded.
 		
 		this.input.start();
+		isLoaded = true;
 	}
 
 	public void save() {}
@@ -54,7 +56,7 @@ public class Player extends GameScreen {
 	public void update() {}
 	
 	public void update(String update){
-		input.send(update);
+		if(isLoaded()) input.send(update);
 	}
 	
 	public void InputReceived(String message){
@@ -68,6 +70,10 @@ public class Player extends GameScreen {
 	public void quit() {
 		host.removePlayer(this);
 		input.quit();
+	}
+	
+	public boolean isLoaded(){
+		return isLoaded;
 	}
 	
 }

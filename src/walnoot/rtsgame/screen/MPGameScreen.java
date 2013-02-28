@@ -51,6 +51,10 @@ import walnoot.rtsgame.rest.Util;
 	private InputListener listener;
 	
 	private Socket socket;
+	
+	private boolean isLoaded = false;
+	
+	private ArrayList<String> messagesToHandle = new ArrayList<>();
 
 
 	public MPGameScreen(RTSComponent component, InputHandler input, int port, String IP){
@@ -66,11 +70,15 @@ import walnoot.rtsgame.rest.Util;
 			System.out.println(e);
 			this.component.setTitleScreen();
 		}
-		System.out.println("trying to read.... hold on....");
+		//System.out.println("trying to read.... hold on....");
 		map = new MPMapClient(listener.read(), listener, this);
-		System.out.println("done reading from stream!");
+		//System.out.println("done reading from stream!");
 		
 		listener.start();
+	}
+	
+	public void setIsLoaded(boolean isLoaded){
+		this.isLoaded = isLoaded;
 	}
 	
 	public void save(){
@@ -79,6 +87,10 @@ import walnoot.rtsgame.rest.Util;
 	
 	public void save(String fileName){
 		Save.save(map, fileName);
+	}
+	
+	public boolean isLoaded(){
+		return isLoaded;
 	}
 	
 	public void load(){
@@ -100,7 +112,7 @@ import walnoot.rtsgame.rest.Util;
 					pointer = null;
 				}
 			}
-	
+			
 			map.update((int) Math.floor(translationX), (int) Math.floor(translationY), getWidth(), getHeight());
 
 			bar.update(getWidth(), getHeight());
@@ -196,6 +208,13 @@ import walnoot.rtsgame.rest.Util;
 		if(input.LMBTapped() || input.RMBTapped()) {
 			new Sound("src/res/Sounds/klick.mp3").play();
 		}
+		if(isLoaded()){
+			for(String message: messagesToHandle){
+				messageReceived(message);
+			}
+			messagesToHandle.clear();
+		}
+		
 	}
 	
 	public void render(Graphics g){
@@ -340,6 +359,10 @@ import walnoot.rtsgame.rest.Util;
 	}
 	
 	public void messageReceived(String message){
+		if(!isLoaded() ){
+			messagesToHandle.add(message);
+			return;
+		}
 		int messageID = Util.parseInt(Util.splitString(message).get(0));
 		switch(messageID){
 		case 1:
@@ -422,7 +445,10 @@ import walnoot.rtsgame.rest.Util;
 	}
 	
 	private void EntityDamaged(String message){
-		map.getEntity(Util.parseInt(Util.splitString(message).get(1))).damageFromHost(Util.parseInt(Util.splitString(message).get(2)));
+		Entity e = map.getEntity(Util.parseInt(Util.splitString(message).get(1)));
+		if(e != null) {	// TODO Bugs!
+			e.damageFromHost(Util.parseInt(Util.splitString(message).get(2)));
+		}
 	}
 	
 	public void removeEntity(Entity e){

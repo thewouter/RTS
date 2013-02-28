@@ -8,6 +8,8 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.structures.BasicStructure;
+import walnoot.rtsgame.multiplayer.host.MPHost;
+import walnoot.rtsgame.multiplayer.host.MPMapHost;
 import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.MPGameScreen;
 
@@ -37,7 +39,11 @@ public class TentIStructure extends BasicStructure {
 		LinkedList<Entity> toBeAddedToTheMap = new LinkedList<Entity>();
 		if(players.size() < MAX_PLAYERS)time++;
 		if(time >= TIME_TO_SPAWN_A_PLAYER && players.size() < MAX_PLAYERS && screen != null && !(screen instanceof MPGameScreen)){
-			toBeAddedToTheMap.add(new PlayerEntity(map, screen, xPos + 3, yPos + 3, this));
+			PlayerEntity p = new PlayerEntity(map, screen, xPos + 3, yPos + 3, this);
+			if(map instanceof MPMapHost){
+				p.owner = owner;
+			}
+			toBeAddedToTheMap.add(p);
 			screen.inventory.addMeat(-1);
 			screen.inventory.addGold(-1);
 			time = 0;

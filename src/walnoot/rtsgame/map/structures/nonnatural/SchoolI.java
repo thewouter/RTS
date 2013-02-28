@@ -52,7 +52,7 @@ public class SchoolI extends BasicStructure {
 		for(int x = -1; x < getSize() + 1; x++){
 			for(int y = -1; y < getSize() + 1; y++){
 				Entity e = map.getEntity(xPos + x, yPos + y);
-				if(e != null && e instanceof PlayerEntity && ((PlayerEntity)e).profession == null){	//it's a player, no profession.
+				if(e != null && e instanceof PlayerEntity && ((PlayerEntity)e).getProfession() == null){	//it's a player, no profession.
 					playersCollected.add((PlayerEntity) e);
 					map.removeEntityFromMap(e);
 				}

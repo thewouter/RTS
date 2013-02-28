@@ -27,7 +27,7 @@ public abstract class BasicStructure extends Structure {
 					getScreenX() - (Tile.WIDTH / 2) * (getSize() - 1), getScreenY() - (getHeadSpace() * Tile.HEIGHT) + (Tile.HEIGHT / 2) * (getSize() - 1) + image.getHeight(), 
 					0, 0, image.getWidth(), image.getHeight(), null); // there must be an easyer way  somewhere... nevermind
 		}
-		screen.font.drawLine(g, uniqueNumber + "", getScreenX(), getScreenY());
+		//screen.font.drawLine(g, uniqueNumber + "", getScreenX(), getScreenY());
 	}
 	
 	public void render(Graphics g, int x, int y){
