@@ -1,9 +1,10 @@
-package walnoot.rtsgame.map.structures.natural;
+ package walnoot.rtsgame.map.structures.natural;
 
 import java.awt.Graphics;
 import java.util.HashMap;
 
 import walnoot.rtsgame.Images;
+import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.tiles.Tile;
@@ -13,7 +14,7 @@ public class StoneMine extends MineStructure {
 	private static int ID = 206, MINES_PER_DAMAGE = 10;
 	private int counter = 0;
 	
-	public StoneMine(Map map, GameScreen screen, int xPos, int yPos) {
+	public StoneMine(Map map, GameScreen screen, int xPos, int yPos, Direction front) {
 		super(map, screen, xPos, yPos,1, 1, ID);
 
 		int x = 2 * Tile.WIDTH;
@@ -24,6 +25,19 @@ public class StoneMine extends MineStructure {
 		
 		image = Images.structures.getSubimage(x, y, width, height);
 	}
+	
+	public StoneMine(Map map, GameScreen screen, int xPos, int yPos, int health, Direction front) {
+		super(map, screen, xPos, yPos,1, 1, ID);
+		this.health = health;
+		int x = 2 * Tile.WIDTH;
+		int y = 4 * Tile.HEIGHT;
+		
+		int width = getSize() * Tile.WIDTH;
+		int height = (getSize() + getHeadSpace()) * Tile.HEIGHT;
+		
+		image = Images.structures.getSubimage(x, y, width, height);
+	}
+
 
 	public int getHeadSpace() {
 		return 2;

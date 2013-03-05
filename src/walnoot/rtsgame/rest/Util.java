@@ -9,9 +9,12 @@ import walnoot.rtsgame.map.entities.DeerEntity;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.SnakeEntity;
+import walnoot.rtsgame.map.entities.players.AlertComponent;
 import walnoot.rtsgame.map.entities.players.Bow;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.Shield;
 import walnoot.rtsgame.map.entities.players.Soldier;
+import walnoot.rtsgame.map.entities.players.SoldierComponent;
 import walnoot.rtsgame.map.entities.players.Sword;
 import walnoot.rtsgame.map.entities.players.Weapon;
 import walnoot.rtsgame.map.entities.players.professions.Farmer;
@@ -22,10 +25,18 @@ import walnoot.rtsgame.map.entities.players.professions.Miner;
 import walnoot.rtsgame.map.entities.players.professions.Profession;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.IronMine;
+import walnoot.rtsgame.map.structures.natural.StoneMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.BaseOfOperations;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
+import walnoot.rtsgame.map.structures.nonnatural.Farm;
+import walnoot.rtsgame.map.structures.nonnatural.IronSmelter;
+import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenGate;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenWall;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.screen.GameScreen;
 
@@ -79,7 +90,6 @@ public class Util {
 		
 		x = abs(x);
 		y = abs(y);
-		
 		
 		return (int) (reminder + Math.toDegrees(Math.atan2(y , x)));
 		
@@ -178,68 +188,110 @@ public class Util {
 	}
 	
 	public static Entity getEntity(Map map, String entity, GameScreen screen){
-		Entity e = getEntity(entity, map);
-		e.screen = screen;
+		Entity e = getEntity(entity, map, screen);
 		return e;
 	}
 	
-	public static Entity getEntity(Map map, int ID, int xPos, int yPos, int extraInfoOne){
+	public static Entity getEntity(Map map, GameScreen screen, int ID, int xPos, int yPos, int health, int[] extraInfoOne){
+		int extraInfo = 0;
+		if(extraInfoOne.length == 2){
+			extraInfo = extraInfoOne[1];
+		}
 		Entity e = null;
-		if(ID >= 300){				//mines
-			switch(ID){
-			case 300:
-				e = new GoldMine(map, null, xPos, yPos, extraInfoOne);
-				break;
-			case 301:
-				e = new IronMine(map, null, xPos, yPos, extraInfoOne);
-			}	
-		}else if(ID >= 200){		//structures
-			switch(ID){
-			case 200:
-				e = new CampFireStructure(map, null,  xPos, yPos, Direction.SOUTH_WEST);
-				break;
-				
-			case 201:
-				e = new TentIStructure(map, null,  xPos, yPos, Direction.SOUTH_WEST);
-				break;
-				
-			case 202:
-				e = new TreeStructure(map, null,  xPos, yPos, Direction.SOUTH_WEST);
-				break;
-				
-			case 203:
-				e = new BaseOfOperations(map, null,  xPos, yPos, Direction.SOUTH_WEST);
-				break;
-				
-			}
-		}else if(ID >= 100){		//movingEntities
-			switch(ID){
-			case 100:
-				e = new SnakeEntity(map, null,  xPos, yPos);
-				break;
-				
-			case 101:
-				e = new SheepEntity(map, null,  xPos, yPos);
-				break;
-				
-			case 102:
-				e = new PlayerEntity(map, null,  xPos, yPos, null);
-				((PlayerEntity)e).setProfessionFromHost(getProfession(extraInfoOne, (PlayerEntity)e));
-				break;
-				
-			case 103:
-				e = new DeerEntity(map, null,  xPos, yPos);
-				break;
-				
-			}
-		}else{
-			System.out.println("no entity found!");
+		switch(ID){
+		case 300:
+			e = new GoldMine(map, screen, xPos, yPos, extraInfo, health);
+			break;
+		case 301:
+			e = new IronMine(map, screen, xPos, yPos, extraInfo, health);
+			break;
+		case 200:
+			e = new CampFireStructure(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
+			break;
+		case 201:
+			e = new TentIStructure(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
+			break;
+		case 202:
+			e = new TreeStructure(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
+			break;
+		case 203:
+			e = new BaseOfOperations(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
+			break;
+		case 206:
+			e = new StoneMine(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
+			break;
+		case 209:
+			e = new Farm(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
+			break;
+		case 210:
+			e = new SchoolI(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
+			break;
+		case 211:
+			e = new Barracks(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
+			break;
+		case 212:
+			e = new DefenseTower(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
+			break;
+		case 213:
+			e = new WoodenWall(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
+			break;
+		case 214:
+			e = new WoodenGate(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
+			break;
+		case 215:
+			e = new IronSmelter(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
+			break;
+		case 100:
+			e = new SnakeEntity(map, screen,  xPos, yPos, health);
+			break;
+		case 101:
+			e = new SheepEntity(map, screen,  xPos, yPos, health);
+			break;
+		case 102:
+			e = new PlayerEntity(map, screen,  xPos, yPos, null);
+			((PlayerEntity)e).setProfessionFromHost(getProfession(extraInfo, (PlayerEntity)e));
+			break;
+		case 103:
+			e = new DeerEntity(map, screen,  xPos, yPos, health);
+			break;
+		case 107:
+			e = new Soldier(map, screen, xPos, yPos, null);
+			
+			break;
+		default:
+			System.out.println("Entity not Found: " + ID);
 		}
 		return e;
-		
+	}
+	
+	public static ArrayList<SoldierComponent> getComponents(int[] data, Soldier owner){
+		ArrayList<SoldierComponent> components = new ArrayList<>();
+		for(int i = 1; i < data.length; i++){
+			components.add(getSoldierComponent(data[i], owner));
+		}
+		return components;
+	}
+	
+	public static SoldierComponent getSoldierComponent(int ID, Soldier owner){
+		SoldierComponent c = null;
+		switch(ID){
+		case 600:
+			c = new AlertComponent(owner, ID % 100);
+			break;
+		case 631:
+			c = new Shield(owner, 1, 100);
+			break;
+		case 632:
+			c = new Sword(owner, 1);
+			break;
+		case 633:
+			c = new Bow(owner);
+		}
+		return c;
 	}
 	
 	public static Profession getProfession(int ID, PlayerEntity player){
+		System.out.println(ID);
 		switch(ID){
 		case(400):
 			return new LumberJacker(player);
@@ -260,74 +312,53 @@ public class Util {
 		}
 	}
 	
-	public static Entity getEntity(Map map, int ID, int xPos, int yPos, int health, int extraInfoOne, int uniqeNumber){
-		Entity e = null;
-		switch(ID){
-		case 300:
-			e = new GoldMine(map, null, xPos, yPos, extraInfoOne, health);
-			break;
-		case 301:
-			e = new IronMine(map, null, xPos, yPos, extraInfoOne, health);
-		case 200:
-			e = new CampFireStructure(map, null,  xPos, yPos, health, Direction.SOUTH_WEST);
-			break;
-		case 201:
-			e = new TentIStructure(map, null,  xPos, yPos, health, Direction.SOUTH_WEST);
-			break;
-		case 202:
-			e = new TreeStructure(map, null,  xPos, yPos, health, Direction.SOUTH_WEST);
-			break;
-		case 203:
-			e = new BaseOfOperations(map, null,  xPos, yPos, health, Direction.SOUTH_WEST);
-			break;
-		case 100:
-			e = new SnakeEntity(map, null,  xPos, yPos, health);
-			break;
-		case 101:
-			e = new SheepEntity(map, null,  xPos, yPos, health);
-			break;
-		case 102:
-			e = new PlayerEntity(map, null,  xPos, yPos, null);
-			((PlayerEntity)e).setProfessionFromHost(getProfession(extraInfoOne, (PlayerEntity)e));
-			break;
-		case 103:
-			e = new DeerEntity(map, null,  xPos, yPos, health);
-			break;
-		default:
-			System.out.println("Entity not Found: " + ID);
-		}
+	public static Entity getEntity(Map map, GameScreen screen, int ID, int xPos, int yPos, int health, int[] extraInfoOne, int uniqeNumber){
+		Entity e = getEntity(map, screen, ID, xPos, yPos, health, extraInfoOne);
 		e.uniqueNumber = uniqeNumber;
 		return e;
 	}
 	
-	public static Entity getEntity(String entity, Map map){
-		
+	public static Entity getEntity(String entity, Map map, GameScreen screen){
+		//System.out.println(entity);
 		ArrayList<String> entityInstrings = splitString(entity);
 		int ID = parseInt(entityInstrings.get(0));
 		int xPos = parseInt(entityInstrings.get(1));
 		int yPos = parseInt(entityInstrings.get(2));
 		int health = parseInt(entityInstrings.get(3));
-		int extraInfoOne = parseInt(entityInstrings.get(4));
-		int uniqueNumber = parseInt(entityInstrings.get(5));
+		int number = parseInt(entityInstrings.get(4));
+		int[] extraInfoOne = new int[number + 1];
+		extraInfoOne[0] = number;
+		int n = 5;
+		for(int i = 1; i < number + 1; i++){
+			extraInfoOne[i] = parseInt(entityInstrings.get(n));
+			n++;
+		}
+		int uniqueNumber = parseInt(entityInstrings.get(n));
 		
 		
-		return getEntity(map, ID, xPos, yPos, health, extraInfoOne, uniqueNumber);
+		return getEntity(map, screen, ID, xPos, yPos, health, extraInfoOne, uniqueNumber);
 	}
 	
 	public static int getProfessionID(Profession prof){
+		System.out.println(prof);
 		if (prof instanceof LumberJacker){
 			return 400;
-		}else if(prof instanceof Miner){
+		}
+		if(prof instanceof Miner){
 			if(((Miner) prof).level == 1){
 				return 401;
-			}else if(((Miner) prof).level == 2){
+			}
+			if(((Miner) prof).level == 2){
 				return 405;
 			}
-		}else if(prof instanceof Hunter){
+		}
+		if(prof instanceof Hunter){
 			return 402; 
-		}else if(prof instanceof Founder){
+		}
+		if(prof instanceof Founder){
 			return 403;
-		}else if(prof instanceof Farmer){
+		}
+		if(prof instanceof Farmer){
 			return 404;
 		}
 		return 0;

@@ -66,6 +66,7 @@ public class Inventory {
 
 	public void addStone(int stone) {
 		this.stone += stone;
+		//new Exception(this.stone + "").printStackTrace();
 	}
 
 	public int getVegetables() {

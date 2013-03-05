@@ -74,8 +74,8 @@ public class SchoolII extends BasicStructure {
 		return new HashMap<String, Integer>();
 	}
 
-	public int getExtraOne() {
-		return 0;
+	public String getExtraOne() {
+		return "0";
 	}
 	
 	public void releasePupil(PlayerEntity pupil){

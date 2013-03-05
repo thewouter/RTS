@@ -11,13 +11,14 @@ import walnoot.rtsgame.map.entities.Entity;
 public class Shield extends SoldierComponent {
 	private int protection = 0;
 	private int health = 0;
+	public static int ID = 601;
 	private Image image;
 	/**
 	 * @param owner
 	 * @param protection Number between 0 - 100, 0 is no protection , 100 is full
 	 */
 	public Shield(Soldier owner, int protection, int health) {
-		super(owner);
+		super(owner, ID);
 		this.protection = protection;
 		this.health = health;
 		image = Images.smallButtons[0][0];

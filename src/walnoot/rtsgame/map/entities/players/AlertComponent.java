@@ -8,9 +8,10 @@ import walnoot.rtsgame.map.tiles.Tile;
 
 public class AlertComponent extends SoldierComponent {
 	private int radius;
+	public static int ID = 601;
 
 	public AlertComponent(Soldier owner, int radius) {
-		super(owner);
+		super(owner, ID);
 		this.radius = radius;
 	}
 	

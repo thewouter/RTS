@@ -37,11 +37,31 @@ public class WoodenWall extends BasicStructure {
 		}
 	}
 	
+	public WoodenWall(Map map, GameScreen screen, int xPos, int yPos, int health, Direction front) {
+		super(map, screen, xPos, yPos, 6, 0, ID, front);
+		for (int i = 0, k = 0; i < 2; i++){
+			for(int j = 0; j < 2; j++, k++){
+				int x = (6 + j)* Tile.WIDTH;
+				int y = (i) * Tile.HEIGHT * 2;
+				
+				int width = getSize() * Tile.WIDTH;
+				int height = (getSize() + getHeadSpace()) * Tile.HEIGHT;
+				
+				images[k] = Images.structures.getSubimage(x, y, width, height);
+			}
+		}
+		
+		for(int i = 0; i < 4; i++){
+			neightboursAreConnected[i] = checkSide(i);
+		}
+		this.health = health;
+	}
+
 	private boolean checkSide(int side){
 		ArrayList<Entity> es;
 		int x = xPos;
 		int y = yPos;
-		if(side % 2 == 0){
+		if(side % 2 == 0){	
 			x += side - 1;
 		}else{
 			y += side - 2;
@@ -101,8 +121,8 @@ public class WoodenWall extends BasicStructure {
 		return costs;
 	}
 
-	public int getExtraOne() {
-		return 0;
+	public String getExtraOne() {
+		return "0";
 	}
 
 	public int getHeadSpace() {

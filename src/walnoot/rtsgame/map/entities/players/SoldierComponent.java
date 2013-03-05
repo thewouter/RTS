@@ -7,9 +7,11 @@ import walnoot.rtsgame.map.entities.Entity;
 public abstract class SoldierComponent {
 	
 	public Soldier owner;
+	public int ID;
 	
-	public SoldierComponent(Soldier owner) {
+	public SoldierComponent(Soldier owner, int ID) {
 		this.owner = owner;
+		this.ID = ID;
 	}
 	
 	public abstract void render(Graphics g);

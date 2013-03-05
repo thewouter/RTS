@@ -39,8 +39,8 @@ public class CampFireStructure extends BasicStructure{
 		return 1;
 	}
 
-	public int getExtraOne() {
-		return 0;
+	public String getExtraOne() {
+		return "0";
 	}
 	
 	public HashMap<String, Integer> getCosts(){

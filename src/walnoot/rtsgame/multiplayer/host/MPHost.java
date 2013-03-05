@@ -14,6 +14,7 @@ import walnoot.rtsgame.map.entities.players.professions.Hunter;
 import walnoot.rtsgame.map.entities.players.professions.LumberJacker;
 import walnoot.rtsgame.map.entities.players.professions.Miner;
 import walnoot.rtsgame.map.entities.players.professions.Profession;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
 import walnoot.rtsgame.rest.Inventory;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.Screen;
@@ -26,20 +27,19 @@ public class MPHost extends Screen{
 	public int translationX, translationY;
 	
 	public MPMapHost map;
-
+	
 	public Inventory inventory =new Inventory(this);
 	
 	public LinkedList<Player> players = new LinkedList<Player>();
 	private ClientHandler clientHandler;
-
+	
 	private LinkedList<Player> toRemove = new LinkedList<Player>();
 	private LinkedList<Player> toAdd = new LinkedList<Player>();
 	
 	
-			
+		
 	public MPHost(RTSComponent component, InputHandler input, int port) {
 		super(component , input);
-		
 		this.port = port;
 		
 		map =  new MPMapHost(256, this);
@@ -79,8 +79,22 @@ public class MPHost extends Screen{
 	}
 	
 	public void entityMoved(Entity e, int newX, int newY){
-		String toSend = "2 " + e.uniqueNumber + " " + newX + " " + newY; 
+		String toSend = "2 1 " + e.uniqueNumber + " " + newX + " " + newY; 
 		for(Player p: players){
+			p.update(toSend);
+		}
+	}
+	
+	public void entityMoved(Entity entity, Entity goal){
+		String toSend = "2 2 " + entity.uniqueNumber + " " + goal.uniqueNumber;
+		for(Player p:players){
+			p.update(toSend);
+		}
+	}
+	
+	public void entityFollowed(Entity entity, Entity goal){
+		String toSend = "2 3 " + entity.uniqueNumber + " " + goal.uniqueNumber;
+		for(Player p:players){
 			p.update(toSend);
 		}
 	}
@@ -90,12 +104,13 @@ public class MPHost extends Screen{
 			p.update(5 + " " + uniqueNumber);
 		}
 	}
-
+	
 	public void render(Graphics g) {
 		map.render(g, new Point(translationX, translationY), component.getSize(), component.getWidth(), component.getHeight());
 	}
-
+	
 	public void messageReceived(String message, Player owner) {
+		System.out.println(message);
 		switch(Util.parseInt(Util.splitString(message).get(0))){
 		case 2:
 			moveEntity(message);
@@ -120,7 +135,45 @@ public class MPHost extends Screen{
 		case 8:
 			professionMethod(message);
 			break;
+		case 9:
+			shootArrow(message);
+			break;
+		case 10:
+			pressBarrackPopupButton(message);
 		}
+	}
+	
+	private void pressBarrackPopupButton(String message){
+		int uniqueNumberBarrack = Util.parseInt(Util.splitString(message).get(2));
+		int select = Util.parseInt(Util.splitString(message).get(1));
+		int buttonID = Util.parseInt(Util.splitString(message).get(3));
+		Entity e = map.getEntity(uniqueNumberBarrack);
+		if(e instanceof Barracks){
+			if(select == 1){
+				((Barracks)e).getpopup().getButton(buttonID).onSelect();
+			}else if(select == 2){
+				((Barracks)e).getpopup().getButton(buttonID).deSelect();
+			}
+		}
+	}
+	
+	public void arrowShot(Entity start, Entity end, boolean fromTop, int horSpeed, int distance){
+		String update = 9 + " " + start.uniqueNumber + " " + ((fromTop)? 1 : 0) + " " + end.uniqueNumber + " " + horSpeed + " " + distance;
+		for(Player p: players){
+			p.update(update);
+		}
+	}
+	
+	private void shootArrow(String message){
+		int uniqueNumberStart = Util.parseInt(Util.splitString(message).get(1));
+		int uniqueNumberEnd = Util.parseInt(Util.splitString(message).get(3));
+		boolean fromTop = Util.parseInt(Util.splitString(message).get(2)) == 1 ? true : false ;
+		int horSpeed = Util.parseInt(Util.splitString(message).get(4));
+		int maxDistance = Util.parseInt(Util.splitString(message).get(5));
+		Entity start = map.getEntity(uniqueNumberStart);
+		Entity end = map.getEntity(uniqueNumberEnd);
+		map.shootArrow(start, end, fromTop, horSpeed, maxDistance);
+		
 	}
 	
 	private void professionMethod(String message){
@@ -180,15 +233,21 @@ public class MPHost extends Screen{
 			}
 		}
 	}
-
+	
 	private void addEntity(String message, Player owner) {
 		int ID = Util.parseInt(Util.splitString(message).get(1));
 		int xPos = Util.parseInt(Util.splitString(message).get(2));
 		int yPos = Util.parseInt(Util.splitString(message).get(3));
 		int health = Util.parseInt(Util.splitString(message).get(4));
-		int extraInfoOne = Util.parseInt(Util.splitString(message).get(5));
-		int isOwnedByPlayer = Util.parseInt(Util.splitString(message).get(6));
-		Entity e = Util.getEntity(map, ID, xPos, yPos, extraInfoOne);
+		int number = Util.parseInt(Util.splitString(message).get(5));
+		int[] extraInfoOne = new int[number];
+		int n = 6;
+		for(int i = 0; i < number; i++){
+			extraInfoOne[i] = Util.parseInt(Util.splitString(message).get(n));
+			n++;
+		}
+		int isOwnedByPlayer = Util.parseInt(Util.splitString(message).get(n));
+		Entity e = Util.getEntity(map, owner, ID, xPos, yPos, health, extraInfoOne);
 		if(isOwnedByPlayer == 1) e.owner = owner;
 		e.screen = owner;
 		e.setHealth(health);
@@ -206,7 +265,7 @@ public class MPHost extends Screen{
 		int yPos = e.yPos;
 		int uniqueNumber = e.uniqueNumber;
 		int health = e.getHealth();
-		int extraInfoOne = e.getExtraOne();
+		String extraInfoOne = e.getExtraOne();
 		String update = 4 + " " + 0 + " " + ID + " " + uniqueNumber + " " + xPos + " " + yPos + " " + health + " " + extraInfoOne;
 		for(Player p: players){
 			if(e.owner == p){
@@ -224,11 +283,22 @@ public class MPHost extends Screen{
 			p.update(update);
 		}
 	}
-
+	
 	private void moveEntity(String message){
-		Entity e = map.getEntity(Util.parseInt(Util.splitString(message).get(1)));
-		if(e instanceof MovingEntity){
-			((MovingEntity)e).moveTo(new Point(Util.parseInt(Util.splitString(message).get(2)),Util.parseInt(Util.splitString(message).get(3))));
+		Entity e = map.getEntity(Util.parseInt(Util.splitString(message).get(2)));
+		int oneOrTwo = Util.parseInt(Util.splitString(message).get(1));
+		if(oneOrTwo == 1){
+			if(e instanceof MovingEntity){
+				((MovingEntity)e).moveTo(new Point(Util.parseInt(Util.splitString(message).get(3)),Util.parseInt(Util.splitString(message).get(4))));
+			}
+		}else if(oneOrTwo == 2){
+			if(e instanceof MovingEntity){
+				((MovingEntity)e).moveTo(map.getEntity(Util.parseInt(Util.splitString(message).get(3))));
+			}
+		}else if(oneOrTwo == 3){ // haha
+			if(e instanceof MovingEntity){
+				((MovingEntity)e).follow(map.getEntity(Util.parseInt(Util.splitString(message).get(3))));
+			}
 		}
 	}
 	

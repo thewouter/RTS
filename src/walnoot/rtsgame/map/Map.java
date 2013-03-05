@@ -19,15 +19,21 @@ import walnoot.rtsgame.map.structures.natural.MineStructure;
 import walnoot.rtsgame.map.structures.natural.StoneMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.Farm;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
 import walnoot.rtsgame.map.tiles.Tile;
+import walnoot.rtsgame.multiplayer.host.MPMapHost;
+import walnoot.rtsgame.popups.screenpopup.BarracksPopup.Button;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.MPGameScreen;
 
 public class Map {
 	public Tile[][] surface;
 	private ArrayList<Entity> entities = new ArrayList<Entity>();
 	public ArrayList<Entity> notOnMap = new ArrayList<Entity>();
 	public LinkedList<Entity> toBeRemoved = new LinkedList<Entity>(), toBeAdded = new LinkedList<Entity>(), toBeRemovedFromMap = new LinkedList<Entity>();
+	private ArrayList<Arrow> arrows = new ArrayList<>(), arrowsToAdd = new ArrayList<>(), arrowsToRemove = new ArrayList<>();
 	public PerlinNoise2D noiseObj;
 	public int amountSheepGroups = 0;
 	private GameScreen screen;
@@ -67,7 +73,6 @@ public class Map {
 		
 	};
 	
-	
 	public Map(int mapSize, GameScreen screen){
 		
 		surface = new Tile[mapSize][mapSize];
@@ -80,9 +85,7 @@ public class Map {
 		surface = new Tile[mapSize][mapSize];
 		noiseObj = new PerlinNoise2D();
 		this.amountSheepGroups = amountSheepGroups;
-		this.screen = screen;
 		generateEmptyMap();
-	
 	}
 	
 	public synchronized void update(int translationX, int translationY, int screenWidth, int screenHeight){
@@ -98,6 +101,9 @@ public class Map {
 			addSheepGroup(screen);
 		}
 		handleEntityMutations();
+		for(Arrow a: arrows){
+			a.update();
+		}
 	}
 	
 	public synchronized Entity getEntity(int uniqueNumber){
@@ -265,8 +271,30 @@ public class Map {
 		for(Entity e: toSort){
 			e.render(g);
 		}
+		for(Arrow a:arrows){
+			a.render(g);
+		}
 		
 		g.translate(-translation.x, -translation.y);
+	}
+	
+	public void shootArrow(Entity start,Entity end, boolean fromTop, int horSpeed, int distance){
+		shootArrow(start, start.xPos - ((fromTop)? start.getHeadSpace() : 0), start.yPos - ((fromTop)?start.getHeadSpace():0), horSpeed, distance, Util.getDirectionInDegrees(start, end, fromTop));
+	}
+	
+	public void shootArrow(Entity owner, int xStart, int yStart, double horSpeed, int distance, int direction){
+		if(screen instanceof MPGameScreen){
+			return; // client is not allowed to shoot
+		}
+		addArrow(new Arrow(this, owner, xStart, yStart, horSpeed, distance, direction));
+	}
+	
+	public void shootArrowFromHost(Entity owner, int xStart, int yStart, double horSpeed, int distance, int direction){
+		addArrow(new Arrow(this, owner, xStart, yStart, horSpeed, distance, direction));
+	}
+	
+	public void shootArrowFromHost(Entity start,Entity end, boolean fromTop, int horSpeed, int distance){
+		shootArrowFromHost(start, start.xPos - ((fromTop)? start.getHeadSpace() : 0), start.yPos - ((fromTop)?start.getHeadSpace():0), horSpeed, distance, Util.getDirectionInDegrees(start, end, fromTop));
 	}
 	
 	public boolean isSolid(Point pos){
@@ -297,10 +325,27 @@ public class Map {
 			Collections.sort(entities, entitySorter);
 		}
 		toBeAdded.clear();
+		arrows.addAll(arrowsToAdd);
+		arrowsToAdd.clear();
+		arrows.removeAll(arrowsToRemove);
+		arrowsToRemove.clear();
+	}
+	
+	public void addArrow(Arrow arrow){
+		arrowsToAdd.add(arrow);
+	}
+	
+	public void removeArrow(Arrow arrow){
+		arrowsToRemove.add(arrow);
+	}
+	
+	public ArrayList<Arrow> getArrows(){
+		return arrows;
 	}
 	
 	public synchronized Entity getEntity(int x, int y){
 		for(Entity e: getEntities()){
+			if(e == null) continue;
 			if(e instanceof Structure){
 				Structure structure = (Structure) e;
 				

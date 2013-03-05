@@ -9,16 +9,14 @@ public abstract class Weapon extends SoldierComponent {
 	boolean isFighting = false;
 	public int MIN_HIT_RANGE = 0, MAX_HIT_RANGE = 1, LOAD_TIME = 0; //standard..  TODO place in constructor
 	int ticksCounter = 0;
-	public final int ID;
 
 	public Weapon(Soldier owner, int ID) {
-		super(owner);
+		super(owner, ID);
 		for(SoldierComponent c: owner.getComponents()){
 			if(c instanceof Weapon){
 				owner.comp.remove(c);
 			}
 		}
-		this.ID = ID;
 	}
 
 	public void render(Graphics g) {}
@@ -27,13 +25,13 @@ public abstract class Weapon extends SoldierComponent {
 	public void update(){
 		if(isFighting){
 			ticksCounter++;
-			if(ticksCounter >= LOAD_TIME && owner.target != null && Util.getDistance(owner.target, owner) <= MAX_HIT_RANGE + 1){
+			if(ticksCounter >= LOAD_TIME && owner.target != null && Util.getDistance(owner.target, owner) <= MIN_HIT_RANGE){
 				owner.standStill();
 				activate();
 				ticksCounter = 0;
 			}else if(owner.target == null){
 				isFighting = false;
-			}else if(Util.getDistance(owner.target, owner) > MAX_HIT_RANGE + 1){
+			}else if(Util.getDistance(owner.target, owner) > MIN_HIT_RANGE){
 				owner.follow(owner.target);
 			}
 		}

@@ -11,8 +11,10 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.structures.BasicStructure;
+import walnoot.rtsgame.multiplayer.host.MPMapHost;
 import walnoot.rtsgame.popups.screenpopup.SchoolPopup;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.MPGameScreen;
 
 public class SchoolI extends BasicStructure {
 	
@@ -20,19 +22,39 @@ public class SchoolI extends BasicStructure {
 	public static int ID = 210;
 	public boolean isSelected = false;
 	public ArrayList<PlayerEntity> playersCollected = new ArrayList<PlayerEntity>();
-	public SchoolPopup popup = new SchoolPopup(screen, image, this, screen.input);
+	public SchoolPopup popup;
 	
 	
 	public SchoolI(Map map, GameScreen screen, int xPos, int yPos, Direction front) {
 		super(map, screen, xPos, yPos, 0, 12, ID, front);
+		if(map instanceof MPMapHost){
+			return;
+		}
 		int level = screen.level;
-		
+		popup = new SchoolPopup(screen, image, this, screen.input);
 		if(level <= 0) return;
 		popup.hunter.activate();
 		popup.lumberJacker.activate();
 		if(level <= 1) return;
 		popup.minerI.activate();
 		popup.founder.activate();
+	}
+
+	public SchoolI(Map map, GameScreen screen, int xPos, int yPos, int health, Direction front) {
+		super(map, screen, xPos, yPos, 0, 12, ID, front);
+		if(map instanceof MPMapHost){
+			return;
+		}
+		int level = screen.level;
+		popup = new SchoolPopup(screen, image, this, screen.input);
+		this.health = health;
+		if(level <= 0) return;
+		popup.hunter.activate();
+		popup.lumberJacker.activate();
+		if(level <= 1) return;
+		popup.minerI.activate();
+		popup.founder.activate();
+		
 	}
 
 	public int getHeadSpace() {
@@ -58,7 +80,7 @@ public class SchoolI extends BasicStructure {
 				}
 			}
 		}
-		popup.updateSchool();
+		if(!(map instanceof MPMapHost)) popup.updateSchool();
 	}
 
 	public int getMaxHealth() {
@@ -76,8 +98,8 @@ public class SchoolI extends BasicStructure {
 		return costs;
 	}
 
-	public int getExtraOne() {
-		return 0;
+	public String getExtraOne() {
+		return "0";
 	}
 	
 	public void releasePupil(PlayerEntity pupil){

@@ -13,6 +13,11 @@ public class Farm extends BasicStructure{
 		super(map, screen, xPos, yPos,2, 8, ID, front);
 	}
 
+	public Farm(Map map, GameScreen screen, int xPos, int yPos, int health, Direction front) {
+		super(map, screen, xPos, yPos,2, 8, ID, front);
+		this.health = health;
+	}
+
 	public int getHeadSpace() {
 		return 2;
 	}
@@ -40,8 +45,8 @@ public class Farm extends BasicStructure{
 		return costs;
 	}
 
-	public int getExtraOne() {
-		return 0;
+	public String getExtraOne() {
+		return "0";
 	}
 
 }

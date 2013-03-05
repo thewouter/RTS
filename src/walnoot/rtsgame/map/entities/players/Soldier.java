@@ -22,13 +22,11 @@ public class Soldier extends PlayerEntity {
 	private static int ID = 107;
 
 	public Soldier(Map map, GameScreen screen, int xPos, int yPos, Structure tent) {
-		super(map, screen, xPos, yPos, tent);
-		super.ID = ID;
+		super(map, screen, xPos, yPos, ID, tent);
 	}
 
 	public Soldier(Map map, GameScreen screen, int xPos, int yPos, Structure tent, int health) {
-		super(map, screen, xPos, yPos, tent, health);
-		super.ID = ID;
+		super(map, screen, xPos, yPos, ID, tent, health);
 	}
 	
 	public void addSoldierComponent(SoldierComponent comp){
@@ -110,6 +108,7 @@ public class Soldier extends PlayerEntity {
 		}
 		return false;
 	}
+	
 	public String getHealthInString(){
 		if(shieldProtection != 0) return health + ",  " + shieldProtection + " protection";
 		return health + ""; 
@@ -132,4 +131,11 @@ public class Soldier extends PlayerEntity {
 		return weapon;
 	}
 
+	public String getExtraOne(){
+		String result = "" + comp.size();
+		for(SoldierComponent c: comp){
+			result = result + " " + c.ID;
+		}
+		return result;
+	}
 }

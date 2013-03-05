@@ -66,8 +66,8 @@ public class TentIIIStructure extends BasicStructure {
 		return "Tent";
 	}
 
-	public int getExtraOne() {
-		return 0;
+	public String getExtraOne() {
+		return "0";
 	}
 	
 	public HashMap<String, Integer> getCosts(){

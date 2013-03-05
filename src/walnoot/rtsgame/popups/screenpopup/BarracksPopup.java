@@ -15,8 +15,11 @@ import walnoot.rtsgame.map.entities.players.professions.Profession;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
+import walnoot.rtsgame.multiplayer.host.MPMapHost;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.MPGameScreen;
 import walnoot.rtsgame.screen.Screen;
 
 public class BarracksPopup extends ScreenPopup {
@@ -30,15 +33,15 @@ public class BarracksPopup extends ScreenPopup {
 	
 	LinkedList<Button> buttons = new LinkedList<Button>();
 
-	public BarracksPopup(Screen title, BufferedImage image, BasicStructure owner, InputHandler input) {
+	public BarracksPopup(Screen title, BufferedImage image, Barracks owner, InputHandler input) {
 		super(title.getWidth() - (image.getWidth() / 2), title.getHeight() - (image.getHeight() / 2), image.getWidth(), image.getHeight(), title, false);
 		this.image = image;
 		this.input = input;
 		xPos = title.getWidth() / 2 - (image.getWidth() / 2);
 		yPos = title.getHeight() / 2 - (image.getHeight() / 2);
 		this.owner = owner;
-		swordsMan = new Button(owner, xPos + 40, yPos + 20 * 0 + 10, 120, 501, Images.buttons[2][5]);
-		bow = new Button(owner, xPos + 40, yPos + 50, 120, 500, Images.buttons[3][5]);
+		swordsMan = new Button(owner, xPos + 40, yPos + 20 * 0 + 10, 120, 501, Images.buttons[2][5], 1);
+		bow = new Button(owner, xPos + 40, yPos + 50, 120, 500, Images.buttons[3][5], 2);
 		
 		setButtons();
 	}
@@ -47,6 +50,15 @@ public class BarracksPopup extends ScreenPopup {
 		buttons.clear();
 		buttons.add(swordsMan);
 		buttons.add(bow);
+	}
+	
+	public Button getButton(int buttonID){
+		for(Button b:buttons){
+			if(b.getButtonID() == buttonID){
+				return b;
+			}
+		}
+		return null;
 	}
 	
 	public void render(Graphics g) {
@@ -105,8 +117,12 @@ public class BarracksPopup extends ScreenPopup {
 	public Soldier getSoldier(){
 		for(Button b : buttons){
 			if(b.amountToBuild > 0){
-				Soldier soldier = new Soldier(((GameScreen)screen).map, (GameScreen)screen, owner.xPos - 1, owner.yPos - 1, null);
+				Soldier soldier = new Soldier(owner.map, owner.screen, owner.xPos - 1, owner.yPos - 1, null);
 				soldier.addSoldierComponent(b.getWeapon(soldier));
+				soldier.owner = owner.owner;
+				if(owner.map instanceof MPMapHost){
+					owner.owner.update("10 2 " + owner.uniqueNumber + " " + b.buttonID);
+				}
 				return soldier;
 			}
 		}
@@ -123,17 +139,19 @@ public class BarracksPopup extends ScreenPopup {
 	public class Button{
 		int x, y, width,height;
 		BufferedImage button;
-		int amountToBuild;
-		SchoolI ownerA;
-		SchoolII ownerB;
+		public int amountToBuild;
+		//SchoolI ownerA;
+		//SchoolII ownerB;
 		PlayerEntity pupil = null;
 		int teller = 0;
 		private final int professionID;
 		boolean isActive = true;
+		private final int buttonID;
+		Barracks owner;
 		
 		public final int TICKS_TO_TEACH;
 		
-		private Button(BasicStructure owner, int x, int y,int teachTime, int professionID, BufferedImage image){
+		private Button(Barracks owner, int x, int y,int teachTime, int professionID, BufferedImage image, int buttonID){
 			this.x = x;
 			this.y = y;
 			this.professionID = professionID;
@@ -142,6 +160,8 @@ public class BarracksPopup extends ScreenPopup {
 			height = button.getHeight();
 			amountToBuild = 0;
 			TICKS_TO_TEACH = teachTime;
+			this.buttonID = buttonID;
+			this.owner = owner;
 		}
 		
 		public Weapon getWeapon(Soldier owner){
@@ -149,15 +169,17 @@ public class BarracksPopup extends ScreenPopup {
 			return Util.getWeapon(professionID, owner);
 		}
 		
+		public int getButtonID(){
+			return buttonID;
+		}
+		
 		public void update(){
-			if(pupil != null){
+			/*if(pupil != null){
 				teller++;
 				if(teller > TICKS_TO_TEACH){ // Time to teach!
 					Profession.setProfession(professionID, pupil);
-					if(ownerA != null)ownerA.releasePupil(pupil);
-					else if (ownerB != null) {
-						ownerB.releasePupil(pupil);
-					}
+					if(ownerA != null) ownerA.releasePupil(pupil);
+					else if (ownerB != null) ownerB.releasePupil(pupil);
 					pupil = null;
 					
 				}
@@ -171,7 +193,7 @@ public class BarracksPopup extends ScreenPopup {
 				ownerB.playersCollected.remove(pupil);
 				amountToBuild --;
 				
-			}
+			}*/
 		}
 		
 		public void render(Graphics g){
@@ -184,11 +206,17 @@ public class BarracksPopup extends ScreenPopup {
 		}
 		
 		public void onSelect(){
+			if(screen instanceof MPGameScreen){
+				((MPGameScreen)screen).barracksPopupButtonSelected(this, owner);
+			}
 			if(isActive)amountToBuild++;
 		}
 		
 		public void deSelect(){
-			if(isActive && amountToBuild > 0) amountToBuild--;
+			if(screen instanceof MPGameScreen){
+				((MPGameScreen)screen).barracksPopupButtonDeselected(this, owner);
+			}
+			if(isActive)amountToBuild--;
 		}
 		
 		public boolean isInButton(int x, int y){

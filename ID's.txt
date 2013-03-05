@@ -9,9 +9,9 @@
 	101	SheepEntity						0		0		0			0				0
 	102	PlayerEntity					0		0		1/500		1/500			0
 	103	DeerEntity						0		0		0			0				0
-	104 HunterEntity					1/500	0		1/500		1/500			0
-	105 MinerEntity						1/400	1/300	1/400		1/600			0
-	106 LumberJacker					1/500	0		1/400		1/600			0
+		HunterEntity					1/500	0		1/500		1/500			0
+		MinerEntity						1/400	1/300	1/400		1/600			0
+		LumberJacker					1/500	0		1/400		1/600			0
 	107 Soldier							1/300	0		1/300		0				0
 	
 200-299		Structures			costs:	gold	wood	meat		vegetables		stone
@@ -23,7 +23,7 @@
 	209 Farm							5		15		0				0			3
 	210 SchoolI							10		10		0				0			0
 	211 Barracks						5		20		1/300 Ticks		1/300 Tics	0
-	212 DefenseTower					20		2		0				0			25
+	212 DefenseTower					20		5		0				0			25
 	213 WoodenWall						1		1		0				0			0
 	214 WoodenGate						5		20		0				0			0
 	213 IronSmelter						15		2		0				0			10
@@ -40,10 +40,13 @@
 	404 Farmer
 	405 MinerII
 	406 MinerIII
-	
-500-599 Weapons
-	500 Bow
-	501 Sword
+
+600-99 SoldierComponents:
+	n0 AlertComponent
+	631 Shiel
+		Weapon
+		632 Sword
+		633 Bow
 	
 	
 	MP messages:
@@ -62,7 +65,8 @@
 	 											 4 : stop Mining
 	 											 5 : start Chopping
 	 											 6 : stop Chopping
-	
+	 	9:		Shoot Arrow				9 - Un<Start> - startFromTop < 0 / 1 > - Un<End>
+		10: 	barracksButton pressed
 	
 	
 	ctrl - shift - o imports;
@@ -75,5 +79,9 @@ Start Conditions:
 		10 	Meat
 		10	Vegetables
 		50 	Stone
+		
+ButtonID's:
+	1: swordsMan
+	2: bow 
 		
 	

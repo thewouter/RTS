@@ -10,6 +10,7 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.Screen;
 
 public abstract class MineStructure extends Structure {
 	int size;
@@ -59,6 +60,7 @@ public abstract class MineStructure extends Structure {
 		int y = getScreenY();
 		if(size == 2) y -= Tile.HEIGHT / 2;
 		g.drawImage(image, x, y, null);
+		Screen.font.drawLine(g, "" + uniqueNumber, getScreenX(), getScreenY());
 	}
 	
 	public void loadImage(int textureX, int textureY, BufferedImage i){
@@ -97,8 +99,8 @@ public abstract class MineStructure extends Structure {
 		loadImage(textureX, textureY, Images.mines);
 	}
 	
-	public int getExtraOne(){
-		return size;
+	public String getExtraOne(){
+		return 1 + " " + size;
 	}
 	
 	public void damage(int damage){

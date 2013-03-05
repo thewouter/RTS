@@ -59,13 +59,18 @@ public class MapLoader extends Thread {
 		}
 		int amountEntities = Util.parseInt(mapInStrings.get(counter++));
 		//System.out.println(amountEntities);
+		//System.out.println(screen);
 		for(int i = 0; i < amountEntities; i++){
-			String entity = mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++); 
-			Entity e = Util.getEntity(map, entity,screen);
-			e.screen = screen;
+			String entity = mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++) + " ";
+			int number = Util.parseInt(mapInStrings.get(counter++));
+			entity = entity + number + " ";
+			for(int j = 0; j < number; j++){
+				entity = entity + mapInStrings.get(counter++) + " ";
+			}
+			entity = entity + mapInStrings.get(counter++); 
+			Entity e = Util.getEntity(map, entity, screen);
 			e.isOwnedByPlayer = false;
 			map.addEntityFromHost(e);
-			
 		}
 		int amountMovements = Util.parseInt(mapInStrings.get(counter++));
 		try {

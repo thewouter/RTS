@@ -15,6 +15,7 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.players.Soldier;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.multiplayer.client.MPMapClient;
+import walnoot.rtsgame.multiplayer.host.MPMapHost;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.MPGameScreen;
@@ -125,6 +126,17 @@ public abstract class MovingEntity extends Entity {
 	}
 	
 	public void follow(Entity e){
+		if(screen instanceof MPGameScreen){
+			((MPGameScreen)screen).followEntity(this, e);
+			 return;
+		}else if(map instanceof MPMapHost){
+			((MPMapHost)map).host.entityFollowed(this, e);
+		}
+		goal = e;
+		entityGoal = e;
+	}
+	
+	public void followFromHost(Entity e){
 		goal = e;
 		entityGoal = e;
 	}
@@ -161,6 +173,12 @@ public abstract class MovingEntity extends Entity {
 	}
 	
 	public void moveTo(Entity goal){
+		if(screen instanceof MPGameScreen){
+			if(isOwnedByPlayer()){
+				((MPGameScreen)screen).moveEntity(this, goal);
+			}
+			return;
+		}
 		this.goal = goal;
 	}
 
@@ -169,6 +187,10 @@ public abstract class MovingEntity extends Entity {
 		ArrayList<Entity> e = new ArrayList<Entity>();
 		e.addAll(map.getEntities());
 		Pathfinder.moveTo(this,new Point(xPos, yPos), goal, map, e);
+	}
+	
+	public void moveToFromHost(Entity goal){
+		this.goal = goal;
 	}
 	
 	public boolean isMoving(){

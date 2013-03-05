@@ -16,6 +16,11 @@ public class IronSmelter extends BasicStructure {
 		super(map, screen, xPos, yPos, 4, 3, ID, front);
 	}
 
+	public IronSmelter(Map map, GameScreen screen, int xPos, int yPos, int health, Direction front) {
+		super(map, screen, xPos, yPos, 4, 3, ID, front);
+		this.health = health;
+	}
+
 	public int getSize() {
 		return 2;
 	}
@@ -58,8 +63,8 @@ public class IronSmelter extends BasicStructure {
 		return 3;
 	}
 
-	public int getExtraOne() {
-		return 0;
+	public String getExtraOne() {
+		return "0";
 	}
 
 }

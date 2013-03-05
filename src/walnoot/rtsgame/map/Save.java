@@ -61,7 +61,7 @@ public class Save {
 				data_out.writeInt(e.getxPos());
 				data_out.writeInt(e.getyPos());
 				data_out.writeInt(e.getHealth());
-				data_out.writeInt(e.getExtraOne());
+				//data_out.write(e.getExtraOne()); TODO: work on this!
 				
 			}
 			

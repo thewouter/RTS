@@ -15,6 +15,11 @@ public class WoodenGate extends BasicStructure {
 		super(map, screen, xPos, yPos, 8, 0, ID, front);
 	}
 
+	public WoodenGate(Map map, GameScreen screen, int xPos, int yPos, int health, Direction front) {
+		super(map, screen, xPos, yPos, 8, 0, ID, front);
+		this.health = health;
+	}
+
 	public int getSize() {
 		return 3;
 	}
@@ -42,8 +47,8 @@ public class WoodenGate extends BasicStructure {
 		return 2;
 	}
 
-	public int getExtraOne() {
-		return 0;
+	public String getExtraOne() {
+		return "0";
 	}
 	
 	public boolean isWalkable(int x, int y, Entity toPass){

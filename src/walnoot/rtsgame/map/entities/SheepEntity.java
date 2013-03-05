@@ -87,7 +87,6 @@ public class SheepEntity extends MovingEntity {
 	public void setSelectedOption(int indexSelected){}
 	
 	public void render(Graphics g){
-		screen.font.drawLine(g, uniqueNumber + "", getScreenX(), getScreenY());
 		g.setColor(Color.BLACK);
 		if(isMoving()) g.drawImage(currentAnimation.getImage(), getScreenX(), getScreenY() - Tile.getHeight() / 2, null);
 		else g.drawImage(Images.sheep[Images.sheep.length-1][0], getScreenX(), getScreenY() - Tile.getHeight() / 2, null);
@@ -102,8 +101,8 @@ public class SheepEntity extends MovingEntity {
 		return "Sheep";
 	}
 	
-	public int getExtraOne() {
-		return 0;
+	public String getExtraOne() {
+		return "0";
 	}
 	
 	public boolean isMovable(){

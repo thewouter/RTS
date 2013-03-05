@@ -14,7 +14,7 @@ public class InventoryPopup extends ScreenPopup {
 			HEIGHT =  2 * BLANK_SPACE + (SIZE_HEIGHT - 1) * SPACE_BETWEEN_TILES + SIZE_HEIGHT * TILE_HEIGHT;
 	public Button gold = new Button(0,0,this, Images.buttons[6][1]);
 	public Button stone = new Button(0,1,this, Images.buttons[5][0]);
-	public Button wood = new Button(1,1,this, Images.buttons[6][0]);
+	public Button wood = new Button(2,1,this, Images.buttons[6][0]);
 	public Button vegetables = new Button(0,2,this, Images.buttons[5][1]);
 	public Button meat = new Button(1,2,this, Images.buttons[7][0]);
 	public Button ironOre = new Button(1, 1, this, Images.buttons[7][1]);

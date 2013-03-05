@@ -54,6 +54,19 @@ public class PlayerEntity extends MovingEntity {
 		}.start();*/
 	}
 	
+	public PlayerEntity(Map map, GameScreen screen, int xPos, int yPos, int ID, Structure tent){
+		super(map,screen, xPos, yPos, ID);
+		name = Util.NAME_GEN.getRandomName();
+		loadAnimation(Images.player);
+		ownerTent = tent;
+		/*final Exception e = new Exception();
+		new Thread(){
+			public void run(){
+				e.printStackTrace();
+			}
+		}.start();*/
+	}
+	
 	public void update(){
 		super.update();
 		animation.update();
@@ -64,6 +77,13 @@ public class PlayerEntity extends MovingEntity {
 	}
 	
 	public PlayerEntity(Map map, GameScreen screen, int xPos, int yPos, Structure tent, int health){
+		super(map,screen,xPos,yPos, ID);
+		this.health = health;
+		name = Util.NAME_GEN.getRandomName();
+		ownerTent = tent;
+	}
+	
+	public PlayerEntity(Map map, GameScreen screen, int xPos, int yPos, int ID, Structure tent, int health){
 		super(map,screen,xPos,yPos, ID);
 		this.health = health;
 		name = Util.NAME_GEN.getRandomName();
@@ -112,10 +132,10 @@ public class PlayerEntity extends MovingEntity {
 	}
 	
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){
-		if(profession != null && profession.onRightClick(entityClicked, screen, input)) return false;
+		if(profession != null && (entityClicked == this) && profession.onRightClick(entityClicked, screen, input)) return false;
 		if(entityClicked == this){
 			EntityOptionsPopup popup = new EntityOptionsPopup(this, screen);
-			
+			      
 			Option option2 = new Option("lumber", popup){
 				public void onClick(){
 					((PlayerEntity)owner.owner).setProfession(new LumberJacker((PlayerEntity) owner.owner));
@@ -159,6 +179,8 @@ public class PlayerEntity extends MovingEntity {
 			screen.setEntityPopup(popup);
 		}else if(entityClicked instanceof BasicStructure){
 			moveTo(entityClicked);
+		}else if(entityClicked instanceof MovingEntity){
+			follow(entityClicked);
 		}
 		return false;
 	}
@@ -184,8 +206,8 @@ public class PlayerEntity extends MovingEntity {
 		return lastSelectedOption;
 	}
 
-	public int getExtraOne() {
-		return Util.getProfessionID(profession);
+	public String getExtraOne() {
+		return 1 + " " + Util.getProfessionID(profession);
 	}
 
 	public boolean isMovable() {

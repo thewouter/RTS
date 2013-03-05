@@ -15,6 +15,7 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.tiles.Tile;
+import walnoot.rtsgame.multiplayer.host.MPMapHost;
 import walnoot.rtsgame.screen.GameScreen;
 
 public abstract class MousePointer {
@@ -51,8 +52,10 @@ public abstract class MousePointer {
 				String material = (String)en.getKey();
 				int cost = (int) en.getValue();
 				if(!handleCosts(material, cost)){ // not enough materials detected!
+					System.out.println(material);
 					for(String key :keysDone){
 						handleCosts(key, -cost);
+						System.out.println(key);
 					}
 					new Sound("src/res/Sounds/airhorn.mp3").play();
 					return;
@@ -74,6 +77,9 @@ public abstract class MousePointer {
 	}
 	
 	private boolean handleCosts(String material, int amount){
+		if(map instanceof MPMapHost){
+			return true;
+		}
 		switch(material){
 		case "gold":
 			if(screen.inventory.getGold() >= amount){

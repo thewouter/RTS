@@ -27,16 +27,15 @@ import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
 import walnoot.rtsgame.map.structures.nonnatural.TentIIStructure;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
-import walnoot.rtsgame.menubar.HomeBar;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
 import walnoot.rtsgame.menubar.MenuBarPopupButton;
-import walnoot.rtsgame.menubar.StatusBar;
 import walnoot.rtsgame.multiplayer.client.InputListener;
 import walnoot.rtsgame.multiplayer.client.MPMapClient;
-import walnoot.rtsgame.multiplayer.host.Player;
 import walnoot.rtsgame.popups.entitypopup.EntityPopup;
+import walnoot.rtsgame.popups.screenpopup.BarracksPopup.Button;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopupButton;
-import walnoot.rtsgame.rest.Inventory;
 import walnoot.rtsgame.rest.MousePointer;
 import walnoot.rtsgame.rest.Sound;
 import walnoot.rtsgame.rest.Util;
@@ -240,7 +239,7 @@ import walnoot.rtsgame.rest.Util;
 					return "Tent I";
 				}
 			});
-			
+
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[7][6], this) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
@@ -253,6 +252,33 @@ import walnoot.rtsgame.rest.Util;
 
 				public String getName() {
 					return "School";
+				}
+			});
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[6][5], this) {
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(map, input, screen) {
+						public Entity toBuild(Direction face) {
+							return new DefenseTower(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY),face);
+						}
+					};
+					
+				}
+
+				public String getName() {
+					return "DefenseTower";
+				}
+			});
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[3][5], this) {
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(map, input, screen) {
+						public Entity toBuild(Direction face) {
+							return new Barracks(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY),face);
+						}
+					};
+					
+				}
+				public String getName() {
+					return "Barracks";
 				}
 			});
 			pointer=null;
@@ -269,13 +295,14 @@ import walnoot.rtsgame.rest.Util;
 					s.popup.hunter.activate();
 				}
 			}
+			
 			return;
 		case 2:
 			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][6], this) {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, input, screen) {
 						public Entity toBuild(Direction face) {
-							return new StoneMine(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+							return new StoneMine(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
 						}
 					};
 				}
@@ -383,9 +410,40 @@ import walnoot.rtsgame.rest.Util;
 		case 7:
 			professionAdded(message);
 			break;
+		case 9:
+			shootArrow(message);
+			break;
+		case 10:
+			pressBarracksPopup(message);
+			break;
 		default:
 			new Exception("invalid message: " + messageID).printStackTrace();
 		}
+	}
+	
+	private void pressBarracksPopup(String message){
+		int select = Util.parseInt(Util.splitString(message).get(1));
+		int uniqueNumber = Util.parseInt(Util.splitString(message).get(2));
+		int buttonID = Util.parseInt(Util.splitString(message).get(3));
+		Entity e = map.getEntity(uniqueNumber);
+		if(e instanceof Barracks){
+			if(select == 1){
+				((Barracks)e).getpopup().getButton(buttonID).amountToBuild++;
+			}else if(select == 2){
+				((Barracks)e).getpopup().getButton(buttonID).amountToBuild--;
+			}
+		}
+	}
+	
+	private void shootArrow(String message){
+		Entity start = map.getEntity(Util.parseInt(Util.splitString(message).get(1)));
+		boolean fromTop = (Util.parseInt(Util.splitString(message).get(2)) == 1)? true : false;
+		Entity end = map.getEntity(Util.parseInt(Util.splitString(message).get(3)));
+		int horSpeed = Util.parseInt(Util.splitString(message).get(4));
+		int maxDistance = Util.parseInt(Util.splitString(message).get(5));
+		
+		map.shootArrowFromHost(start, end, fromTop, horSpeed, maxDistance);
+		
 	}
 	
 	private void professionAdded(String update){
@@ -399,13 +457,25 @@ import walnoot.rtsgame.rest.Util;
 	}
 	
 	private void entityAdded(String entity){
+		//System.out.println(entity);
 		int ID = Util.parseInt(Util.splitString(entity).get(2));
 		int uniqueNumber = Util.parseInt(Util.splitString(entity).get(3));
 		int xPos = Util.parseInt(Util.splitString(entity).get(4));
 		int yPos = Util.parseInt(Util.splitString(entity).get(5));
 		int health = Util.parseInt(Util.splitString(entity).get(6));
-		int extraInfoOne = Util.parseInt(Util.splitString(entity).get(7));
-		Entity e = Util.getEntity(map, ID, xPos, yPos,health, extraInfoOne, uniqueNumber);
+		int number = Util.parseInt(Util.splitString(entity).get(7));
+		int[] extraInfoOne = new int[number + 1];
+		extraInfoOne[0] = number;
+		int n = 8;
+		for(int i = 0; i < number; i++){
+			extraInfoOne[i+1] = Util.parseInt(Util.splitString(entity).get(n));
+			//System.out.println(extraInfoOne[i]);
+			n++;
+		}
+		for(int i: extraInfoOne){
+			System.out.println(i);
+		}
+		Entity e = Util.getEntity(map, this, ID, xPos, yPos,health, extraInfoOne, uniqueNumber);
 		if(Util.parseInt(Util.splitString(entity).get(1)) == 0) e.setOwned(false);
 		e.screen = this;
 		map.addEntityFromHost(e);
@@ -413,10 +483,21 @@ import walnoot.rtsgame.rest.Util;
 	}
 	
 	private void moveEntity(String entity){
-		int uniqueNumber = Util.parseInt(Util.splitString(entity).get(1));
+		int oneOrTwo = Util.parseInt(Util.splitString(entity).get(1));
+		int uniqueNumber = Util.parseInt(Util.splitString(entity).get(2));
 		Entity e = map.getEntity(uniqueNumber);
 		if(e instanceof MovingEntity){
-			((MovingEntity)e).moveToFromHost(new Point(Util.parseInt(Util.splitString(entity).get(2)),Util.parseInt(Util.splitString(entity).get(3))));
+			switch(oneOrTwo){
+			case 1:
+				((MovingEntity)e).moveToFromHost(new Point(Util.parseInt(Util.splitString(entity).get(3)),Util.parseInt(Util.splitString(entity).get(4))));
+				break;
+			case 2:
+				((MovingEntity)e).moveToFromHost(map.getEntity(Util.parseInt(Util.splitString(entity).get(3))));
+				break;
+			case 3:
+				((MovingEntity)e).followFromHost(map.getEntity(Util.parseInt(Util.splitString(entity).get(3))));
+				break;
+			}
 		}
 	}
 	
@@ -429,7 +510,17 @@ import walnoot.rtsgame.rest.Util;
 	}
 
 	public void moveEntity(MovingEntity movingEntity, int x, int y) {
-		String update = 2 + " " + movingEntity.uniqueNumber + " " + x + " " + y; 
+		String update = 2 + " " + 1 + " "+ movingEntity.uniqueNumber + " " + x + " " + y; 
+		listener.update(update);
+	}
+	
+	public void moveEntity(MovingEntity entity, Entity goal){
+		String update = 2 + " " + 2 + " "+ entity.uniqueNumber + " " + goal.uniqueNumber; 
+		listener.update(update);
+	}
+	
+	public void followEntity(MovingEntity entity, Entity goal){
+		String update = 2 + " " + 3 + " " + entity.uniqueNumber + " " + goal.uniqueNumber;
 		listener.update(update);
 	}
 	
@@ -485,6 +576,18 @@ import walnoot.rtsgame.rest.Util;
 
 	public void stopHunting(Entity owner) {
 		listener.update(8 + " " + owner.uniqueNumber + " " + 2);
+	}
+	
+	public void shootArrow(Entity start, Entity end, boolean fromTop, int horSpeed, int maxDistance){
+		listener.update(9 + " " + start.uniqueNumber + " " + ( fromTop ? "1" : " 0" ) + " " + end.uniqueNumber + " " + horSpeed + " " + maxDistance);
+	}
+	
+	public void barracksPopupButtonSelected(Button b, Barracks barrack){
+		listener.update(10 + " 1 " + barrack.uniqueNumber + " " + b.getButtonID());
+	}
+	
+	public void barracksPopupButtonDeselected(Button b, Barracks barrack){
+		listener.update(10 + " 2 " + barrack.uniqueNumber + " " + b.getButtonID());
 	}
 }
 

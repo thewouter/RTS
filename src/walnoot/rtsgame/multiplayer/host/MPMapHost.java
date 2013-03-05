@@ -11,6 +11,7 @@ import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.professions.Profession;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
 import walnoot.rtsgame.rest.Util;
 
 public class MPMapHost extends Map implements Cloneable{
@@ -21,7 +22,7 @@ public class MPMapHost extends Map implements Cloneable{
 		this.host = host;
 	}
 	
-	public void update(int translationX, int translationY, int screenWidth, int screenHeight){
+	public synchronized void update(int translationX, int translationY, int screenWidth, int screenHeight){
 		for(Entity e: getEntities()){
 			if(e.xPos + e.yPos + 2 > - ((translationY) / 8) && e.xPos + e.yPos - 1 < - ((translationY - screenHeight - 128)/ 8) && e.xPos - e.yPos - 3 < ((translationX) / 16) && e.xPos - e.yPos + 1 > ((translationX - screenWidth) / 16)) {
 				e.update();
@@ -47,12 +48,12 @@ public class MPMapHost extends Map implements Cloneable{
 		render(g, new Point(0,0), new Dimension(1000, 1000), 1000, 1000);
 	}
 	
-	public void addEntity(Entity e){
+	public synchronized void addEntity(Entity e){
 		super.addEntity(e);
 		if(host != null) host.entityAdded(e, e.owner);
 	}
 	
-	public void addEntity(LinkedList<Entity> entities){
+	public synchronized void addEntity(LinkedList<Entity> entities){
 		for(Entity e:entities){
 			addEntity(e);
 		}
@@ -67,5 +68,8 @@ public class MPMapHost extends Map implements Cloneable{
 		host.addProfession(p, prof);
 	}
 	
-	
+	public void shootArrow(Entity start, Entity end, boolean fromTop, int horSpeed, int distance){
+		super.shootArrow(start, end, fromTop, horSpeed, distance);
+		host.arrowShot(start, end, fromTop, horSpeed, distance);
+	}
 }

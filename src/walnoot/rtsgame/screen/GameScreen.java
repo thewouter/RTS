@@ -18,6 +18,7 @@ import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
 import walnoot.rtsgame.map.structures.nonnatural.TentIIStructure;
 import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
 import walnoot.rtsgame.menubar.Button;
 import walnoot.rtsgame.menubar.HomeBar;
 import walnoot.rtsgame.menubar.MenuBarPopupButton;
@@ -57,11 +58,29 @@ public abstract class GameScreen extends Screen {
 		};
 
 		inventory.addGold(500);
-		inventory.addWood(70);
-		inventory.addStone(50);
+		inventory.addWood(170);
+		inventory.addStone(150);
 		inventory.addVegetables(10);
 		inventory.addMeat(10);
 		inventory.addIronOre(20);
+		
+		bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[0][7], this) {
+			public void onLeftClick() {
+				pointer = new MousePointer(map, this.screen.input, this.screen) {
+					public Entity toBuild(Direction face) {
+						return null;
+					}
+					public void afterBuild(){
+						for(Entity e:selectedEntities){
+							map.removeEntity(e);
+						}
+					}
+				};
+			}
+			public String getName() {
+				return "remove";
+			}
+		});
 		
 	}
 	
@@ -215,6 +234,19 @@ public abstract class GameScreen extends Screen {
 					return "School";
 				}
 			});
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[6][5], this) {
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(map, input, screen) {
+						public Entity toBuild(Direction face) {
+							return new DefenseTower(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
+						}
+					};
+				}
+				public String getName() {
+					return "DefenseTower";
+				}
+			});
+			
 			pointer=null;
 			for(Entity e:map.getEntities()){
 				if(e instanceof SchoolI){
@@ -236,7 +268,7 @@ public abstract class GameScreen extends Screen {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, input, screen) {
 						public Entity toBuild(Direction face) {
-							return new StoneMine(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY));
+							return new StoneMine(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), Direction.SOUTH_WEST);
 						}
 					};
 				}

@@ -64,7 +64,7 @@ public abstract class Entity implements Cloneable {
 	/**
 	 * @return extra information for save
 	 */
-	public abstract int getExtraOne();
+	public abstract String getExtraOne();
 	
 	/**
 	 * @param entityClicked Entity that is right-clicked

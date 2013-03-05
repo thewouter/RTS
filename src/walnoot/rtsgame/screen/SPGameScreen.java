@@ -13,6 +13,7 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.Save;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
+import walnoot.rtsgame.map.entities.players.Bow;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.Shield;
 import walnoot.rtsgame.map.entities.players.Soldier;
@@ -50,6 +51,8 @@ public class SPGameScreen extends GameScreen {
 		
 		for(int y = 10; y < map.getLength(); y++){
 			if(!map.getTile(10, y).isSolid()){
+				/*Soldier p = new Soldier(map, this, 10 , y, null);
+				p.addSoldierComponent(new Bow(p));*/
 				PlayerEntity p = new PlayerEntity(map, this, 10, y, null);
 				p.setProfession(new Founder(p));
 				map.addEntity(p);
@@ -58,25 +61,6 @@ public class SPGameScreen extends GameScreen {
 				break;
 			}
 		}
-		
-		bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[0][7], this) {
-			public void onLeftClick() {
-				pointer = new MousePointer(map, this.screen.input, this.screen) {
-					public Entity toBuild(Direction face) {
-						return null;
-					}
-					public void afterBuild(){
-						for(Entity e:selectedEntities){
-							map.removeEntity(e);
-						}
-					}
-				};
-			}
-			
-			public String getName() {
-				return "remove";
-			}
-		});
 	}
 
 	public void save(){

@@ -4,7 +4,7 @@ import walnoot.rtsgame.map.entities.Entity;
 
 public class Sword extends Weapon {
 	int damage;
-	private static int ID = 501;
+	private static int ID = 602;
 
 	public Sword(Soldier owner, int damage) {
 		super(owner, ID);
