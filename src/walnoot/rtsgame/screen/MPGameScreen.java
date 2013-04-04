@@ -30,6 +30,7 @@ import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
 import walnoot.rtsgame.menubar.MenuBarPopupButton;
+import walnoot.rtsgame.multiplayer.client.Chat;
 import walnoot.rtsgame.multiplayer.client.InputListener;
 import walnoot.rtsgame.multiplayer.client.MPMapClient;
 import walnoot.rtsgame.popups.entitypopup.EntityPopup;
@@ -42,18 +43,13 @@ import walnoot.rtsgame.rest.Util;
 
 	public class MPGameScreen extends GameScreen {
 	public MPMapClient map;
-	
 	public int port;
-	
 	public String IP;
-	
 	private InputListener listener;
-	
 	private Socket socket;
-	
 	private boolean isLoaded = false;
-	
 	private ArrayList<String> messagesToHandle = new ArrayList<>();
+	private Chat chat = new Chat(this);
 
 
 	public MPGameScreen(RTSComponent component, InputHandler input, int port, String IP){
@@ -98,7 +94,7 @@ import walnoot.rtsgame.rest.Util;
 
 	public void load(String nameFile){}
 
-	public void update(){
+	public synchronized void update(){
 		if(!pause){
 			if(input.up.isPressed()) translationY += 5;
 			if(input.down.isPressed()) translationY -= 5;
@@ -111,88 +107,87 @@ import walnoot.rtsgame.rest.Util;
 					pointer = null;
 				}
 			}
-			
-			map.update((int) Math.floor(translationX), (int) Math.floor(translationY), getWidth(), getHeight());
-
-			bar.update(getWidth(), getHeight());
-			
-			statusBar.update(getWidth(), getHeight());
-		
-			if(input.space.isPressed() && selectedEntities != null && !selectedEntities.isEmpty()) targetEntity = selectedEntities.getFirst();
-		
-			if(targetEntity != null){
-				int dx = targetEntity.getScreenX() + (translationX - getWidth() / 2);
-				int dy = targetEntity.getScreenY() + (translationY - getHeight() / 2);
-				
-				translationX -= dx / 10;
-				translationY -= dy / 10;
-			
-				if(Util.abs(dx) < 10 && Util.abs(dy) < 10) targetEntity = null;
-			}
-		
-			if(input.LMBTapped()){
-				if(entityPopup != null){
-					entityPopup.onLeftClick(input.getMouseX(), input.getMouseY());
-				}else selectedEntities.clear();
-				
-				if(bar.isInBar(input.getMouseX(), input.getMouseY())){
-					
-				}else if(entityPopup != null && !entityPopup.isInPopup(input.getMouseX(), input.getMouseY()) ){
-					selectedEntities.clear();
-					selectedEntities.addAll(map.getEntities(getMapX(), getMapY()));
-				}else if( entityPopup == null ){
-					selectedEntities.addAll(map.getEntities(getMapX(), getMapY()));
-				}
-			}
-			
-			if(entityPopup != null){
-				entityPopup.update(input.getMouseX(), input.getMouseY());
-				if(!selectedEntities.contains(entityPopup.getOwner())) entityPopup = null;
-			}
-
-			if(input.wasDragging() && (popup == null || !popup.isInPopup(input.mouseX, input.mouseY))){
-				int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
-				selectedEntities.clear();
-				LinkedList<Entity> inRange = (map.getEntities(x1, y1 , x2, y2, new Dimension(translationX, translationY)));
-				ArrayList<Entity> structures = new ArrayList<Entity>();
-				for( Entity e:inRange){
-					if(e instanceof MovingEntity){
-						selectedEntities.add(e);
-					}else if(e instanceof Structure){
-						structures.add(e);
-					}
-				}
-				if(selectedEntities.size() == 0){
-					selectedEntities.addAll(structures);
-				}
-			}
-			
-			if(input.RMBTapped()){
-				
-				Entity rightClicked = map.getEntity(getMapX(), getMapY()); //the Entity that is right clicked, if any
-				boolean canMove = true;
-				
-				if(rightClicked != null && !selectedEntities.isEmpty()) {
-					canMove = selectedEntities.getFirst().onRightClick(rightClicked, this, input);
-				}
-				
-				if(canMove){
-					if(!selectedEntities.isEmpty() && selectedEntities.getFirst() instanceof MovingEntity){
-						if(((MovingEntity)selectedEntities.getFirst()).isMovable()){
-							((MovingEntity) selectedEntities.getFirst()).moveTo(new Point(getMapX(), getMapY()));
-							entityPopup = null;
-						}
-					}
-				}
-			}
-			LinkedList<Entity> remove = new LinkedList<Entity>();
-			for(Entity e: selectedEntities){
-				if(!map.getEntities().contains(e)) remove.add(e);
-			}
-			
-			selectedEntities.removeAll(remove);
-			
 		}
+		map.update((int) Math.floor(translationX), (int) Math.floor(translationY), getWidth(), getHeight());
+		bar.update(getWidth(), getHeight());
+		
+		statusBar.update(getWidth(), getHeight());
+	
+		if(input.space.isPressed() && selectedEntities != null && !selectedEntities.isEmpty()) targetEntity = selectedEntities.getFirst();
+	
+		if(targetEntity != null){
+			int dx = targetEntity.getScreenX() + (translationX - getWidth() / 2);
+			int dy = targetEntity.getScreenY() + (translationY - getHeight() / 2);
+			
+			translationX -= dx / 10;
+			translationY -= dy / 10;
+		
+			if(Util.abs(dx) < 10 && Util.abs(dy) < 10) targetEntity = null;
+		}
+	
+		if(input.LMBTapped()){
+			if(entityPopup != null){
+				entityPopup.onLeftClick(input.getMouseX(), input.getMouseY());
+			}else selectedEntities.clear();
+			
+			if(bar.isInBar(input.getMouseX(), input.getMouseY())){
+				
+			}else if(entityPopup != null && !entityPopup.isInPopup(input.getMouseX(), input.getMouseY()) ){
+				selectedEntities.clear();
+				selectedEntities.addAll(map.getEntities(getMapX(), getMapY()));
+			}else if( entityPopup == null ){
+				selectedEntities.addAll(map.getEntities(getMapX(), getMapY()));
+			}
+		}
+		
+		if(entityPopup != null){
+			entityPopup.update(input.getMouseX(), input.getMouseY());
+			if(!selectedEntities.contains(entityPopup.getOwner())) entityPopup = null;
+		}
+		if(input.wasDragging() && (popup == null || !popup.isInPopup(input.mouseX, input.mouseY))){
+			int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
+			selectedEntities.clear();
+			LinkedList<Entity> inRange = (map.getEntities(x1, y1 , x2, y2, new Dimension(translationX, translationY)));
+			ArrayList<Entity> structures = new ArrayList<Entity>();
+			for( Entity e:inRange){
+				if(e instanceof MovingEntity){
+					selectedEntities.add(e);
+				}else if(e instanceof Structure){
+					structures.add(e);
+				}
+			}
+			if(selectedEntities.size() == 0){
+				selectedEntities.addAll(structures);
+			}
+		}
+		
+		if(input.RMBTapped()){
+			
+			Entity rightClicked = map.getEntity(getMapX(), getMapY()); //the Entity that is right clicked, if any
+			boolean canMove = true;
+			
+			if(rightClicked != null && !selectedEntities.isEmpty()) {
+				canMove = selectedEntities.getFirst().onRightClick(rightClicked, this, input);
+			}
+			
+			if(canMove){
+				if(!selectedEntities.isEmpty() && selectedEntities.getFirst() instanceof MovingEntity){
+					if(((MovingEntity)selectedEntities.getFirst()).isMovable()){
+						((MovingEntity) selectedEntities.getFirst()).moveTo(new Point(getMapX(), getMapY()));
+						entityPopup = null;
+					}
+				}
+			}
+		}
+		LinkedList<Entity> remove = new LinkedList<Entity>();
+		for(Entity e: selectedEntities){
+			if(!map.getEntities().contains(e)) remove.add(e);
+		}
+		
+		selectedEntities.removeAll(remove);
+		
+		chat.update();
+		
 		if (input.p.isTapped()&& popup == null){
 			if(!pause)pause();
 			else dePause();
@@ -216,10 +211,11 @@ import walnoot.rtsgame.rest.Util;
 		
 	}
 	
-	public void render(Graphics g){
+	public synchronized void render(Graphics g){
 		Point translation = new Point((int) translationX, (int) translationY);
 		map.render(g, translation, new Dimension(getWidth(), getHeight()), getWidth(), getHeight());
 		super.render(g);
+		chat.render(g);
 	}
 	
 	public void levelUp(){
@@ -385,7 +381,11 @@ import walnoot.rtsgame.rest.Util;
 		return (x >0 && x < getWidth() && y > 0 && y < getHeight() && !bar.isInBar(x, y) && !statusBar.isInBar(x, y));
 	}
 	
-	public void messageReceived(String message){
+	public void sendMessage(String message){
+		listener.update(1 + " " + message);
+	}
+	
+	public synchronized void messageReceived(String message){
 		if(!isLoaded() ){
 			messagesToHandle.add(message);
 			return;
@@ -393,7 +393,7 @@ import walnoot.rtsgame.rest.Util;
 		int messageID = Util.parseInt(Util.splitString(message).get(0));
 		switch(messageID){
 		case 1:
-			System.out.println(message);
+			chat.messageReceived(message);
 			break;
 		case 2:
 			moveEntity(message);
@@ -471,9 +471,6 @@ import walnoot.rtsgame.rest.Util;
 			extraInfoOne[i+1] = Util.parseInt(Util.splitString(entity).get(n));
 			//System.out.println(extraInfoOne[i]);
 			n++;
-		}
-		for(int i: extraInfoOne){
-			System.out.println(i);
 		}
 		Entity e = Util.getEntity(map, this, ID, xPos, yPos,health, extraInfoOne, uniqueNumber);
 		if(Util.parseInt(Util.splitString(entity).get(1)) == 0) e.setOwned(false);

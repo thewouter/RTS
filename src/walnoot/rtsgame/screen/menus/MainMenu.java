@@ -37,7 +37,7 @@ public class MainMenu extends MenuScreen {
 				else setPopup(null);
 			}
 		});
-		setPopup(popup);
+		//setPopup(popup);
 	}
 	
 	public void render(Graphics g){

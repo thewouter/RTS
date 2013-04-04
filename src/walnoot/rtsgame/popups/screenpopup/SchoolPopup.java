@@ -7,12 +7,12 @@ import java.util.LinkedList;
 
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
-import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.professions.Profession;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
+import walnoot.rtsgame.rest.RTSFont;
 import walnoot.rtsgame.screen.Screen;
 
 public class SchoolPopup extends ScreenPopup{

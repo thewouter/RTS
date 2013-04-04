@@ -19,28 +19,30 @@ public class Pathfinder extends Thread {
 	private final Tile[][] currentMap;
 	private final Map map;
 	private final ArrayList<Entity> copyOfEntities;
+	private final boolean fromEndPoint;
 	
 	private Node finalNode;
 	
-	public static void moveTo(MovingEntity requester, Point start, Point goal, Map map, ArrayList<Entity> copyOfEntities){
+	public static void moveTo(MovingEntity requester, Point start, Point goal, Map map, ArrayList<Entity> copyOfEntities, boolean fromEndPoint){
 		if(map.isSolid(goal)){
 			return;
 		}
 		
-		new Pathfinder(requester, start, goal, map.getSurface(), map, copyOfEntities).start();
+		new Pathfinder(requester, start, goal, map.getSurface(), map, copyOfEntities, fromEndPoint).start();
 	}
 	
-	private Pathfinder(MovingEntity requester ,Point start, Point goal, Tile[][] currentMap, Map map, ArrayList<Entity> copyOfEntities){
+	private Pathfinder(MovingEntity requester ,Point start, Point goal, Tile[][] currentMap, Map map, ArrayList<Entity> copyOfEntities, boolean fromEndPoint){
 		this.start = start;
 		this.goal = goal;
 		this.currentMap = currentMap;
 		this.requester = requester;
 		this.map = map;
 		this.copyOfEntities = copyOfEntities;
+		this.fromEndPoint = fromEndPoint;
 	}
 	
 	public void run(){
-		requester.setNextDirections(getPath());
+		requester.setNextDirections(getPath(), fromEndPoint);
 		requester.setEndPoint(goal);
 		
 		if(requester.map instanceof MPMapHost){

@@ -103,8 +103,8 @@ public class PlayerEntity extends MovingEntity {
 		
 	}
 	
-	public void setNextDirections(LinkedList<Direction> toSet){
-		super.setNextDirections(toSet);
+	public void setNextDirections(LinkedList<Direction> toSet, boolean fromEndPoint){
+		super.setNextDirections(toSet, fromEndPoint);
 		if(profession != null){
 			profession.walkingCalculated();
 		}

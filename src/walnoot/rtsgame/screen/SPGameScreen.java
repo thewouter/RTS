@@ -53,8 +53,11 @@ public class SPGameScreen extends GameScreen {
 			if(!map.getTile(10, y).isSolid()){
 				/*Soldier p = new Soldier(map, this, 10 , y, null);
 				p.addSoldierComponent(new Bow(p));*/
-				PlayerEntity p = new PlayerEntity(map, this, 10, y, null);
+				PlayerEntity p = new PlayerEntity(map, this, 11, y, null);
 				p.setProfession(new Founder(p));
+				PlayerEntity n = new PlayerEntity(map, this, 10, y, null);
+				p.setProfession(new Founder(p));
+				map.addEntity(n);
 				map.addEntity(p);
 				selectedEntities.add(p);
 				map.addEntity(new IronSmelter(map, this, 10, y + 10, Direction.WEST));

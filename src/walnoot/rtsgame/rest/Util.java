@@ -291,7 +291,7 @@ public class Util {
 	}
 	
 	public static Profession getProfession(int ID, PlayerEntity player){
-		System.out.println(ID);
+		//System.out.println(ID);
 		switch(ID){
 		case(400):
 			return new LumberJacker(player);

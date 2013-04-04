@@ -98,8 +98,8 @@ public abstract class GameScreen extends Screen {
 		}else if(!selectedEntities.isEmpty()){
 			font.drawBoldLine(g, "Multiple Select: " + selectedEntities.size(), 20, getHeight() - 30, Color.BLACK);
 		}
-		//font.drawBoldLine(g, getMapX() + ":" + getMapY(), 20, 20, Color.BLACK);
-		font.drawBoldLine(g, (input.mouseX - translationX) + ":" + (input.mouseY - translationY), 20, 20, Color.BLACK);
+		font.drawBoldLine(g, getMapX() + ":" + getMapY(), 20, 20, Color.BLACK);
+		//font.drawBoldLine(g, (input.mouseX - translationX) + ":" + (input.mouseY - translationY), 20, 20, Color.BLACK);
 		
 		if(input.isDragging()){
 			int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;

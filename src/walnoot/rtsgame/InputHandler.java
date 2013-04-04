@@ -8,9 +8,11 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class InputHandler implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 	private ArrayList<Key> keylist = new ArrayList<Key>();
+	public LinkedList<Key> inputKeys = new LinkedList<Key>();
 
 	public Key left = new Key("", KeyEvent.VK_LEFT, KeyEvent.VK_A);
 	public Key fullScreen = new Key("", KeyEvent.VK_F11);
@@ -74,6 +76,44 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 	
 	private InputHandler(){
 		//Only InputHandler can initialize an InputHandler object
+		inputKeys.add(a);
+		inputKeys.add(b);
+		inputKeys.add(c);
+		inputKeys.add(d);
+		inputKeys.add(e);
+		inputKeys.add(f);
+		inputKeys.add(g);
+		inputKeys.add(h);
+		inputKeys.add(i);
+		inputKeys.add(j);
+		inputKeys.add(k);
+		inputKeys.add(l);
+		inputKeys.add(m);
+		inputKeys.add(n);
+		inputKeys.add(o);
+		inputKeys.add(p);
+		inputKeys.add(q);
+		inputKeys.add(r);
+		inputKeys.add(t);
+		inputKeys.add(s);
+		inputKeys.add(u);
+		inputKeys.add(v);
+		inputKeys.add(w);
+		inputKeys.add(x);
+		inputKeys.add(y);
+		inputKeys.add(z);
+		inputKeys.add(space);
+		inputKeys.add(n0);
+		inputKeys.add(n1);
+		inputKeys.add(n2);
+		inputKeys.add(n3);
+		inputKeys.add(n4);
+		inputKeys.add(n5);
+		inputKeys.add(n6);
+		inputKeys.add(n7);
+		inputKeys.add(n8);
+		inputKeys.add(n9);
+		inputKeys.add(dot);
 	}
 	
 	public void update(){

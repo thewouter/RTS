@@ -12,6 +12,7 @@ import com.sun.xml.internal.ws.encoding.MimeMultipartParser;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
+import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.Soldier;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.multiplayer.client.MPMapClient;
@@ -24,84 +25,50 @@ public abstract class MovingEntity extends Entity {
 	protected double timeTraveled; //hoelang hij onderweg is
 	private Entity goal = null;
 	public Entity entityGoal = null;
-	private Point entPoint = new Point(0,0);
+	private Point entPoint = new Point(0,0), targetPoint = new Point (0,0);
+	Direction nextDirection = null;
 	
 	public LinkedList<Direction> nextDirections = new LinkedList<Direction>();
 	private LinkedList<Direction> nextNextDirections = null;
+	private LinkedList<Direction> addNextDirections = null;
 	
 	public MovingEntity(Map map, GameScreen screen, int xPos, int yPos,  int ID){
 		super(map, xPos, yPos, ID, screen);
 	}
 	
 	public void update(){
-		if(nextNextDirections != null){
+		if(addNextDirections != null){
+			nextDirections.addAll(addNextDirections);
+			addNextDirections = null;
+		}else if(nextNextDirections != null){
 			nextDirections = nextNextDirections;
+			nextNextDirections = null;
 		}else if(nextDirections == null){
 			nextDirections = new LinkedList<Direction>();
 		}
-		
-		Direction nextDirection = null;
-		if(nextDirections.isEmpty()){
-			if(goal != null){
-				if(goal instanceof MovingEntity){
-					int dx = goal.xPos - this.xPos;
-					int dy = goal.yPos - this.yPos;
-	
-					if(Util.abs(dx) <= 1 && Util.abs(dy) <= 1) return;
-	
-					if(dx > 1) dx = 1;
-					if(dx < -1) dx = -1;
-					
-					if(dy > 1) dy = 1;
-					if(dy < -1) dy = -1;
-	
-					nextDirections.add(Direction.getDirection(dx, dy));
-				}else if(goal instanceof BasicStructure){
-					entityGoal = goal;
-					int xGoal = goal.xPos;
-					int yGoal = goal.yPos;
-					int size = ((BasicStructure)goal).getSize();
-					double closest = map.surface.length;
-					int closestX = -1;
-					int closestY = -1;
-					
-					for(int x = 0; x < size; x++){
-						for(int y = 0; y < size; y++){
-							int xp = xGoal - x;
-							int yp = yGoal - y;
-							if(Math.sqrt((xp - xPos) * (xp - xPos) + (yp - yPos)*(yp - yPos)) < closest){
-								 closest = Math.sqrt((xp - xPos) * (xp - xPos) + (yp - yPos)*(yp - yPos));
-								 closestX = x;
-								 closestY = y;
-							}
-						}
-					}
-					
-					int moveToX = goal.xPos;
-					int moveToY  = goal.yPos;
-					
-					if(closestX == 0){
-						moveToX += size;
-					}else if(closestX == size - 1){
-						moveToX -= 1;
-					}
-					if(closestY == 0){
-						moveToY += size;
-					}else if(closestY == size - 1){
-						moveToY -= 1;
-					}
-					moveTo(new Point(moveToX,moveToY));
-					goal = null;
-					
+		if(goal != null){
+			if(goal instanceof MovingEntity){
+				if(Util.abs(goal.xPos - targetPoint.x) > 0.1|| Util.abs(goal.yPos - targetPoint.y) > 0.1){
+					targetPoint = new Point(goal.xPos,goal.yPos);
+					int[] result = getClosestMovePoint(goal, xPos, yPos);
+					ArrayList<Entity> e = new ArrayList<Entity>();
+					e.addAll(map.getEntities());
+					Pathfinder.moveTo(this,new Point(xPos, yPos), new Point(result[0], result[1]), map, e, false);
 				}
-			}else return;
+			}else if(goal instanceof BasicStructure){
+				entityGoal = goal;
+				int[] movePoint = getClosestMovePoint(goal, xPos, yPos);
+				targetPoint = new Point(goal.xPos,goal.yPos);
+				moveTo(new Point(movePoint[0], movePoint[1]));
+				goal = null;
+			}
 		}
+		
 		
 		if(!nextDirections.isEmpty()) {
-			nextDirection = nextDirections.get(0);
+			if(nextDirection == null) nextDirection = nextDirections.get(0);
 			timeTraveled += RTSComponent.MS_PER_TICK / (getTravelTime() * (nextDirection.isDiagonal() ? Math.sqrt(2) : 1.0));
 		}
-		
 		
 		while(timeTraveled > 1){
 			timeTraveled -= 1;
@@ -110,16 +77,45 @@ public abstract class MovingEntity extends Entity {
 				timeTraveled = 0;
 				onStopMoving();
 			}
-			
 			xPos += nextDirection.getxOffset();
 			yPos += nextDirection.getyOffset();
 			
 			if(!nextDirections.isEmpty()) nextDirections.remove(0);
+			nextDirection = null;
 		}
 	}
 	
-	public void setNextDirections(LinkedList<Direction> toSet){
-		nextNextDirections = toSet;
+	public int[] getClosestMovePoint(Entity goal, int xPos, int yPos){
+		int size = 1;
+		int closestX = 0, closestY = 0;
+		int closestDistance = map.getLength();
+		if(goal instanceof BasicStructure) size = ((BasicStructure) goal).getSize();
+		for(int x = goal.xPos - 1; x < goal.xPos + 1 + size; x++){
+			for(int y = goal.yPos - 1; y < goal.yPos + size + 1; y++){
+				Entity e = map.getEntity(x,y);
+				if(e == null && !map.isSolid(new Point(x,y))){
+					int distance = Util.getDistance(xPos, yPos, x, y);
+					if(distance <= closestDistance){
+						closestX = x;
+						closestY = y;
+						closestDistance = distance;
+					}
+				}
+			}
+		}
+		int[] result = {closestX,closestY};
+		return result;
+	}
+	
+	public void setNextDirections(LinkedList<Direction> toSet, boolean fromEndPoint){
+		if(!fromEndPoint) {
+			nextNextDirections = toSet;
+			//System.out.println(toSet);
+			//System.out.println(fromEndPoint);
+		}else {
+			addNextDirections = toSet;
+			//System.out.println(fromEndPoint);
+		}
 	}
 	
 	protected void onStopMoving(){
@@ -165,11 +161,11 @@ public abstract class MovingEntity extends Entity {
 			((MPGameScreen)screen).moveEntity(this, goal.x, goal.y);
 			return;
 		}
-		//this.entityGoal = null;
 		this.goal = null;
 		ArrayList<Entity> e = new ArrayList<Entity>();
 		e.addAll(map.getEntities());
-		Pathfinder.moveTo(this,new Point(xPos, yPos), goal, map, e);
+		//if(this instanceof PlayerEntity) System.out.println("gooo to " + goal);
+		Pathfinder.moveTo(this,new Point(xPos, yPos), goal, map, e, false);
 	}
 	
 	public void moveTo(Entity goal){
@@ -186,7 +182,7 @@ public abstract class MovingEntity extends Entity {
 		this.goal = null;
 		ArrayList<Entity> e = new ArrayList<Entity>();
 		e.addAll(map.getEntities());
-		Pathfinder.moveTo(this,new Point(xPos, yPos), goal, map, e);
+		Pathfinder.moveTo(this,new Point(xPos, yPos), goal, map, e, false);
 	}
 	
 	public void moveToFromHost(Entity goal){
@@ -202,7 +198,7 @@ public abstract class MovingEntity extends Entity {
 		int x = super.getScreenX();
 		
 		Direction direction = null;
-		if(nextDirections != null && !nextDirections.isEmpty()) direction = nextDirections.get(0);
+		if(nextDirections != null && !nextDirections.isEmpty()) direction = nextDirection;
 		
 		if(direction != null) x += Math.round(direction.getPointOnScreen().x * timeTraveled);
 		
@@ -213,7 +209,7 @@ public abstract class MovingEntity extends Entity {
 		int y = super.getScreenY();
 		
 		Direction direction = null;
-		if(nextDirections != null && !nextDirections.isEmpty()) direction = nextDirections.get(0);
+		if(nextDirections != null && !nextDirections.isEmpty()) direction = nextDirection;
 		
 		if(direction != null) y += Math.round(direction.getPointOnScreen().y * timeTraveled);
 		

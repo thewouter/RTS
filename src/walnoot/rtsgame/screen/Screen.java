@@ -9,8 +9,8 @@ import java.awt.Point;
 import walnoot.rtsgame.Images;
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
-import walnoot.rtsgame.RTSFont;
 import walnoot.rtsgame.popups.screenpopup.ScreenPopup;
+import walnoot.rtsgame.rest.RTSFont;
 
 /**
  * Een Screen staat voor een deel van het spel, zoals het hoofdmenu, of game

@@ -1,4 +1,4 @@
-package walnoot.rtsgame;
+package walnoot.rtsgame.rest;
 
 import java.awt.Color;
 import java.awt.Graphics;

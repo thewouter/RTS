@@ -3,7 +3,7 @@ package walnoot.rtsgame.menubar;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import walnoot.rtsgame.RTSFont;
+import walnoot.rtsgame.rest.RTSFont;
 import walnoot.rtsgame.screen.Screen;
 
 public abstract class MenubarTextField extends Button{
