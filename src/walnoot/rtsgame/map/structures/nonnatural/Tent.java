@@ -8,23 +8,25 @@ import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.structures.BasicStructure;
-import walnoot.rtsgame.multiplayer.host.MPHost;
 import walnoot.rtsgame.multiplayer.host.MPMapHost;
 import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.MPGameScreen;
 
-public class TentIStructure extends BasicStructure {
-	
-	public final static int ID = 201, TIME_TO_SPAWN_A_PLAYER = 120, MAX_PLAYERS = 2;
+public class Tent extends BasicStructure{
+
+	private int amountOfPlayers;
+	public final static int ID = 201, TIME_TO_SPAWN_A_PLAYER = 120;
 	private int time = 0;
 	public LinkedList<PlayerEntity> players = new LinkedList<PlayerEntity>();
-	public TentIStructure(Map map, GameScreen screen, int xPos, int yPos, Direction front){
+	public Tent(Map map, GameScreen screen, int xPos, int yPos, Direction front, int amountOfPlayers){
 		super(map, screen, xPos, yPos,  0, 0,ID, front);
+		this.setAmountOfPlayers(amountOfPlayers);
 	}
 	
-	public TentIStructure(Map map, GameScreen screen ,int xPos, int yPos, int health, Direction front){
+	public Tent(Map map, GameScreen screen ,int xPos, int yPos, int health, Direction front, int amountOfPlayers){
 		super(map,screen,xPos,yPos, 0, 0, ID, front);
 		this.health = health;
+		this.setAmountOfPlayers(amountOfPlayers);
 	}
 	
 	public int getHeadSpace(){
@@ -37,8 +39,8 @@ public class TentIStructure extends BasicStructure {
 	
 	public void update(){
 		LinkedList<Entity> toBeAddedToTheMap = new LinkedList<Entity>();
-		if(players.size() < MAX_PLAYERS)time++;
-		if(time >= TIME_TO_SPAWN_A_PLAYER && players.size() < MAX_PLAYERS && screen != null && !(screen instanceof MPGameScreen)){
+		if(players.size() < amountOfPlayers)time++;
+		if(time >= TIME_TO_SPAWN_A_PLAYER && players.size() < amountOfPlayers && screen != null && !(screen instanceof MPGameScreen)){
 			PlayerEntity p = new PlayerEntity(map, screen, xPos + 3, yPos + 3, this);
 			if(map instanceof MPMapHost){
 				p.owner = owner;
@@ -72,11 +74,11 @@ public class TentIStructure extends BasicStructure {
 	}
 	
 	public String getName(){
-		return "Tent";
+		return "Tent for " + amountOfPlayers + " players";
 	}
 
 	public String getExtraOne() {
-		return "0";
+		return amountOfPlayers + "";
 	}
 	
 	public HashMap<String, Integer> getCosts(){
@@ -84,4 +86,13 @@ public class TentIStructure extends BasicStructure {
 		costs.put("gold", 5);
 		return costs;
 	}
+
+	public int getAmountOfPlayers() {
+		return amountOfPlayers;
+	}
+
+	public void setAmountOfPlayers(int amountOfPlayers) {
+		this.amountOfPlayers = amountOfPlayers;
+	}
+
 }

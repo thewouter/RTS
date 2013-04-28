@@ -25,8 +25,8 @@ public class EntityOptionsPopup extends EntityPopup {
 			this.options.add(options[i]);
 		}
 	}
-
-
+	
+	
 	public void render(Graphics g){
 		if(!dimensionsSet) setDimensions();
 		dimensionsSet = true;
@@ -93,6 +93,7 @@ public class EntityOptionsPopup extends EntityPopup {
 	}
 	
 	public void onLeftClick(int mouseX, int mouseY) {
+		//System.out.println("onLeftClick");
 		if(isInPopup(mouseX, mouseY)){
 			indexSelected = (mouseY - 16 - screenY)/RTSFont.HEIGHT;
 			if(getOption(indexSelected) != null){	

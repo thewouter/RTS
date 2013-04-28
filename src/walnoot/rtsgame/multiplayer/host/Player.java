@@ -1,6 +1,7 @@
 package walnoot.rtsgame.multiplayer.host;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class Player extends GameScreen {
 	public MPHost host;
 	public final int ID;
 	private boolean isLoaded = false;
-	
+	private String loginName = "Player";	
 	private static int PLAYERID = 0;
 	
 	private static int getNextPlayerID(){
@@ -28,11 +29,14 @@ public class Player extends GameScreen {
 	
 	public Player(RTSComponent component, InputHandler input, MPHost host, BufferedReader r, PrintStream p, List<Entity> entities) {
 		super(component, input);
-		inventory = host.inventory;
-		
 		ID = getNextPlayerID();
 		
 		this.input = new InputListener(this, r, p);
+		try {
+			setLoginName(this.input.r.readLine().split(" ",2)[1]);
+		} catch (IOException e) {e.printStackTrace();}
+		inventory = host.inventory;
+		
 		this.host = host;
 		
 		this.input.send(host.map.getData());
@@ -74,6 +78,14 @@ public class Player extends GameScreen {
 	
 	public boolean isLoaded(){
 		return isLoaded;
+	}
+
+	public String getLoginName() {
+		return loginName;
+	}
+
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
 	}
 	
 }

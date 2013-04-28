@@ -12,6 +12,8 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
 import walnoot.rtsgame.map.entities.players.professions.Miner;
+import walnoot.rtsgame.map.projectiles.Arrow;
+import walnoot.rtsgame.map.projectiles.Projectile;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.IronMine;
@@ -19,11 +21,9 @@ import walnoot.rtsgame.map.structures.natural.MineStructure;
 import walnoot.rtsgame.map.structures.natural.StoneMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.Farm;
-import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
-import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
 import walnoot.rtsgame.map.tiles.Tile;
+import walnoot.rtsgame.multiplayer.host.MPHost;
 import walnoot.rtsgame.multiplayer.host.MPMapHost;
-import walnoot.rtsgame.popups.screenpopup.BarracksPopup.Button;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.MPGameScreen;
@@ -33,7 +33,7 @@ public class Map {
 	private ArrayList<Entity> entities = new ArrayList<Entity>();
 	public ArrayList<Entity> notOnMap = new ArrayList<Entity>();
 	public LinkedList<Entity> toBeRemoved = new LinkedList<Entity>(), toBeAdded = new LinkedList<Entity>(), toBeRemovedFromMap = new LinkedList<Entity>();
-	private ArrayList<Arrow> arrows = new ArrayList<>(), arrowsToAdd = new ArrayList<>(), arrowsToRemove = new ArrayList<>();
+	private ArrayList<Projectile> projectiles = new ArrayList<>(), projectilesToAdd = new ArrayList<>(), projectilesToRemove = new ArrayList<>();
 	public PerlinNoise2D noiseObj;
 	public int amountSheepGroups = 0;
 	private GameScreen screen;
@@ -101,7 +101,7 @@ public class Map {
 			addSheepGroup(screen);
 		}
 		handleEntityMutations();
-		for(Arrow a: arrows){
+		for(Projectile a: projectiles){
 			a.update();
 		}
 	}
@@ -271,7 +271,7 @@ public class Map {
 		for(Entity e: toSort){
 			e.render(g);
 		}
-		for(Arrow a:arrows){
+		for(Projectile a:projectiles){
 			a.render(g);
 		}
 		
@@ -279,22 +279,28 @@ public class Map {
 	}
 	
 	public void shootArrow(Entity start,Entity end, boolean fromTop, int horSpeed, int distance){
-		shootArrow(start, start.xPos - ((fromTop)? start.getHeadSpace() : 0), start.yPos - ((fromTop)?start.getHeadSpace():0), horSpeed, distance, Util.getDirectionInDegrees(start, end, fromTop));
+		if(screen instanceof MPGameScreen){
+			return; // client is not allowed to shoot arrows
+		}
+		if(this instanceof MPMapHost){
+			((MPMapHost)this).host.arrowShot(start, end, fromTop, horSpeed, distance);
+		}
+		shootArrow(start, start.xPos, start.yPos, horSpeed, Util.getDistance(start, end), Util.getDirectionInDegrees(start, end, false), (fromTop)?start.getHeadSpace():1, distance);
 	}
 	
-	public void shootArrow(Entity owner, int xStart, int yStart, double horSpeed, int distance, int direction){
+	private void shootArrow(Entity owner, int xStart, int yStart, double horSpeed, int distance, int direction, int startHeight, int maxDistance){
 		if(screen instanceof MPGameScreen){
 			return; // client is not allowed to shoot
 		}
-		addArrow(new Arrow(this, owner, xStart, yStart, horSpeed, distance, direction));
+		addProjectile(new Arrow(this, owner, xStart, yStart, horSpeed, distance, direction, startHeight, maxDistance));
 	}
 	
-	public void shootArrowFromHost(Entity owner, int xStart, int yStart, double horSpeed, int distance, int direction){
-		addArrow(new Arrow(this, owner, xStart, yStart, horSpeed, distance, direction));
+	private void shootArrowFromHost(Entity owner, int xStart, int yStart, double horSpeed, int distance, int direction, int startHeight, int maxDistance){
+		addProjectile(new Arrow(this, owner, xStart, yStart, horSpeed, distance, direction, startHeight, maxDistance));
 	}
 	
 	public void shootArrowFromHost(Entity start,Entity end, boolean fromTop, int horSpeed, int distance){
-		shootArrowFromHost(start, start.xPos - ((fromTop)? start.getHeadSpace() : 0), start.yPos - ((fromTop)?start.getHeadSpace():0), horSpeed, distance, Util.getDirectionInDegrees(start, end, fromTop));
+		shootArrowFromHost(start, start.xPos, start.yPos, horSpeed, Util.getDistance(start, end), Util.getDirectionInDegrees(start, end, false), (fromTop)?start.getHeadSpace():1, distance);
 	}
 	
 	public boolean isSolid(Point pos){
@@ -325,22 +331,22 @@ public class Map {
 			Collections.sort(entities, entitySorter);
 		}
 		toBeAdded.clear();
-		arrows.addAll(arrowsToAdd);
-		arrowsToAdd.clear();
-		arrows.removeAll(arrowsToRemove);
-		arrowsToRemove.clear();
+		projectiles.addAll(projectilesToAdd);
+		projectilesToAdd.clear();
+		projectiles.removeAll(projectilesToRemove);
+		projectilesToRemove.clear();
 	}
 	
-	public void addArrow(Arrow arrow){
-		arrowsToAdd.add(arrow);
+	public void addProjectile(Projectile projectile){
+		projectilesToAdd.add(projectile);
 	}
 	
-	public void removeArrow(Arrow arrow){
-		arrowsToRemove.add(arrow);
+	public void removeProjectile(Projectile projectile){
+		projectilesToRemove.add(projectile);
 	}
 	
-	public ArrayList<Arrow> getArrows(){
-		return arrows;
+	public ArrayList<Projectile> getProjectiles(){
+		return projectiles;
 	}
 	
 	public synchronized Entity getEntity(int x, int y){
@@ -639,7 +645,7 @@ public class Map {
 		}
 		String entityData = "";
 		for(Entity e: getEntities()){
-			entityData = entityData + " " + e.getData();
+			entityData = entityData + " " + e.getData() + " ";
 		}
 		
 		data = data + " " + getEntities().size() + entityData;

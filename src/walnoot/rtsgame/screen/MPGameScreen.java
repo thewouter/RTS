@@ -1,6 +1,5 @@
 package walnoot.rtsgame.screen;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -25,8 +24,7 @@ import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.natural.StoneMine;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
-import walnoot.rtsgame.map.structures.nonnatural.TentIIStructure;
-import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
+import walnoot.rtsgame.map.structures.nonnatural.Tent;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
 import walnoot.rtsgame.menubar.MenuBarPopupButton;
@@ -59,6 +57,7 @@ import walnoot.rtsgame.rest.Util;
 		try {
 			socket = new Socket(this.IP, this.port);
 			listener = new InputListener(this,  new BufferedReader(new InputStreamReader(socket.getInputStream())), new PrintStream(socket.getOutputStream()));
+			listener.send("0 " + component.getLoginName());
 		} catch (IOException e) {
 			System.out.println(port);
 			System.out.println(IP);
@@ -200,7 +199,7 @@ import walnoot.rtsgame.rest.Util;
 			popup.update(input.getMouseX(), input.getMouseY());
 		}
 		if(input.LMBTapped() || input.RMBTapped()) {
-			new Sound("src/res/Sounds/klick.mp3").play();
+			new Sound("/res/Sounds/klick.mp3").play();
 		}
 		if(isLoaded()){
 			for(String message: messagesToHandle){
@@ -226,7 +225,7 @@ import walnoot.rtsgame.rest.Util;
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
 						public Entity toBuild(Direction face) {
-							return new TentIStructure(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
+							return new Tent(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face,2);
 						}
 					};
 				}
@@ -311,7 +310,7 @@ import walnoot.rtsgame.rest.Util;
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, input, screen) {
 						public Entity toBuild(Direction face) {
-							return new TentIIStructure(map, screen,Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
+							return new Tent(map, screen,Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face,2);
 						}
 					};
 					
@@ -484,6 +483,7 @@ import walnoot.rtsgame.rest.Util;
 		int uniqueNumber = Util.parseInt(Util.splitString(entity).get(2));
 		Entity e = map.getEntity(uniqueNumber);
 		if(e instanceof MovingEntity){
+			//System.out.println(oneOrTwo);
 			switch(oneOrTwo){
 			case 1:
 				((MovingEntity)e).moveToFromHost(new Point(Util.parseInt(Util.splitString(entity).get(3)),Util.parseInt(Util.splitString(entity).get(4))));
@@ -534,8 +534,10 @@ import walnoot.rtsgame.rest.Util;
 	
 	private void EntityDamaged(String message){
 		Entity e = map.getEntity(Util.parseInt(Util.splitString(message).get(1)));
-		if(e != null) {	// TODO Bugs!
+		if(e != null) {	
 			e.damageFromHost(Util.parseInt(Util.splitString(message).get(2)));
+		}else{
+			System.out.println(Util.parseInt(Util.splitString(message).get(1)));
 		}
 	}
 	

@@ -27,17 +27,20 @@ public class MainMenu extends MenuScreen {
 		
 		ScreenPopup popup = new ScreenPopup((getWidth()-100)/2, (getHeight() - 100)/2, 100, 100, this, true);
 		TextInput userNameInput = new TextInput(popup,input);
-		userNameInput.setText("wouter");
+		userNameInput.setText("");
 		popup.addPart(userNameInput);
 		popup.addPart(new ScreenPopupButton("OK", popup, input) {
 			
 			public void onLeftClick() {
 				String username = owner.getTextInput(1).getOutput();
 				if(!owner.screen.component.isMember(username)) owner.screen.component.stop();
-				else setPopup(null);
+				else {
+					setPopup(null);
+					owner.screen.component.setLoginName(username);
+				}
 			}
 		});
-		//setPopup(popup);
+		if(title.component.getLoginName().equals("Player"))setPopup(popup);
 	}
 	
 	public void render(Graphics g){

@@ -16,7 +16,7 @@ import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.BaseOfOperations;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
-import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
+import walnoot.rtsgame.map.structures.nonnatural.Tent;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.screen.GameScreen;
 
@@ -61,7 +61,6 @@ public class Save {
 				data_out.writeInt(e.getxPos());
 				data_out.writeInt(e.getyPos());
 				data_out.writeInt(e.getHealth());
-				//data_out.write(e.getExtraOne()); TODO: work on this!
 				
 			}
 			
@@ -146,7 +145,7 @@ public class Save {
 						map.addEntity(new CampFireStructure(map,screen,  xPos, yPos, health, Direction.SOUTH_WEST));
 						break;
 					case 201:
-						map.addEntity(new TentIStructure(map,screen,  xPos, yPos, health, Direction.SOUTH_WEST));
+						map.addEntity(new Tent(map,screen,  xPos, yPos, health, Direction.SOUTH_WEST, 2));
 						break;
 					case 202:
 						map.addEntity(new TreeStructure(map,screen,  xPos, yPos, health, Direction.SOUTH_WEST));
@@ -218,7 +217,7 @@ public class Save {
 						map.addEntity(new CampFireStructure(map,null,  xPos, yPos, health, Direction.SOUTH_WEST));
 						break;
 					case 201:
-						map.addEntity(new TentIStructure(map,null,  xPos, yPos, health, Direction.SOUTH_WEST));
+						map.addEntity(new Tent(map,null,  xPos, yPos, health, Direction.SOUTH_WEST, 2));
 						break;
 					case 202:
 						map.addEntity(new TreeStructure(map, null, xPos, yPos, health, Direction.SOUTH_WEST));
@@ -255,7 +254,6 @@ public class Save {
 	
 	private static Map loadV1 (Map map, DataInputStream data_in){
 		try{
-			
 			int width = data_in.readInt();
 			int height = data_in.readInt();
 
@@ -286,7 +284,7 @@ public class Save {
 						map.addEntity(new CampFireStructure(map, null, xPos, yPos, health, Direction.SOUTH_WEST));
 						break;
 					case 201:
-						map.addEntity(new TentIStructure(map,null,  xPos, yPos, health, Direction.SOUTH_WEST));
+						map.addEntity(new Tent(map,null,  xPos, yPos, health, Direction.SOUTH_WEST, 2));
 						break;
 					case 202:
 						map.addEntity(new TreeStructure(map,null,  xPos, yPos, health, Direction.SOUTH_WEST));

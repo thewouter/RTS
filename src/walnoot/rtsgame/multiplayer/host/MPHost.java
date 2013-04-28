@@ -6,15 +6,19 @@ import java.util.LinkedList;
 
 import walnoot.rtsgame.InputHandler;
 import walnoot.rtsgame.RTSComponent;
+import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
+import walnoot.rtsgame.map.entities.players.Bow;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.Soldier;
 import walnoot.rtsgame.map.entities.players.professions.Founder;
 import walnoot.rtsgame.map.entities.players.professions.Hunter;
 import walnoot.rtsgame.map.entities.players.professions.LumberJacker;
 import walnoot.rtsgame.map.entities.players.professions.Miner;
 import walnoot.rtsgame.map.entities.players.professions.Profession;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
 import walnoot.rtsgame.rest.Inventory;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.Screen;
@@ -74,6 +78,11 @@ public class MPHost extends Screen{
 			player.owner = p;
 			player.setProfession(new Founder(player));
 			map.addEntity(player);
+			/*Soldier s = new Soldier(map, p, 5, 5, null);
+			s.addSoldierComponent(new Bow(s));
+			DefenseTower t = new DefenseTower(map, p, 6, 6, Direction.NORTH);
+			t.setGuard(s);
+			map.addEntity(t);*/
 		}
 		toAdd.clear();
 	}
@@ -110,14 +119,15 @@ public class MPHost extends Screen{
 	}
 	
 	public void messageReceived(String message, Player owner) {
-		System.out.println(message);
+		//System.out.println(message);
 		switch(Util.parseInt(Util.splitString(message).get(0))){
 		case 2:
 			moveEntity(message);
 			break;
 		case 1:
+			String messageToSend = "1 " + owner.getLoginName() + " " + message.split(" ", 2)[1];
 			for(Player p: players){
-				p.sendTextMessage(message);
+				p.sendTextMessage(messageToSend);
 			}
 			break;
 		case 3:

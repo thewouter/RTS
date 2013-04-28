@@ -60,4 +60,8 @@ public class DeerEntity extends MovingEntity {
 	public boolean isMovable() {
 		return false;
 	}
+
+	public int getHeadSpace() {
+		return 1;
+	}
 }

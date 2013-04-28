@@ -91,4 +91,8 @@ public class SnakeEntity extends MovingEntity {
 		return false;
 	}
 
+	public int getHeadSpace() {
+		return 1;
+	}
+
 }

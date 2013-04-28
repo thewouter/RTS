@@ -55,11 +55,10 @@ public class SheepEntity extends MovingEntity {
 		super.update();
 		sheepAnimation.update();
 		if(!(map instanceof MPMapClient)){
-			if(!isMoving() && Util.RANDOM.nextInt(1000) < WALK_CHANGE) moveRandomLocation(WALK_RANGE);
-			if(Util.RANDOM.nextInt(APROX_LIFETIME_IN_TICKS) == 0)map.removeEntity(xPos, yPos);
+			//if(!isMoving() && Util.RANDOM.nextInt(1000) < WALK_CHANGE) moveRandomLocation(WALK_RANGE);
+			if(Util.RANDOM.nextInt(APROX_LIFETIME_IN_TICKS) == 0) map.removeEntity(this);
 		}
 	}
-	
 	
 	public boolean onRightClick(Entity entityClicked, SPGameScreen screen, InputHandler input){
 		if(entityClicked == this){
@@ -108,5 +107,9 @@ public class SheepEntity extends MovingEntity {
 	
 	public boolean isMovable(){
 		return true;
+	}
+
+	public int getHeadSpace() {
+		return 1;
 	}
 }

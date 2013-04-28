@@ -19,7 +19,7 @@ import walnoot.rtsgame.map.entities.players.professions.Profession;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
-import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
+import walnoot.rtsgame.map.structures.nonnatural.Tent;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.multiplayer.host.MPHost;
 import walnoot.rtsgame.multiplayer.host.MPMapHost;
@@ -143,7 +143,7 @@ public class PlayerEntity extends MovingEntity {
 			};
 			Option option1 = new Option("add tent",popup) {
 				public void onClick() {
-					map.addEntity(new TentIStructure(map, this.owner.screen, xPos, yPos-2, Direction.SOUTH_WEST));
+					map.addEntity(new Tent(map, this.owner.screen, xPos, yPos-2, Direction.SOUTH_WEST, 2));
 				}
 			};
 			Option dig = new Option("dig", popup){
@@ -166,9 +166,9 @@ public class PlayerEntity extends MovingEntity {
 				}
 			});
 			
-			popup.addOption(new Option("kill", popup) {
+			popup.addOption(new Option("damage", popup) {
 				public void onClick() {
-					this.owner.owner.damage(this.owner.owner.getMaxHealth());
+					this.owner.owner.damage(1);
 				}
 			});
 			popup.addOption(option1);

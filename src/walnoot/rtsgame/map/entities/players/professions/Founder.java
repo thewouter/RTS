@@ -37,7 +37,7 @@ public class Founder extends Profession {
 					}
 					public void afterBuild(){
 						map.removeEntity(owner.owner);
-						new Sound("src/res/Sounds/Buildbaseofoperations.mp3").play();
+						new Sound("/res/Sounds/Buildbaseofoperations.mp3").play();
 						if(screen.level < 1) screen.levelUp();
 					}
 				});

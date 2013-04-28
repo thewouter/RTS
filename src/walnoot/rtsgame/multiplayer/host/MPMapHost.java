@@ -5,12 +5,16 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.util.LinkedList;
 
+import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.SheepEntity;
+import walnoot.rtsgame.map.entities.players.Bow;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
+import walnoot.rtsgame.map.entities.players.Soldier;
 import walnoot.rtsgame.map.entities.players.professions.Profession;
+import walnoot.rtsgame.map.projectiles.Arrow;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
 import walnoot.rtsgame.rest.Util;
 
@@ -38,10 +42,10 @@ public class MPMapHost extends Map implements Cloneable{
 		for(Entity e: toBeRemoved){
 			host.entityRemoved(getEntities().indexOf(e));
 		}
-		getEntities().removeAll(toBeRemoved);
-		toBeRemoved.clear();
-		getEntities().addAll(toBeAdded);
-		toBeAdded.clear();
+		for(Arrow a: getArrows()){
+			a.update();
+		}
+		handleEntityMutations();
 	}
 	
 	public void render(Graphics g){

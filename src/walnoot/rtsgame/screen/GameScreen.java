@@ -16,9 +16,11 @@ import walnoot.rtsgame.map.structures.natural.StoneMine;
 import walnoot.rtsgame.map.structures.natural.TreeStructure;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
-import walnoot.rtsgame.map.structures.nonnatural.TentIIStructure;
-import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
+import walnoot.rtsgame.map.structures.nonnatural.Tent;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenGate;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenWall;
 import walnoot.rtsgame.menubar.Button;
 import walnoot.rtsgame.menubar.HomeBar;
 import walnoot.rtsgame.menubar.MenuBarPopupButton;
@@ -57,12 +59,12 @@ public abstract class GameScreen extends Screen {
 			}
 		};
 
-		inventory.addGold(500);
-		inventory.addWood(170);
-		inventory.addStone(150);
-		inventory.addVegetables(10);
-		inventory.addMeat(10);
-		inventory.addIronOre(20);
+		inventory.addGold(5000);
+		inventory.addWood(1700);
+		inventory.addStone(1500);
+		inventory.addVegetables(100);
+		inventory.addMeat(100);
+		inventory.addIronOre(200);
 		
 		bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[0][7], this) {
 			public void onLeftClick() {
@@ -98,8 +100,8 @@ public abstract class GameScreen extends Screen {
 		}else if(!selectedEntities.isEmpty()){
 			font.drawBoldLine(g, "Multiple Select: " + selectedEntities.size(), 20, getHeight() - 30, Color.BLACK);
 		}
-		font.drawBoldLine(g, getMapX() + ":" + getMapY(), 20, 20, Color.BLACK);
-		//font.drawBoldLine(g, (input.mouseX - translationX) + ":" + (input.mouseY - translationY), 20, 20, Color.BLACK);
+		//font.drawBoldLine(g, getMapX() + ":" + getMapY(), 20, 20, Color.BLACK);
+		font.drawBoldLine(g, (input.mouseX - translationX) + ":" + (input.mouseY - translationY), 20, 20, Color.BLACK);
 		
 		if(input.isDragging()){
 			int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
@@ -211,7 +213,7 @@ public abstract class GameScreen extends Screen {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
 						public Entity toBuild(Direction face) {
-							return new TentIStructure(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
+							return new Tent(map,screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face, 2);
 						}
 					};
 				}
@@ -224,7 +226,7 @@ public abstract class GameScreen extends Screen {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
 						public Entity toBuild(Direction face) {
-							return new SchoolI(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
+							return new Barracks(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
 						}
 					};
 					
@@ -244,6 +246,35 @@ public abstract class GameScreen extends Screen {
 				}
 				public String getName() {
 					return "DefenseTower";
+				}
+			});
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[4][5], this) {
+				
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(map, input, screen) {
+						public Entity toBuild(Direction face) {
+							return new WoodenWall(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
+						}
+					};
+				}
+				
+				public String getName() {
+					return "Wall";
+				}
+			});
+			
+			bar.buildmenu.addButton(new MenuBarPopupButton(Images.buttons[5][5], this) {
+				
+				public void onLeftClick() {
+					screen.pointer = new MousePointer(map, input, screen) {
+						public Entity toBuild(Direction face) {
+							return new WoodenGate(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
+						}
+					};
+				}
+				
+				public String getName() {
+					return "Gate";
 				}
 			});
 			
@@ -280,7 +311,7 @@ public abstract class GameScreen extends Screen {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(screen.map, input, screen) {
 						public Entity toBuild(Direction face) {
-							return new TentIIStructure(map, screen,Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
+							return new Tent(map, screen,Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face, 4);
 						}
 					};
 					
@@ -309,12 +340,10 @@ public abstract class GameScreen extends Screen {
 				if(e instanceof SchoolI){
 					SchoolI s = ((SchoolI)e);
 					s.popup.minerI.activate();
-					//s.popup.minerII.activate();
 					s.popup.founder.activate();
 				}else if(e instanceof SchoolII){
 					SchoolII s = ((SchoolII)e);
 					s.popup.minerI.activate();
-					//s.popup.minerII.activate();
 					s.popup.founder.activate();
 				}
 			}

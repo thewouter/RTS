@@ -60,6 +60,7 @@ public class RTSComponent extends Canvas implements Runnable {
 	private BufferedImage screenImage;
 	private Sound backgroundSound;
 	public boolean backgroundSoundOn = false;
+	private String loginName = "Player";
 	
 	public RTSComponent(Container container){
 		this.container = container;
@@ -254,7 +255,6 @@ public class RTSComponent extends Canvas implements Runnable {
 		final PathMatcher matcher = fs.getPathMatcher("glob:" + pattern);
 		
 		FileVisitor<Path> matcherVisitor = new SimpleFileVisitor<Path>() {
-		    @Override
 		    public FileVisitResult visitFile(Path file, BasicFileAttributes attribs) {
 		        Path name = file.getFileName();
 		        if (matcher.matches(name)) {
@@ -275,13 +275,13 @@ public class RTSComponent extends Canvas implements Runnable {
 	
 	public boolean isMember(String name){
 		try {
-			URL source = new URL("http://www.tribe.net84.net/users.nothin"); //super secret database of registered users!
+			URL source = new URL("http://www.wouter.byethost15.com/users.nothin"); //super secret database of registered users!
 			InputStreamReader input = new InputStreamReader(source.openStream());
 			BufferedReader in = new BufferedReader(input);
 			String inputLine;
 			while((inputLine = in.readLine())!= null){
 				if(name.equals(inputLine)) return true;
-				System.out.println(inputLine);
+				//System.out.println(inputLine);
 			}
 		} catch (FileNotFoundException e) {
 			return true;
@@ -291,5 +291,13 @@ public class RTSComponent extends Canvas implements Runnable {
 			return true;
 		}
 		return false;
+	}
+
+	public String getLoginName() {
+		return loginName;
+	}
+
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
 	}
 }

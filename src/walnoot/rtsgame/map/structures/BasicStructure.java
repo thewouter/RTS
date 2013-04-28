@@ -9,6 +9,7 @@ import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.screen.GameScreen;
+import walnoot.rtsgame.screen.Screen;
 
 public abstract class BasicStructure extends Structure {
 	private BufferedImage image;
@@ -27,7 +28,7 @@ public abstract class BasicStructure extends Structure {
 					getScreenX() - (Tile.WIDTH / 2) * (getSize() - 1), getScreenY() - (getHeadSpace() * Tile.HEIGHT) + (Tile.HEIGHT / 2) * (getSize() - 1) + image.getHeight(), 
 					0, 0, image.getWidth(), image.getHeight(), null); // there must be an easyer way  somewhere... nevermind
 		}
-		screen.font.drawLine(g, uniqueNumber + "", getScreenX() + 10, getScreenY());
+		Screen.font.drawLine(g, uniqueNumber + "", getScreenX() + 10, getScreenY());
 	}
 	
 	public void render(Graphics g, int x, int y){

@@ -44,12 +44,6 @@ public class Pathfinder extends Thread {
 	public void run(){
 		requester.setNextDirections(getPath(), fromEndPoint);
 		requester.setEndPoint(goal);
-		
-		if(requester.map instanceof MPMapHost){
-			MPMapHost map = ((MPMapHost) requester.map);
-			map.host.entityMoved(requester, goal.x, goal.y);
-		}
-		
 	}
 	
 	private synchronized LinkedList<Direction> getPath(){

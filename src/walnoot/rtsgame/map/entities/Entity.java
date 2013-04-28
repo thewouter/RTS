@@ -62,7 +62,7 @@ public abstract class Entity implements Cloneable {
 	
 	
 	/**
-	 * @return extra information for save
+	 * @return extra information for save and MP
 	 */
 	public abstract String getExtraOne();
 	
@@ -89,8 +89,10 @@ public abstract class Entity implements Cloneable {
 		}
 		
 		health -= damage;
-		if(health <=0) map.removeEntity(this);
-		onDestroying();
+		if(health <=0){
+			map.removeEntity(this);
+			onDestroying();
+		}
 	}
 	
 	public void onDestroying() {}
@@ -155,7 +157,7 @@ public abstract class Entity implements Cloneable {
 	}
 	
 	public String getData(){
-		String data = this.ID + " " + this.xPos + " " + this.yPos + " " + this.getHealth() + " " + this.getExtraOne() + " " + this.uniqueNumber + " ";
+		String data = this.ID + " " + this.xPos + " " + this.yPos + " " + this.getHealth() + " " + this.getExtraOne() + " " + this.uniqueNumber;
 		return data;
 	}
 }

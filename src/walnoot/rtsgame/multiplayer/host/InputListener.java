@@ -7,8 +7,8 @@ import java.io.PrintStream;
 
 public class InputListener extends Thread{
 	
-	private Player p;
-	private BufferedReader r;
+	public Player p;
+	public BufferedReader r;
 	private PrintStream out;
 	private boolean running = true;
 	

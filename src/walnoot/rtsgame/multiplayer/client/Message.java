@@ -4,11 +4,13 @@ public class Message {
 	private final String message;
 	private int lifetimeLeft;
 	private Chat chat;
+	private String playerName;
 	
-	public Message(String message, int lifetimeInTicks, Chat chat) {
+	public Message(String message, String playerName, int lifetimeInTicks, Chat chat) {
 		this.message = message;
 		lifetimeLeft = lifetimeInTicks;
 		this.chat = chat;
+		this.playerName = playerName;
 	}
 	
 	public void update(){
@@ -19,7 +21,7 @@ public class Message {
 	}
 	
 	public String getMessage(){
-		return message;
+		return playerName + ":  " + message;
 	}
 
 }

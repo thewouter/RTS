@@ -7,9 +7,9 @@ import java.io.PrintStream;
 import walnoot.rtsgame.screen.MPGameScreen;
 
 public class InputListener extends Thread{
-	BufferedReader r;
-	PrintStream p;
-	MPGameScreen owner;
+	public BufferedReader r;
+	public PrintStream p;
+	private MPGameScreen owner;
 	
 	
 	public InputListener(MPGameScreen screen, BufferedReader r, PrintStream p){

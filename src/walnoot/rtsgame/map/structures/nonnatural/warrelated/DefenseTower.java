@@ -9,13 +9,13 @@ import com.sun.corba.se.impl.oa.toa.TOA;
 import com.sun.corba.se.impl.oa.toa.TOAFactory;
 
 import walnoot.rtsgame.RTSComponent;
-import walnoot.rtsgame.map.Arrow;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.players.Bow;
 import walnoot.rtsgame.map.entities.players.Soldier;
+import walnoot.rtsgame.map.projectiles.Arrow;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.multiplayer.host.MPMapHost;
@@ -23,13 +23,14 @@ import walnoot.rtsgame.rest.Sound;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
 import walnoot.rtsgame.screen.MPGameScreen;
+import walnoot.rtsgame.screen.SPGameScreen;
 
 public class DefenseTower extends BasicStructure {
-	public static int ID = 212;
+	public static int ID = 212, TICKS_BETWEEN_CHECKS = 30;
 	private Soldier guard = null;
 	private int HIT_RANGE = 0;
-	Entity target = null;
-	private int counter = 0; // (:
+	private Entity target = null;
+	private int counter = 0, checkCounter = 0; // (:
 
 	public DefenseTower(Map map, GameScreen screen, int xPos, int yPos, Direction front) {
 		super(map, screen, xPos, yPos, 4, 0, ID, front);
@@ -48,28 +49,57 @@ public class DefenseTower extends BasicStructure {
 		return 1;
 	}
 	
+	public void setGuard(Entity entity){
+		if(entity != null && entity instanceof Soldier && ((Soldier)entity).getWeapon() instanceof Bow){
+			guard = (Soldier)entity;
+			map.removeEntityFromMap(guard);
+			HIT_RANGE = guard.getWeapon().MIN_HIT_RANGE;
+			loadImage(5, 0);
+		}else{
+			System.out.println("this isn't a Soldier with a bow!");
+		}
+	}
+	
 	public void update() {
-		for(int x = -1; x <=1; x++){
-			for(int y = -1; y <= 1; y++){
-				Entity e = map.getEntity(x + xPos, y + yPos);
-				if(guard == null && e != null && e instanceof Soldier && ((Soldier)e).getWeapon() instanceof Bow  && ((MovingEntity)e).entityGoal == this){
-					guard = (Soldier)e;
-					map.removeEntityFromMap(guard);
-					HIT_RANGE = guard.getWeapon().MAX_HIT_RANGE;
-					loadImage(5, 0);
+		if(guard == null){
+			for(int x = -1; x <=1; x++){
+				for(int y = -1; y <= 1; y++){
+					Entity e = map.getEntity(x + xPos, y + yPos);
+					if(e != null && e instanceof Soldier && ((Soldier)e).getWeapon() instanceof Bow  && ((MovingEntity)e).entityGoal == this){
+						guard = (Soldier)e;
+						map.removeEntityFromMap(guard);
+						HIT_RANGE = guard.getWeapon().MIN_HIT_RANGE;
+						loadImage(5, 0);
+					}else{
+						/*if(guard != null) System.out.println("guard isnt null");
+						else if (e == null) System.out.println("entity is null");
+						else if (!(e instanceof Soldier)) System.out.println("entity isnt a Soldier");
+						else if (!(((Soldier)e).getWeapon() instanceof Bow)) System.out.println("entity is soldier without a bow");
+						else System.out.println("not the goal");*/
+					}
+					
 				}
 			}
-		}
-		if(target != null && target instanceof MovingEntity && ((MovingEntity)target).isMoving() && Util.getDistance(target, this) > HIT_RANGE){
-			target = null;
 		}
 
 		if(guard == null) return;
 		
-		ArrayList<Entity> inRange = map.getEntities(xPos, yPos, HIT_RANGE);
-		for(Entity e : inRange){
-			if(e instanceof MovingEntity && !e.isOwnedByPlayer()){
-				target = e;
+		if(target != null && target instanceof MovingEntity && ((MovingEntity)target).isMoving() && Util.getDistance(target, this) > HIT_RANGE){
+			target = null;
+		}
+		
+		checkCounter++;
+		if(checkCounter >= TICKS_BETWEEN_CHECKS){
+			checkCounter = 0;
+			ArrayList<Entity> inRange = map.getEntities(xPos, yPos, HIT_RANGE);
+			for(Entity e : inRange){
+				if(e instanceof MovingEntity){
+					if (screen instanceof SPGameScreen && !e.isOwnedByPlayer()){
+						target = e;
+					}else if(e.owner != owner){
+						target = e;
+					}
+				}
 			}
 		}
 		
@@ -78,7 +108,7 @@ public class DefenseTower extends BasicStructure {
 		if(target != null){
 			counter ++;
 			if(counter >= guard.getWeapon().LOAD_TIME){
-				map.shootArrow(this,xPos - getHeadSpace(), yPos - getHeadSpace() , 500.0, HIT_RANGE, Util.getDirectionInDegrees(this, target, true));
+				map.shootArrow(this,target, true, 15, HIT_RANGE);
 				counter = 0;
 			}
 		}
@@ -113,7 +143,9 @@ public class DefenseTower extends BasicStructure {
 		return costs;
 	}
 
-	public String getExtraOne() {
-		return "0";
+	public String getExtraOne(){
+		if(guard == null) return "0";
+		String entityData = guard.getData();
+		return (Util.splitString(entityData).size()) + " " + entityData;
 	}
 }

@@ -10,9 +10,6 @@ import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 
-import javazoom.jl.decoder.BitstreamException;
-import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.Player;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 
 
@@ -24,10 +21,19 @@ public class MP3 {
 
     // constructor that takes the name of an MP3 file
     public MP3(String fileName) {
+    	if(fileName.startsWith("src")){
+    		fileName = fileName.split("c", 2)[1];
+    		System.out.println(fileName);
+    	}
         fileNames.add(fileName);
     }
     
     public MP3(ArrayList<String> fileNames){
+    	for(String s:fileNames){
+    		if(s.startsWith("src")){
+    			s = s.split("c", 2)[1];
+    		}
+    	}
     	this.fileNames.addAll(fileNames);
     }
 
@@ -43,7 +49,7 @@ public class MP3 {
     			for(String s:fileNames){
     				if(!isPlaying) return;
     				try{
-	    				InputStream in = new FileInputStream(s);
+	    				InputStream in = getClass().getResourceAsStream(s);
 	    				BufferedInputStream bis = new BufferedInputStream(in);
 	    				player = new AdvancedPlayer(bis);
 						player.play();

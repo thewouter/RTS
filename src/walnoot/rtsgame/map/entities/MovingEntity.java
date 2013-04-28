@@ -1,5 +1,7 @@
 package walnoot.rtsgame.map.entities;
 
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,13 +11,17 @@ import org.omg.CORBA.UserException;
 
 import com.sun.xml.internal.ws.encoding.MimeMultipartParser;
 
+import walnoot.rtsgame.Animation;
+import walnoot.rtsgame.Images;
 import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.Soldier;
 import walnoot.rtsgame.map.structures.BasicStructure;
+import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.multiplayer.client.MPMapClient;
+import walnoot.rtsgame.multiplayer.host.MPHost;
 import walnoot.rtsgame.multiplayer.host.MPMapHost;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
@@ -27,6 +33,7 @@ public abstract class MovingEntity extends Entity {
 	public Entity entityGoal = null;
 	private Point entPoint = new Point(0,0), targetPoint = new Point (0,0);
 	Direction nextDirection = null;
+	Animation flag = new Animation(10);
 	
 	public LinkedList<Direction> nextDirections = new LinkedList<Direction>();
 	private LinkedList<Direction> nextNextDirections = null;
@@ -34,15 +41,36 @@ public abstract class MovingEntity extends Entity {
 	
 	public MovingEntity(Map map, GameScreen screen, int xPos, int yPos,  int ID){
 		super(map, xPos, yPos, ID, screen);
+		for(int i = 0; i < Images.flag.length - 1; i++){
+			flag.addScene(Images.flag[i][0]);
+		}
+	}
+	
+	public void renderSelected(Graphics g){
+		super.renderSelected(g);
+		if(isMoving()){
+			g.drawImage(flag.getImage(), (entPoint.x - entPoint.y) * (-Tile.WIDTH / 2), (entPoint.x + entPoint.y) * (Tile.HEIGHT / 2) - (1 * Tile.HEIGHT), null);
+		}
 	}
 	
 	public void update(){
+		if(isMoving()) flag.update();
 		if(addNextDirections != null){
 			nextDirections.addAll(addNextDirections);
 			addNextDirections = null;
 		}else if(nextNextDirections != null){
 			nextDirections = nextNextDirections;
 			nextNextDirections = null;
+			if(nextDirection != null){
+				nextDirections.add(0, nextDirection);
+			}
+			/*if(nextDirection != null){
+				int xOffSet = nextDirection.getxOffset();
+				int yOffSet = nextDirection.getyOffset();
+				nextDirections.add(0, Direction.getDirection(-xOffSet, -yOffSet));
+				nextDirections.add(0, element)
+				System.out.println("added: " + Direction.getDirection(-xOffSet, -yOffSet));
+			}*/
 		}else if(nextDirections == null){
 			nextDirections = new LinkedList<Direction>();
 		}
@@ -53,13 +81,14 @@ public abstract class MovingEntity extends Entity {
 					int[] result = getClosestMovePoint(goal, xPos, yPos);
 					ArrayList<Entity> e = new ArrayList<Entity>();
 					e.addAll(map.getEntities());
-					Pathfinder.moveTo(this,new Point(xPos, yPos), new Point(result[0], result[1]), map, e, false);
+					Pathfinder.moveTo(this,getNextMovePoint(), new Point(result[0], result[1]), map, e, false);
 				}
 			}else if(goal instanceof BasicStructure){
 				entityGoal = goal;
-				int[] movePoint = getClosestMovePoint(goal, xPos, yPos);
-				targetPoint = new Point(goal.xPos,goal.yPos);
-				moveTo(new Point(movePoint[0], movePoint[1]));
+				int[] result = getClosestMovePoint(goal, xPos, yPos);
+				targetPoint = new Point(goal.xPos,goal.yPos);ArrayList<Entity> e = new ArrayList<Entity>();
+				e.addAll(map.getEntities());
+				Pathfinder.moveTo(this,getNextMovePoint(), new Point(result[0], result[1]), map, e, false);
 				goal = null;
 			}
 		}
@@ -160,12 +189,21 @@ public abstract class MovingEntity extends Entity {
 			if(screen == null || !isOwnedByPlayer) return;
 			((MPGameScreen)screen).moveEntity(this, goal.x, goal.y);
 			return;
+		}else if(map instanceof MPMapHost){
+			((MPMapHost)map).host.entityMoved(this, goal.x, goal.y);
 		}
 		this.goal = null;
 		ArrayList<Entity> e = new ArrayList<Entity>();
 		e.addAll(map.getEntities());
-		//if(this instanceof PlayerEntity) System.out.println("gooo to " + goal);
-		Pathfinder.moveTo(this,new Point(xPos, yPos), goal, map, e, false);
+		Pathfinder.moveTo(this,getNextMovePoint(), goal, map, e, false);
+	}
+	
+	public Point getNextMovePoint(){
+		if(nextDirection == null){
+			return new Point(xPos, yPos);
+		}
+		//System.out.println(nextDirection);
+		return new Point(xPos + nextDirection.getxOffset(), yPos + nextDirection.getyOffset());
 	}
 	
 	public void moveTo(Entity goal){
@@ -174,6 +212,8 @@ public abstract class MovingEntity extends Entity {
 				((MPGameScreen)screen).moveEntity(this, goal);
 			}
 			return;
+		}else if(map instanceof MPMapHost){
+			((MPMapHost)map).host.entityMoved(this, goal);
 		}
 		this.goal = goal;
 	}
@@ -182,11 +222,12 @@ public abstract class MovingEntity extends Entity {
 		this.goal = null;
 		ArrayList<Entity> e = new ArrayList<Entity>();
 		e.addAll(map.getEntities());
-		Pathfinder.moveTo(this,new Point(xPos, yPos), goal, map, e, false);
+		Pathfinder.moveTo(this,getNextMovePoint(), goal, map, e, false);
 	}
 	
 	public void moveToFromHost(Entity goal){
 		this.goal = goal;
+		System.out.println("move");
 	}
 	
 	public boolean isMoving(){
@@ -239,9 +280,7 @@ public abstract class MovingEntity extends Entity {
 		return entPoint;
 	}
 	
-	public int getHeadSpace(){
-		return 1; // default
-	}
+	public abstract int getHeadSpace();
 	
 	/** @return tijd die het duurt om over 1 tile te bewegen */
 	protected abstract double getTravelTime();

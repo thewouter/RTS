@@ -31,12 +31,6 @@ public class Soldier extends PlayerEntity {
 	
 	public void addSoldierComponent(SoldierComponent comp){
 		SoldierComponent remove = null;
-		for( SoldierComponent c : this.comp){
-			if(c.getClass() == comp.getClass()){
-				remove = c;
-			}
-		}
-		
 		if(comp instanceof Weapon){
 			weapon = (Weapon) comp;
 			for(SoldierComponent c : this.comp){

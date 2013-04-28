@@ -25,7 +25,6 @@ public class Chat {
 	
 	public Chat(GameScreen screen){
 		this.screen = screen;
-		text.add("hoi");
 	}
 	
 	public synchronized void render(Graphics g){
@@ -97,6 +96,6 @@ public class Chat {
 	}
 	
 	public synchronized void messageReceived(String message){
-		messages.add(new Message(message.split(" ", 2)[1], 600, this));
+		messages.add(new Message(message.split(" ", 3)[2], message.split(" ", 3)[1], 600, this));
 	}
 }

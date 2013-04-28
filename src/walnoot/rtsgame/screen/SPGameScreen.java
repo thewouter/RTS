@@ -130,7 +130,7 @@ public class SPGameScreen extends GameScreen {
 				}
 			}
 			
-			if(input.wasDragging() && (popup == null || !popup.isInPopup(input.mouseX, input.mouseY))){
+			if(input.wasDragging() && (popup == null || !popup.isInPopup(input.mouseX, input.mouseY)) && entityPopup == null){
 				int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
 				selectedEntities.clear();
 				LinkedList<Entity> inRange = (map.getEntities(x1, y1 , x2, y2, new Dimension(translationX, translationY)));
@@ -197,7 +197,7 @@ public class SPGameScreen extends GameScreen {
 			popup.update(input.getMouseX(), input.getMouseY());
 		}
 		if(input.LMBTapped() || input.RMBTapped()) {
-			new Sound("src/res/Sounds/klick.mp3").play();
+			new Sound("/res/Sounds/klick.mp3").play();
 		}
 	}
 	

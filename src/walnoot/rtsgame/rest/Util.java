@@ -32,7 +32,7 @@ import walnoot.rtsgame.map.structures.nonnatural.CampFireStructure;
 import walnoot.rtsgame.map.structures.nonnatural.Farm;
 import walnoot.rtsgame.map.structures.nonnatural.IronSmelter;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
-import walnoot.rtsgame.map.structures.nonnatural.TentIStructure;
+import walnoot.rtsgame.map.structures.nonnatural.Tent;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenGate;
@@ -57,13 +57,11 @@ public class Util {
 	}
 	
 	public static int getDirectionInDegrees(Entity a, Entity b, boolean fromTop){
-		int screenXA = a.getScreenX();
-		int screenYA = a.getScreenY();
-		int screenXB = b.getScreenX();
-		int screenYB = b.getScreenY();
-		if (fromTop){
-			screenYA -= a.getHeadSpace() * Tile.getHeight();
-		}
+		int screenXA = a.getScreenX() + Tile.getWidth() / 2;
+		int screenYA = a.getScreenY() + Tile.getHeight() / 2;
+		int screenXB = b.getScreenX() + Tile.getWidth() / 2;
+		int screenYB = b.getScreenY() + Tile.getHeight() / 2;
+		
 		int x = - screenXA + screenXB;
 		int y = screenYA - screenYB;
 
@@ -209,7 +207,7 @@ public class Util {
 			e = new CampFireStructure(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
 			break;
 		case 201:
-			e = new TentIStructure(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
+			e = new Tent(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST, extraInfo);
 			break;
 		case 202:
 			e = new TreeStructure(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
@@ -231,6 +229,15 @@ public class Util {
 			break;
 		case 212:
 			e = new DefenseTower(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
+			if(extraInfoOne.length > 2){
+				int[] extraInfoSoldier = new int[extraInfoOne.length - 5];
+				for(int i = 5; i < extraInfoOne.length; i++){
+					extraInfoSoldier[i - 5] = extraInfoOne[i];
+				}
+				Entity en = getEntity(map, screen, extraInfoOne[1], extraInfoOne[2], extraInfoOne[3], extraInfoOne[4], extraInfoSoldier);
+				System.out.println(en);
+				((DefenseTower)e).setGuard(en);
+			}
 			break;
 		case 213:
 			e = new WoodenWall(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
@@ -250,13 +257,16 @@ public class Util {
 		case 102:
 			e = new PlayerEntity(map, screen,  xPos, yPos, null);
 			((PlayerEntity)e).setProfessionFromHost(getProfession(extraInfo, (PlayerEntity)e));
+			e.setHealth(health);
 			break;
 		case 103:
 			e = new DeerEntity(map, screen,  xPos, yPos, health);
 			break;
 		case 107:
 			e = new Soldier(map, screen, xPos, yPos, null);
-			
+			for(SoldierComponent c: getComponents(extraInfoOne, (Soldier) e)){
+				((Soldier)e).addSoldierComponent(c);
+			}
 			break;
 		default:
 			System.out.println("Entity not Found: " + ID);
@@ -273,6 +283,7 @@ public class Util {
 	}
 	
 	public static SoldierComponent getSoldierComponent(int ID, Soldier owner){
+		System.out.println(ID);
 		SoldierComponent c = null;
 		switch(ID){
 		case 600:
@@ -286,6 +297,7 @@ public class Util {
 			break;
 		case 633:
 			c = new Bow(owner);
+			break;
 		}
 		return c;
 	}
