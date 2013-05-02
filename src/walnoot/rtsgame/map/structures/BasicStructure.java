@@ -13,16 +13,16 @@ import walnoot.rtsgame.screen.Screen;
 
 public abstract class BasicStructure extends Structure {
 	private BufferedImage image;
-	protected Direction front;
+	private Direction front;
 	
 	public BasicStructure(Map map, GameScreen screen, int xPos, int yPos, int textureX, int textureY, int ID, Direction front){
 		super(map, screen, xPos, yPos, ID);
-		this.front = front;
+		this.setFront(front);
 		loadImage(textureX, textureY);
 	}
 	
 	public void render(Graphics g){
-		if(front != Direction.SOUTH_EAST) g.drawImage(image, getScreenX() - (Tile.WIDTH / 2) * (getSize() - 1), getScreenY() - (getHeadSpace() * Tile.HEIGHT) + (Tile.HEIGHT / 2) * (getSize() - 1), null);
+		if(getFront() != Direction.SOUTH_EAST) g.drawImage(image, getScreenX() - (Tile.WIDTH / 2) * (getSize() - 1), getScreenY() - (getHeadSpace() * Tile.HEIGHT) + (Tile.HEIGHT / 2) * (getSize() - 1), null);
 		else{
 			g.drawImage(image, image.getWidth() + getScreenX() - (Tile.WIDTH / 2) * (getSize() - 1) ,  getScreenY() - (getHeadSpace() * Tile.HEIGHT) + (Tile.HEIGHT / 2) * (getSize() - 1), 
 					getScreenX() - (Tile.WIDTH / 2) * (getSize() - 1), getScreenY() - (getHeadSpace() * Tile.HEIGHT) + (Tile.HEIGHT / 2) * (getSize() - 1) + image.getHeight(), 
@@ -48,6 +48,14 @@ public abstract class BasicStructure extends Structure {
 	
 	public Image getImage(){
 		return image;
+	}
+
+	public Direction getFront() {
+		return front;
+	}
+
+	public void setFront(Direction front) {
+		this.front = front;
 	}
 	
 	

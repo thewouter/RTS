@@ -180,7 +180,7 @@ public class PlayerEntity extends MovingEntity {
 		}else if(entityClicked instanceof BasicStructure){
 			moveTo(entityClicked);
 		}else if(entityClicked instanceof MovingEntity){
-			follow(entityClicked);
+			follow(entityClicked, 5);
 		}
 		return false;
 	}

@@ -84,7 +84,7 @@ public class Soldier extends PlayerEntity {
 		for(SoldierComponent c: comp){
 			c.activate(target);
 		}
-		follow(target);
+		follow(target, 0);
 	}
 	
 	public String getName(){

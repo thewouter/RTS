@@ -7,7 +7,7 @@ import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.players.Bow;
-import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.StoneDefenseTower;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.rest.Sound;
 import walnoot.rtsgame.rest.Util;

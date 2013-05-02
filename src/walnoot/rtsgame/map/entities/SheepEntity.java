@@ -55,7 +55,7 @@ public class SheepEntity extends MovingEntity {
 		super.update();
 		sheepAnimation.update();
 		if(!(map instanceof MPMapClient)){
-			//if(!isMoving() && Util.RANDOM.nextInt(1000) < WALK_CHANGE) moveRandomLocation(WALK_RANGE);
+			if(!isMoving() && Util.RANDOM.nextInt(1000) < WALK_CHANGE) moveRandomLocation(WALK_RANGE);
 			if(Util.RANDOM.nextInt(APROX_LIFETIME_IN_TICKS) == 0) map.removeEntity(this);
 		}
 	}
@@ -78,7 +78,7 @@ public class SheepEntity extends MovingEntity {
 			screen.setEntityPopup(popup);
 			
 		}else{
-			follow(entityClicked);
+			follow(entityClicked, 0);
 		}
 		
 		return true;

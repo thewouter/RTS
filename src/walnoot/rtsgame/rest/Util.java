@@ -23,6 +23,7 @@ import walnoot.rtsgame.map.entities.players.professions.Hunter;
 import walnoot.rtsgame.map.entities.players.professions.LumberJacker;
 import walnoot.rtsgame.map.entities.players.professions.Miner;
 import walnoot.rtsgame.map.entities.players.professions.Profession;
+import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.structures.natural.GoldMine;
 import walnoot.rtsgame.map.structures.natural.IronMine;
 import walnoot.rtsgame.map.structures.natural.StoneMine;
@@ -34,7 +35,7 @@ import walnoot.rtsgame.map.structures.nonnatural.IronSmelter;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.Tent;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
-import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.StoneDefenseTower;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenGate;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenWall;
 import walnoot.rtsgame.map.tiles.Tile;
@@ -190,7 +191,7 @@ public class Util {
 		return e;
 	}
 	
-	public static Entity getEntity(Map map, GameScreen screen, int ID, int xPos, int yPos, int health, int[] extraInfoOne){
+	public static Entity getEntity(Map map, GameScreen screen, int ID, int xPos, int yPos, int health, int[] extraInfoOne, int front){
 		int extraInfo = 0;
 		if(extraInfoOne.length == 2){
 			extraInfo = extraInfoOne[1];
@@ -228,15 +229,15 @@ public class Util {
 			e = new Barracks(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
 			break;
 		case 212:
-			e = new DefenseTower(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
+			e = new StoneDefenseTower(map, screen,  xPos, yPos, health, Direction.SOUTH_WEST);
 			if(extraInfoOne.length > 2){
 				int[] extraInfoSoldier = new int[extraInfoOne.length - 5];
 				for(int i = 5; i < extraInfoOne.length; i++){
 					extraInfoSoldier[i - 5] = extraInfoOne[i];
 				}
-				Entity en = getEntity(map, screen, extraInfoOne[1], extraInfoOne[2], extraInfoOne[3], extraInfoOne[4], extraInfoSoldier);
+				Entity en = getEntity(map, screen, extraInfoOne[1], extraInfoOne[2], extraInfoOne[3], extraInfoOne[4], extraInfoSoldier, extraInfoOne[5], extraInfoOne[6]);
 				System.out.println(en);
-				((DefenseTower)e).setGuard(en);
+				((StoneDefenseTower)e).setGuard(en);
 			}
 			break;
 		case 213:
@@ -270,6 +271,9 @@ public class Util {
 			break;
 		default:
 			System.out.println("Entity not Found: " + ID);
+		}
+		if(e instanceof BasicStructure && front == 1){
+			((BasicStructure)e).setFront(Direction.SOUTH_EAST);
 		}
 		return e;
 	}
@@ -324,8 +328,8 @@ public class Util {
 		}
 	}
 	
-	public static Entity getEntity(Map map, GameScreen screen, int ID, int xPos, int yPos, int health, int[] extraInfoOne, int uniqeNumber){
-		Entity e = getEntity(map, screen, ID, xPos, yPos, health, extraInfoOne);
+	public static Entity getEntity(Map map, GameScreen screen, int ID, int xPos, int yPos, int health, int[] extraInfoOne, int uniqeNumber, int front){
+		Entity e = getEntity(map, screen, ID, xPos, yPos, health, extraInfoOne, front);
 		e.uniqueNumber = uniqeNumber;
 		return e;
 	}
@@ -345,10 +349,11 @@ public class Util {
 			extraInfoOne[i] = parseInt(entityInstrings.get(n));
 			n++;
 		}
-		int uniqueNumber = parseInt(entityInstrings.get(n));
+		int uniqueNumber = parseInt(entityInstrings.get(n++));
+		int front = parseInt(entityInstrings.get(n++));
 		
 		
-		return getEntity(map, screen, ID, xPos, yPos, health, extraInfoOne, uniqueNumber);
+		return getEntity(map, screen, ID, xPos, yPos, health, extraInfoOne, uniqueNumber, front);
 	}
 	
 	public static int getProfessionID(Profession prof){

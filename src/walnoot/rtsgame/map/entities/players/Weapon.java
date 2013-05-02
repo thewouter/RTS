@@ -32,7 +32,7 @@ public abstract class Weapon extends SoldierComponent {
 			}else if(owner.target == null){
 				isFighting = false;
 			}else if(Util.getDistance(owner.target, owner) > MIN_HIT_RANGE){
-				owner.follow(owner.target);
+				owner.follow(owner.target, 1);
 			}
 		}
 	}

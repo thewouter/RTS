@@ -3,46 +3,38 @@ package walnoot.rtsgame.map.structures.nonnatural.warrelated;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import com.sun.corba.se.impl.oa.toa.TOA;
-import com.sun.corba.se.impl.oa.toa.TOAFactory;
-
-import walnoot.rtsgame.RTSComponent;
 import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
 import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.players.Bow;
 import walnoot.rtsgame.map.entities.players.Soldier;
-import walnoot.rtsgame.map.projectiles.Arrow;
 import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.tiles.Tile;
-import walnoot.rtsgame.multiplayer.host.MPMapHost;
-import walnoot.rtsgame.rest.Sound;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.GameScreen;
-import walnoot.rtsgame.screen.MPGameScreen;
 import walnoot.rtsgame.screen.SPGameScreen;
 
-public class DefenseTower extends BasicStructure {
+public abstract class DefenseTower extends BasicStructure {
 	public static int ID = 212, TICKS_BETWEEN_CHECKS = 30;
-	private Soldier guard = null;
-	private int HIT_RANGE = 0;
-	private Entity target = null;
-	private int counter = 0, checkCounter = 0; // (:
+	protected Soldier guard = null;
+	protected int HIT_RANGE = 0;
+	protected Entity target = null;
+	protected int counter = 0, checkCounter = 0; // (:
 
-	public DefenseTower(Map map, GameScreen screen, int xPos, int yPos, Direction front) {
-		super(map, screen, xPos, yPos, 4, 0, ID, front);
+	public DefenseTower(Map map, GameScreen screen, int xPos, int yPos, int textureX, int textureY, int ID, Direction front) {
+		super(map, screen, xPos, yPos, textureX, textureY, ID, front);
+	}
+
+	public String getExtraOne(){
+		if(guard == null) return "0";
+		String entityData = guard.getData();
+		return (Util.splitString(entityData).size()) + " " + entityData;
 	}
 	
-	public DefenseTower(Map map, GameScreen screen, int xPos, int yPos, int health, Direction front) {
-		super(map, screen, xPos, yPos, 4, 0, ID, front);
-		this.health = health;
-	}
-
-	public int getHeadSpace() {
-		return 2;
+	public boolean connectsToWall(){
+		return true;
 	}
 
 	public int getSize() {
@@ -60,6 +52,19 @@ public class DefenseTower extends BasicStructure {
 		}
 	}
 	
+	public void onDestroying() {
+		map.removeEntity(guard);
+	}
+	
+	public void renderSelected(Graphics g){
+		int radius = HIT_RANGE - 1;
+		g.setColor(new Color(0,0,0,250/2));
+		g.drawOval((int) (getScreenX() - radius * Tile.WIDTH + 0.5 * Tile.WIDTH ), (int)(getScreenY() - radius * Tile.HEIGHT + 0.5 * Tile.HEIGHT) , radius * Tile.WIDTH * 2  , radius * Tile.HEIGHT * 2);
+		g.setColor(new Color(168,11,0,32));
+		g.fillOval((int) (getScreenX() - radius * Tile.WIDTH + 0.5 * Tile.WIDTH ), (int)(getScreenY() - radius * Tile.HEIGHT + 0.5 * Tile.HEIGHT) , radius * Tile.WIDTH * 2  , radius * Tile.HEIGHT * 2);
+		super.renderSelected(g);
+	}
+	
 	public void update() {
 		if(guard == null){
 			for(int x = -1; x <=1; x++){
@@ -70,14 +75,7 @@ public class DefenseTower extends BasicStructure {
 						map.removeEntityFromMap(guard);
 						HIT_RANGE = guard.getWeapon().MIN_HIT_RANGE;
 						loadImage(5, 0);
-					}else{
-						/*if(guard != null) System.out.println("guard isnt null");
-						else if (e == null) System.out.println("entity is null");
-						else if (!(e instanceof Soldier)) System.out.println("entity isnt a Soldier");
-						else if (!(((Soldier)e).getWeapon() instanceof Bow)) System.out.println("entity is soldier without a bow");
-						else System.out.println("not the goal");*/
 					}
-					
 				}
 			}
 		}
@@ -113,39 +111,5 @@ public class DefenseTower extends BasicStructure {
 			}
 		}
 	}
-	
-	public void renderSelected(Graphics g){
-		int radius = HIT_RANGE - 1;
-		g.setColor(new Color(0,0,0,250/2));
-		g.drawOval((int) (getScreenX() - radius * Tile.WIDTH + 0.5 * Tile.WIDTH ), (int)(getScreenY() - radius * Tile.HEIGHT + 0.5 * Tile.HEIGHT) , radius * Tile.WIDTH * 2  , radius * Tile.HEIGHT * 2);
-		g.setColor(new Color(168,11,0,32));
-		g.fillOval((int) (getScreenX() - radius * Tile.WIDTH + 0.5 * Tile.WIDTH ), (int)(getScreenY() - radius * Tile.HEIGHT + 0.5 * Tile.HEIGHT) , radius * Tile.WIDTH * 2  , radius * Tile.HEIGHT * 2);
-		super.renderSelected(g);
-	}
-	
-	public void onDestroying() {
-		map.removeEntity(guard);
-	}
 
-	public int getMaxHealth() {
-		return 300;
-	}
-
-	public String getName() {
-		return "Primary defense Tower";
-	}
-
-	public HashMap<String, Integer> getCosts() {
-		HashMap<String, Integer> costs = new HashMap<String, Integer>();
-		costs.put("gold", 20);
-		costs.put("wood", 5);
-		costs.put("stone", 25);
-		return costs;
-	}
-
-	public String getExtraOne(){
-		if(guard == null) return "0";
-		String entityData = guard.getData();
-		return (Util.splitString(entityData).size()) + " " + entityData;
-	}
 }

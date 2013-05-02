@@ -18,7 +18,7 @@ import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
 import walnoot.rtsgame.map.structures.nonnatural.Tent;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
-import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.StoneDefenseTower;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenGate;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenWall;
 import walnoot.rtsgame.menubar.Button;
@@ -100,8 +100,8 @@ public abstract class GameScreen extends Screen {
 		}else if(!selectedEntities.isEmpty()){
 			font.drawBoldLine(g, "Multiple Select: " + selectedEntities.size(), 20, getHeight() - 30, Color.BLACK);
 		}
-		//font.drawBoldLine(g, getMapX() + ":" + getMapY(), 20, 20, Color.BLACK);
-		font.drawBoldLine(g, (input.mouseX - translationX) + ":" + (input.mouseY - translationY), 20, 20, Color.BLACK);
+		font.drawBoldLine(g, getMapX() + ":" + getMapY(), 20, 20, Color.BLACK);
+		//font.drawBoldLine(g, (input.mouseX - translationX) + ":" + (input.mouseY - translationY), 20, 20, Color.BLACK);
 		
 		if(input.isDragging()){
 			int x1 = input.mouseXOnClick, y1 = input.mouseYOnClick, x2 = input.mouseX, y2 = input.mouseY;
@@ -240,7 +240,7 @@ public abstract class GameScreen extends Screen {
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
 						public Entity toBuild(Direction face) {
-							return new DefenseTower(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
+							return new StoneDefenseTower(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY), face);
 						}
 					};
 				}

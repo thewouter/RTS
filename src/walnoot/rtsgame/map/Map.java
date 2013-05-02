@@ -386,6 +386,25 @@ public class Map {
 		return null;
 	}
 	
+	public ArrayList<Entity> getEntities(int x, int y, ArrayList<Entity> copyOfEntities){
+		ArrayList<Entity> result = new ArrayList<>();
+		for(Entity e: copyOfEntities){
+			if(e instanceof Structure){
+				Structure structure = (Structure) e;
+				
+				int dx = x - structure.getxPos();
+				int dy = y - structure.getyPos();
+				
+				if(dx >= 0 && dy >= 0){
+					if(dx < structure.getSize() && dy < structure.getSize()) result.add(structure);
+				}
+			}else{
+				if(e.getxPos() == x && e.getyPos() == y) result.add(e);
+			}
+		}
+		return result;
+	}
+	
 	public synchronized ArrayList<Entity> getEntities(){
 		return entities;
 	}

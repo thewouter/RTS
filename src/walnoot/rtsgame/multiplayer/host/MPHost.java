@@ -17,8 +17,9 @@ import walnoot.rtsgame.map.entities.players.professions.Hunter;
 import walnoot.rtsgame.map.entities.players.professions.LumberJacker;
 import walnoot.rtsgame.map.entities.players.professions.Miner;
 import walnoot.rtsgame.map.entities.players.professions.Profession;
+import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
-import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.StoneDefenseTower;
 import walnoot.rtsgame.rest.Inventory;
 import walnoot.rtsgame.rest.Util;
 import walnoot.rtsgame.screen.Screen;
@@ -101,9 +102,9 @@ public class MPHost extends Screen{
 		}
 	}
 	
-	public void entityFollowed(Entity entity, Entity goal){
-		String toSend = "2 3 " + entity.uniqueNumber + " " + goal.uniqueNumber;
-		for(Player p:players){
+	public void entityFollowed(Entity entity, Entity goal, int distance){
+		String toSend = "2 3 " + entity.uniqueNumber + " " + goal.uniqueNumber + " " + distance;
+		for(Player p:players){ 
 			p.update(toSend);
 		}
 	}
@@ -256,8 +257,9 @@ public class MPHost extends Screen{
 			extraInfoOne[i] = Util.parseInt(Util.splitString(message).get(n));
 			n++;
 		}
-		int isOwnedByPlayer = Util.parseInt(Util.splitString(message).get(n));
-		Entity e = Util.getEntity(map, owner, ID, xPos, yPos, health, extraInfoOne);
+		int isOwnedByPlayer = Util.parseInt(Util.splitString(message).get(n++));
+		int front = Util.parseInt(Util.splitString(message).get(n));
+		Entity e = Util.getEntity(map, owner, ID, xPos, yPos, health, extraInfoOne, front);
 		if(isOwnedByPlayer == 1) e.owner = owner;
 		e.screen = owner;
 		e.setHealth(health);
@@ -275,11 +277,15 @@ public class MPHost extends Screen{
 		int yPos = e.yPos;
 		int uniqueNumber = e.uniqueNumber;
 		int health = e.getHealth();
+		int frontData = 0;
+		if(e instanceof BasicStructure){
+			frontData = (((BasicStructure)e).getFront() == Direction.SOUTH_EAST)? 1 : 2;
+		}
 		String extraInfoOne = e.getExtraOne();
-		String update = 4 + " " + 0 + " " + ID + " " + uniqueNumber + " " + xPos + " " + yPos + " " + health + " " + extraInfoOne;
+		String update = "4 0 " + ID + " " + uniqueNumber + " " + xPos + " " + yPos + " " + health + " " + extraInfoOne + " " + frontData;
 		for(Player p: players){
 			if(e.owner == p){
-				p.update(4 + " " + 1 + " " + ID + " " + uniqueNumber + " " + xPos + " " + yPos + " " + health + " " + extraInfoOne);
+				p.update("4 1 " + ID + " " + uniqueNumber + " " + xPos + " " + yPos + " " + health + " " + extraInfoOne + " " + frontData);
 				continue;
 			}
 			p.update(update);
@@ -307,7 +313,7 @@ public class MPHost extends Screen{
 			}
 		}else if(oneOrTwo == 3){ // haha
 			if(e instanceof MovingEntity){
-				((MovingEntity)e).follow(map.getEntity(Util.parseInt(Util.splitString(message).get(3))));
+				((MovingEntity)e).follow(map.getEntity(Util.parseInt(Util.splitString(message).get(3))), Util.parseInt(Util.splitString(message).get(4)));
 			}
 		}
 	}

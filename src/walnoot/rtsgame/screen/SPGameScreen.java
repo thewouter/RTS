@@ -23,7 +23,7 @@ import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.natural.IronMine;
 import walnoot.rtsgame.map.structures.nonnatural.IronSmelter;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
-import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.StoneDefenseTower;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.WoodenWall;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.menubar.Button;

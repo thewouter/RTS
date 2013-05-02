@@ -5,7 +5,9 @@ import java.awt.Graphics;
 import java.util.HashMap;
 
 import walnoot.rtsgame.InputHandler;
+import walnoot.rtsgame.map.Direction;
 import walnoot.rtsgame.map.Map;
+import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.tiles.Tile;
 import walnoot.rtsgame.multiplayer.host.MPMapHost;
 import walnoot.rtsgame.multiplayer.host.Player;
@@ -157,7 +159,11 @@ public abstract class Entity implements Cloneable {
 	}
 	
 	public String getData(){
-		String data = this.ID + " " + this.xPos + " " + this.yPos + " " + this.getHealth() + " " + this.getExtraOne() + " " + this.uniqueNumber;
+		int frontData = 0;
+		if(this instanceof BasicStructure){
+			frontData = (((BasicStructure)this).getFront() == Direction.SOUTH_EAST)?1:2;
+		}
+		String data = this.ID + " " + this.xPos + " " + this.yPos + " " + this.getHealth() + " " + this.getExtraOne() + " " + this.uniqueNumber + " " + frontData;
 		return data;
 	}
 }

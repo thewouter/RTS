@@ -15,7 +15,8 @@ import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.Soldier;
 import walnoot.rtsgame.map.entities.players.professions.Profession;
 import walnoot.rtsgame.map.projectiles.Arrow;
-import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
+import walnoot.rtsgame.map.projectiles.Projectile;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.StoneDefenseTower;
 import walnoot.rtsgame.rest.Util;
 
 public class MPMapHost extends Map implements Cloneable{
@@ -42,8 +43,8 @@ public class MPMapHost extends Map implements Cloneable{
 		for(Entity e: toBeRemoved){
 			host.entityRemoved(getEntities().indexOf(e));
 		}
-		for(Arrow a: getArrows()){
-			a.update();
+		for(Projectile p: getProjectiles()){
+			p.update();
 		}
 		handleEntityMutations();
 	}

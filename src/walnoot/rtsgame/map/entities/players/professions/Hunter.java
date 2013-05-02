@@ -56,7 +56,7 @@ public class Hunter extends Profession {
 			}
 			notIncluded.add(closestMovingEntity);
 		}
-		owner.follow(closestMovingEntity);
+		owner.follow(closestMovingEntity, 1);
 	}
 	
 	public boolean onRightClick(Entity entityClicked, GameScreen screen, InputHandler input){

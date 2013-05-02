@@ -20,13 +20,14 @@ import walnoot.rtsgame.map.entities.Entity;
 import walnoot.rtsgame.map.entities.MovingEntity;
 import walnoot.rtsgame.map.entities.players.PlayerEntity;
 import walnoot.rtsgame.map.entities.players.professions.Profession;
+import walnoot.rtsgame.map.structures.BasicStructure;
 import walnoot.rtsgame.map.structures.Structure;
 import walnoot.rtsgame.map.structures.natural.StoneMine;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolI;
 import walnoot.rtsgame.map.structures.nonnatural.SchoolII;
 import walnoot.rtsgame.map.structures.nonnatural.Tent;
 import walnoot.rtsgame.map.structures.nonnatural.warrelated.Barracks;
-import walnoot.rtsgame.map.structures.nonnatural.warrelated.DefenseTower;
+import walnoot.rtsgame.map.structures.nonnatural.warrelated.StoneDefenseTower;
 import walnoot.rtsgame.menubar.MenuBarPopupButton;
 import walnoot.rtsgame.multiplayer.client.Chat;
 import walnoot.rtsgame.multiplayer.client.InputListener;
@@ -253,7 +254,7 @@ import walnoot.rtsgame.rest.Util;
 				public void onLeftClick() {
 					screen.pointer = new MousePointer(map, input, screen) {
 						public Entity toBuild(Direction face) {
-							return new DefenseTower(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY),face);
+							return new StoneDefenseTower(map, screen, Util.getMapX(input.mouseX - translationX, input.mouseY - translationY), Util.getMapY(input.mouseX - translationX	, input.mouseY - translationY),face);
 						}
 					};
 					
@@ -471,7 +472,8 @@ import walnoot.rtsgame.rest.Util;
 			//System.out.println(extraInfoOne[i]);
 			n++;
 		}
-		Entity e = Util.getEntity(map, this, ID, xPos, yPos,health, extraInfoOne, uniqueNumber);
+		int front = Util.parseInt(Util.splitString(entity).get(n++));
+		Entity e = Util.getEntity(map, this, ID, xPos, yPos,health, extraInfoOne, uniqueNumber, front);
 		if(Util.parseInt(Util.splitString(entity).get(1)) == 0) e.setOwned(false);
 		e.screen = this;
 		map.addEntityFromHost(e);
@@ -483,7 +485,6 @@ import walnoot.rtsgame.rest.Util;
 		int uniqueNumber = Util.parseInt(Util.splitString(entity).get(2));
 		Entity e = map.getEntity(uniqueNumber);
 		if(e instanceof MovingEntity){
-			//System.out.println(oneOrTwo);
 			switch(oneOrTwo){
 			case 1:
 				((MovingEntity)e).moveToFromHost(new Point(Util.parseInt(Util.splitString(entity).get(3)),Util.parseInt(Util.splitString(entity).get(4))));
@@ -492,7 +493,7 @@ import walnoot.rtsgame.rest.Util;
 				((MovingEntity)e).moveToFromHost(map.getEntity(Util.parseInt(Util.splitString(entity).get(3))));
 				break;
 			case 3:
-				((MovingEntity)e).followFromHost(map.getEntity(Util.parseInt(Util.splitString(entity).get(3))));
+				((MovingEntity)e).followFromHost(map.getEntity(Util.parseInt(Util.splitString(entity).get(3))), Util.parseInt(Util.splitString(entity).get(3)));
 				break;
 			}
 		}
@@ -516,15 +517,17 @@ import walnoot.rtsgame.rest.Util;
 		listener.update(update);
 	}
 	
-	public void followEntity(MovingEntity entity, Entity goal){
-		String update = 2 + " " + 3 + " " + entity.uniqueNumber + " " + goal.uniqueNumber;
+	public void followEntity(MovingEntity entity, Entity goal, int distance){
+		String update = 2 + " " + 3 + " " + entity.uniqueNumber + " " + goal.uniqueNumber + " " + distance;
 		listener.update(update);
 	}
 	
 	public void addEntity(Entity e, int x, int y){
-		String update = 3 + " " + e.ID + " " + x + " " + y + " " + e.getHealth()+ " " + e.getExtraOne();
-		if(e.isOwnedByPlayer()) update = update + " " + 1;
-		else  update = update + " " + 0;
+		int frontData = 0;
+		if(e instanceof BasicStructure){
+			frontData = (((BasicStructure)e).getFront() == Direction.SOUTH_EAST)? 1 : 2;
+		}
+		String update = 3 + " " + e.ID + " " + x + " " + y + " " + e.getHealth() + " " + e.getExtraOne() + " " + ((e.isOwnedByPlayer())? 1: 0) + " " + frontData ;
 		listener.update(update);
 	}
 	

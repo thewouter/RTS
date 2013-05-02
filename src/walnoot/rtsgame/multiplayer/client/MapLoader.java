@@ -67,7 +67,7 @@ public class MapLoader extends Thread {
 			for(int j = 0; j < number; j++){
 				entity = entity + mapInStrings.get(counter++) + " ";
 			}
-			entity = entity + mapInStrings.get(counter++); 
+			entity = entity + mapInStrings.get(counter++) + " " + mapInStrings.get(counter++); 
 			Entity e = Util.getEntity(map, entity, screen);
 			e.isOwnedByPlayer = false;
 			map.addEntityFromHost(e);

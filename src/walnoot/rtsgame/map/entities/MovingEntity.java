@@ -38,6 +38,7 @@ public abstract class MovingEntity extends Entity {
 	public LinkedList<Direction> nextDirections = new LinkedList<Direction>();
 	private LinkedList<Direction> nextNextDirections = null;
 	private LinkedList<Direction> addNextDirections = null;
+	private int followDistance = 0;
 	
 	public MovingEntity(Map map, GameScreen screen, int xPos, int yPos,  int ID){
 		super(map, xPos, yPos, ID, screen);
@@ -64,28 +65,21 @@ public abstract class MovingEntity extends Entity {
 			if(nextDirection != null){
 				nextDirections.add(0, nextDirection);
 			}
-			/*if(nextDirection != null){
-				int xOffSet = nextDirection.getxOffset();
-				int yOffSet = nextDirection.getyOffset();
-				nextDirections.add(0, Direction.getDirection(-xOffSet, -yOffSet));
-				nextDirections.add(0, element)
-				System.out.println("added: " + Direction.getDirection(-xOffSet, -yOffSet));
-			}*/
 		}else if(nextDirections == null){
 			nextDirections = new LinkedList<Direction>();
 		}
 		if(goal != null){
-			if(goal instanceof MovingEntity){
+			if(goal instanceof MovingEntity){ // following
 				if(Util.abs(goal.xPos - targetPoint.x) > 0.1|| Util.abs(goal.yPos - targetPoint.y) > 0.1){
 					targetPoint = new Point(goal.xPos,goal.yPos);
-					int[] result = getClosestMovePoint(goal, xPos, yPos);
+					int[] result = getClosestMovePoint(goal, xPos, yPos, followDistance);
 					ArrayList<Entity> e = new ArrayList<Entity>();
 					e.addAll(map.getEntities());
 					Pathfinder.moveTo(this,getNextMovePoint(), new Point(result[0], result[1]), map, e, false);
 				}
-			}else if(goal instanceof BasicStructure){
+			}else if(goal instanceof BasicStructure){ // moving
 				entityGoal = goal;
-				int[] result = getClosestMovePoint(goal, xPos, yPos);
+				int[] result = getClosestMovePoint(goal, xPos, yPos, followDistance);
 				targetPoint = new Point(goal.xPos,goal.yPos);ArrayList<Entity> e = new ArrayList<Entity>();
 				e.addAll(map.getEntities());
 				Pathfinder.moveTo(this,getNextMovePoint(), new Point(result[0], result[1]), map, e, false);
@@ -114,20 +108,20 @@ public abstract class MovingEntity extends Entity {
 		}
 	}
 	
-	public int[] getClosestMovePoint(Entity goal, int xPos, int yPos){
+	public int[] getClosestMovePoint(Entity goal, int xPos, int yPos, int distance){
 		int size = 1;
 		int closestX = 0, closestY = 0;
 		int closestDistance = map.getLength();
 		if(goal instanceof BasicStructure) size = ((BasicStructure) goal).getSize();
-		for(int x = goal.xPos - 1; x < goal.xPos + 1 + size; x++){
-			for(int y = goal.yPos - 1; y < goal.yPos + size + 1; y++){
+		for(int x = goal.xPos - 1 - distance; x < goal.xPos + 1 + distance + size; x++){
+			for(int y = goal.yPos - 1 - distance; y < goal.yPos + 1 + distance + size; y++){
 				Entity e = map.getEntity(x,y);
-				if(e == null && !map.isSolid(new Point(x,y))){
-					int distance = Util.getDistance(xPos, yPos, x, y);
-					if(distance <= closestDistance){
+				if(e == null && !map.isSolid(new Point(x,y)) && Util.getDistance(goal.xPos, goal.yPos, x, y) >= distance && Util.getDistance(goal.xPos, goal.yPos, x, y) < distance + 1){
+					int ddistance = Util.getDistance(xPos, yPos, x, y);
+					if(ddistance <= closestDistance){
 						closestX = x;
 						closestY = y;
-						closestDistance = distance;
+						closestDistance = ddistance;
 					}
 				}
 			}
@@ -139,31 +133,30 @@ public abstract class MovingEntity extends Entity {
 	public void setNextDirections(LinkedList<Direction> toSet, boolean fromEndPoint){
 		if(!fromEndPoint) {
 			nextNextDirections = toSet;
-			//System.out.println(toSet);
-			//System.out.println(fromEndPoint);
 		}else {
 			addNextDirections = toSet;
-			//System.out.println(fromEndPoint);
 		}
 	}
 	
 	protected void onStopMoving(){
 	}
 	
-	public void follow(Entity e){
+	public void follow(Entity e , int distance){
 		if(screen instanceof MPGameScreen){
-			((MPGameScreen)screen).followEntity(this, e);
+			((MPGameScreen)screen).followEntity(this, e, distance);
 			 return;
 		}else if(map instanceof MPMapHost){
-			((MPMapHost)map).host.entityFollowed(this, e);
+			((MPMapHost)map).host.entityFollowed(this, e, distance);
 		}
 		goal = e;
 		entityGoal = e;
+		this.followDistance = distance;
 	}
 	
-	public void followFromHost(Entity e){
+	public void followFromHost(Entity e, int distance){
 		goal = e;
 		entityGoal = e;
+		this.followDistance = distance;
 	}
 	
 	public void buildMenu(){}
@@ -196,6 +189,7 @@ public abstract class MovingEntity extends Entity {
 		ArrayList<Entity> e = new ArrayList<Entity>();
 		e.addAll(map.getEntities());
 		Pathfinder.moveTo(this,getNextMovePoint(), goal, map, e, false);
+		followDistance = 0;
 	}
 	
 	public Point getNextMovePoint(){
@@ -216,6 +210,7 @@ public abstract class MovingEntity extends Entity {
 			((MPMapHost)map).host.entityMoved(this, goal);
 		}
 		this.goal = goal;
+		followDistance = 1;
 	}
 
 	public void moveToFromHost(Point goal){
@@ -223,11 +218,12 @@ public abstract class MovingEntity extends Entity {
 		ArrayList<Entity> e = new ArrayList<Entity>();
 		e.addAll(map.getEntities());
 		Pathfinder.moveTo(this,getNextMovePoint(), goal, map, e, false);
+		followDistance = 0;
 	}
 	
 	public void moveToFromHost(Entity goal){
 		this.goal = goal;
-		System.out.println("move");
+		followDistance = 0;
 	}
 	
 	public boolean isMoving(){
